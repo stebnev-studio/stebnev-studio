@@ -1,0 +1,175 @@
+/*
+********************************************************************
+Миксин - Адаптив пример вызова:  
+@include adaptiv-value("font-size", 42, 30, 0); 
+Пояснение:
+@include adaptiv-value(
+свойство на пример: padding, 
+Начальное макетное значение: 50, 
+Минимальное значение: 20, 
+Режим один из трех: 0);
+Видео пояснение: https://www.youtube.com/watch?v=HJZP5QsrpXs&t=24s
+/********************************************************************
+*/
+
+@mixin touchScreen {
+    @media (min-width: #{$mobileWidth}) and (max-width: #{$minDesktopWidth - 1px}) {
+        @content;
+    }
+}
+
+@mixin notTouchScreen {
+    @media not ((min-width: #{$mobileWidth}) and (max-width: #{$minDesktopWidth - 1px})) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (min-width: #{$mobileWidth}) and (max-width: #{$tabletWidth - 1px}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$tabletWidth}) and (max-width: #{$minDesktopWidth - 1px}) {
+        @content;
+    }
+}
+
+@mixin laptop {
+    @media (min-width: #{$minDesktopWidth}) and (max-width: #{$DesktopWidth - 1px}) {
+        @content;
+    }
+}
+
+@mixin maxDesktop {
+    @media (min-width: #{$maxDesktopWidth}) {
+        @content;
+    }
+}
+
+@mixin adaptiv-value($property, $startSize, $minSize, $type: 1) {
+    $addSize: $startSize - $minSize;
+
+    @if $type==1 {
+        //Тип 1. Только если меньше контейнера
+        #{$property}: $startSize + px;
+
+        @media (max-width: #{$maxWidthContainer + px}) {
+            #{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - #{$minWidthContainer + px}) / #{$maxWidthContainer -  $minWidthContainer}));
+        }
+
+    }
+
+    @else if $type==2 {
+        //Тип 2. Только если больше контейнера
+        #{$property}: $startSize + px;
+
+        @media (min-width: #{$maxWidthContainer + px}) {
+            #{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - #{$minWidthContainer + px}) / #{$maxWidth - $minWidthContainer}));
+        }
+    }
+
+    @else {
+        //Тип 0. Всегда
+        #{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - #{$minWidthContainer + px}) / #{$maxWidth - $minWidthContainer}));
+    }
+}
+
+@mixin adaptiv-value-width($property, $startSize, $minSize, $minWidth, $type) {
+    $addSize: $startSize - $minSize;
+
+    @if $type==1 {
+        //Тип 1. Только если меньше контейнера
+        #{$property}: $startSize + px;
+
+        @media (max-width: #{$maxWidthContainer + px}) {
+            #{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - #{$minWidth + px}) / #{$maxWidthContainer - $minWidth}));
+        }
+
+    }
+
+    @else if $type==2 {
+        //Тип 2. Только если больше контейнера
+        #{$property}: $startSize + px;
+
+        @media (min-width: #{$maxWidthContainer + px}) {
+            #{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - #{$minWidth + px}) / #{$maxWidth - $minWidth}));
+        }
+    }
+
+    @else {
+        //Тип 0. Всегда
+        #{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - #{$minWidth + px}) / #{$maxWidth - $minWidth}));
+    }
+}
+
+@function adaptiv-value-int($startSize, $minSize) {
+    
+    $addSize: $startSize - $minSize;
+    @return calc(#{$minSize + px} + #{$addSize} * ((100vw - #{$minWidthContainer + px}) / #{$maxWidthContainer -  $minWidthContainer}));
+}
+
+@function strip-unit($number) {
+    @if type-of($number)=='number' and not unitless($number) {
+        @return calc($number / ($number * 0 + 1px));
+    }
+
+    @return $number;
+}
+
+@function calcFluidFontSize($f-min, $f-max, $w-min, $w-max, $units: px) {
+    $f-min: strip-unit($f-min);
+    $f-max: strip-unit($f-max);
+    $w-min: strip-unit($w-min);
+    $w-max: strip-unit($w-max);
+    $k: calc(($f-max - $f-min) / ($w-max - $w-min));
+    $b: $f-min - $k * $w-min;
+    $b: $b + $units;
+    @return calc(#{$k} * 100vw + #{$b});
+}
+
+@mixin ffsCalc($f-min, $f-max, $w-min, $w-max, $fallback: false) {
+    line-height: 100%;
+    font-size: $f-min;
+
+    @media (min-width: $w-min) and (max-width: $w-max){
+        @if ($fallback) {
+            font-size: $fallback;
+        }
+
+        font-size: calcFluidFontSize($f-min, $f-max, $w-min, $w-max, px);
+    }
+
+    @media (min-width: $w-max) {
+        font-size: $f-max;
+    }
+}
+
+@mixin apropCalc($prop, $f-min, $f-max, $w-min, $w-max, $fallback: false) {
+    #{$prop}: $f-min;
+
+    @media (min-width: $w-min) and (max-width: $w-max){
+        @if ($fallback) {
+            #{$prop}: $fallback;
+        }
+
+        #{$prop}: calcFluidFontSize($f-min, $f-max, $w-min, $w-max, px);
+    }
+
+    @media (min-width: $w-max) {
+        #{$prop}: $f-max;
+    }
+}
+
+@mixin aprop($prop, $f4, $f3, $f2, $f1) {
+    @include apropCalc($prop, $f1, $f2, $mobileWidth, $tabletWidth - 1px);
+    @include apropCalc($prop, $f2, $f3, $tabletWidth, $minDesktopWidth - 1px);
+    @include apropCalc($prop, $f3, $f4, $minDesktopWidth, $DesktopWidth - 1px);
+}
+
+@mixin ffs($f4, $f3, $f2, $f1) {
+    @include ffsCalc($f1, $f2, $mobileWidth, $tabletWidth - 1px);
+    @include ffsCalc($f2, $f3, $tabletWidth, $minDesktopWidth - 1px);
+    @include ffsCalc($f3, $f4, $minDesktopWidth, $DesktopWidth - 1px);
+}

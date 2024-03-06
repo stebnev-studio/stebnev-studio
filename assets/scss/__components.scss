@@ -1,0 +1,48 @@
+input[type=text], textarea {
+    display: block;
+    border: none;
+    color: $white;
+    border-bottom: 1px solid $gray;
+    background-color: transparent;
+    outline:none;
+    padding-bottom: 12px;
+}
+
+textarea {
+    resize: none;
+}
+
+button[type=submit] {
+    display: flex;
+    border: none;
+    justify-content: flex-end;
+    align-items: center;
+    text-transform: uppercase;
+    color: $white;
+    column-gap: 8px;
+    width: max-content;
+    background-color: transparent;
+    cursor: pointer;
+}
+button[disabled] {
+    color: $gray;
+}
+
+.warning {
+
+    & input,
+    & textarea {
+        color: $red;
+        border-color: $red;
+    }
+}
+
+.form-feedback__label:has(.form-feedback__warning) .form-feedback__input
+{
+    color: $red;
+    border-color: $red;
+}
+
+::-ms-input-placeholder {
+    color: $red
+}

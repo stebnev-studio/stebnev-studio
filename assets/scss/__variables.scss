@@ -1,0 +1,18 @@
+@import "_adaptive";
+
+$button-height: var(--button-height, 50px);
+
+//Стартовые значения по макету
+$maxWidth: 3440;
+$maxWidthContainer: 1560;
+$minWidthContainer: 280;
+$gutter: 20px;
+
+//Брейкпоинты
+$maxDesktopWidth: 3440px;
+$DesktopWidth: 1920px;
+$minDesktopWidth: 1024px;
+$tabletWidth: 768px;
+$mobileWidth: 340px;
+
+

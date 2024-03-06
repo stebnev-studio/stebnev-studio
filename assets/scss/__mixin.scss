@@ -1,0 +1,29 @@
+/*
+***************************
+mixin.scss                *
+***************************
+*/
+$browser-context: 16; // Default
+
+//Перевод в REM. Пример: font-size: rem(42);
+@function rem($px) {
+    $result: $px / 16 + rem;
+    @return $result;
+}
+
+//Перевод в EM. Пример: font-size: em(42);
+
+@function em($pixels, $context: $browser-context) {
+  @return #{$pixels/$context}em;
+}
+
+@mixin font-faceWoff2($font-family, $font-weight, $font-style, $font-files) {
+    @font-face {
+      font-family: $font-family;
+      font-weight: $font-weight;
+      font-style: $font-style;
+      src: 
+        url($font-files) format('woff2');
+      font-display: swap;
+    }
+  }
