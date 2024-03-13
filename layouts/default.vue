@@ -1,12 +1,11 @@
 <template>
     <Header />
     <slot />
-    <SectionsBrief class="section-brief" />
+    <SectionsBrief />
     <Footer />
 </template>
 
 <script lang="ts" setup>
-
 </script>
 
 <style>

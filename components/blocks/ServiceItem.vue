@@ -2,11 +2,11 @@
   <li class="service-item">
     <div class="service-item__title t3">
         <i class="service-item__icon">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="8.5" y="8.5" width="15" height="15" stroke="#FAFAFA"/>
+          <svg width="16" height="20" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="1" width="15" height="15" stroke="#FAFAFA"/>
           </svg>
         </i>
-        Продвижение
+        <p class="t3">Продвижение</p>
     </div>
     <ElementsServiceItemContent class="service-item__content"/>
   </li>
@@ -23,10 +23,16 @@
       column-gap: $gutter;
       opacity: 0.5;
       cursor: pointer;
-      transition: 0.25s ease-out;
+      transition: $transitionTime;
+      margin-bottom: 0;
 
       &:hover {
         opacity: 1;
+        @include aprop("margin-bottom", 120px, 80px, 60px, 60px);
+      }
+
+      @include laptop{
+        grid-template-columns: repeat(12, 1fr);
       }
 
       @include tablet {
@@ -45,6 +51,11 @@
         display: flex;
         align-items: flex-start;
         column-gap: 40px;
+
+        @include laptop{
+          grid-column: 4 span;
+          column-gap: 16px;
+        };
 
         @include tablet {
           margin-bottom: 12px;
@@ -70,8 +81,15 @@
 
       &__content {
         grid-column: 5 span;
+
+        @include laptop{
+          grid-column: 8 span
+        };
+
       }
 
-
+      @include mobile{
+        min-height: 114px;
+      }
   }
 </style>

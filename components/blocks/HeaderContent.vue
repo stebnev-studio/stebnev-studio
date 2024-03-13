@@ -2,11 +2,11 @@
   <div class="header-content">
     <nav class="header-content__navigation menu">
       <div class="menu-item" @click="active = 'service'" :class="{open: active === 'service'}">
-        <span class="menu-text">Услгуи</span>
+        <span class="menu-text">Услуги</span>
         <div class="menu-item__sub submenu">
-          <NuxtLink class="text-med" to="">Контекстная реклама</NuxtLink>
-          <NuxtLink class="text-med" to="">Проектирование и разработка сайта</NuxtLink>
-          <NuxtLink class="text-med" to="">Техническая поддержка сайтов</NuxtLink>
+          <NuxtLink to="/advert" class="text-med" >Контекстная реклама</NuxtLink>
+          <NuxtLink to="/dev" class="text-med" >Проектирование и разработка сайта</NuxtLink>
+          <NuxtLink to="/support" class="text-med" >Техническая поддержка сайтов</NuxtLink>
         </div>
       </div>
       <!-- <div class="menu-item menu-text" @click="active = 'portfolio'" :class="{open: active === 'portfolio'}">
@@ -25,13 +25,14 @@
 
 <script setup>
   import { inject } from "vue";
+  import { useStateMenu } from "~/composables/state";
   const active = ref('service');
-  const isOpenMenu = inject('isOpenMenu');
+  const isOpenMenu = useStateMenu();
 
   onMounted(() => {
-    document.querySelectorAll(['.router-link-active', 'a.menu-item', '.logo']).forEach(e => {
+    document.querySelectorAll(['.router-link-active', 'a.menu-item', '.logo', '.submenu a']).forEach(e => {
       e.addEventListener("click", function(){
-        isOpenMenu.value = false
+        isOpenMenu.set(false);
       })
     })
   })
@@ -70,6 +71,11 @@
     }
     .menu-item {
       cursor: pointer;
+      @include aprop('margin-bottom', 60px, 40px, 40px, 32px);
+    }
+
+    .menu-item.open {
+      margin-bottom: 0;
     }
 
     .menu-item.open {

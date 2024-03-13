@@ -3,9 +3,7 @@
     <div class="numbers__wrapper wrapper">
       <div class="numbers__container container">
         <span class="numbers__subtitle ts">/ Цифры</span>
-        <h2 class="numbers__title t2">
-          Эти цифры говорят о нашем опыте
-        </h2>
+        <h2 class="numbers__title t2" v-html="title"></h2>
         <BlocksNumbersGrid class="numbers__grid" :numbers="numbers" />
       </div>
     </div>
@@ -13,33 +11,10 @@
 </template>
 
 <script lang="ts" setup>
-const numbers = reactive([
-  {
-    number: "500+",
-    title: "Успешных кейсов",
-    description: "Создание и доработка сайтов, продвижение и реклама в интернете."
-  },
-  {
-    number: "2013",
-    title: "Год основания компании",
-    description: "Более 10 лет помогаем вашему бизнесу развиваться на просторах сети интернета"
-  },
-  {
-    number: "40+",
-    title: "отраслей бизнеса клиентов",
-    description: "Более 10 лет помогаем вашему бизнесу развиваться на просторах сети интернета"
-  },
-  {
-    number: "5",
-    title: "Иностранных компаний",
-    description: "Нам доверяют не только клиенты из России"
-  },
-  {
-    number: "24",
-    title: "Города наших клиентов",
-    description: "Работаем с клиентами по всей России"
-  }
-  ])
+  const { numbers, title } = defineProps({
+    numbers: Object,
+    title: String
+  })
 </script>
 
 <style lang="scss" scoped>
@@ -60,7 +35,7 @@ const numbers = reactive([
     }
 
     &__title {
-      grid-column: 5 span;
+      grid-column: 6 span;
 
       @include laptop {
         grid-row: 2;

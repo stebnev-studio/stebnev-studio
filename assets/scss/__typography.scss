@@ -22,6 +22,11 @@ h3, .title3, .t3 {
     font-weight: 400;
     line-height: 150%;
 }
+.text-med-mob, .tm-mob {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 150%;
+}
 
 .text-small, .ts {
     @include ffs(14px, 14px, 14px, 12px);
@@ -47,7 +52,7 @@ h3, .title3, .t3 {
     line-height: 110%;
 
     @include mobile {
-        font-weight: bold;
+        font-weight: 400;
     }
 }
 
@@ -60,6 +65,19 @@ h3, .title3, .t3 {
 
     &-small {
         @include ffs(80px, 60px, 60px, 60px);
+        font-weight: 500;
+        line-height: 80%;
+    }
+}
+.numeral {
+    &-big {
+        @include ffs(170px, 120px, 120px, 80px);
+        font-weight: 400;
+        line-height: 80%;
+    }
+
+    &-small {
+        @include ffs(60px, 40px, 60px, 60px);
         font-weight: 500;
         line-height: 80%;
     }
@@ -113,4 +131,13 @@ h3, .title3, .t3 {
                 font-weight: 400;
             }
         }
+}
+
+.row3 {
+    grid-row: 3 !important;
+}
+.row1 {
+    @include mobile{
+        grid-row: 1 !important;
+    }
 }

@@ -4,17 +4,21 @@
       <div class="about-service-header__container container">
         <span class="about-service-header__subtitle ts">/ Об услуге</span>
         <h2 class="about-service-header__title t2">
-          STEBNEV+STUDIO — это веб студия полного цикла
+          {{ title }}
         </h2>
-        <p class="about-service-header__description text-med">
-          Наши специалисты обладают большим опытом работы и высокой квалификацией. Мы гарантируем быстрое решение поставленных задач и выполнение работ в полном объёме, поэтому наши клиенты остаются довольны сотрудничеством.
-        </p>
+        <p class="about-service-header__description text-med" v-html="description"></p>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+
+  const { title, description } = defineProps({
+    title: String,
+    description: String
+  })
+
 </script>
 
 <style lang="scss" scoped>

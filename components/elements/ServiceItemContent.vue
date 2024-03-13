@@ -4,7 +4,9 @@
       Запуск рекламы от 5 рабочих дней
     </p>
     <div class="service-content__text ts">
-      Запуск рекламы от 5 рабочих дней. Подбираем инструменты для максимального охвата ЦА. Отслеживаем эффективность, оптимизируем бюджет.
+      <p>
+        Запуск рекламы от 5 рабочих дней. Подбираем инструменты для максимального охвата ЦА. Отслеживаем эффективность, оптимизируем бюджет.
+      </p>
     </div>
     <ElementsLinkAdditional class="service-content__link" to="/">
       подробнее
@@ -20,22 +22,27 @@
   .service-content {
     display: flex;
     flex-direction: column;
-    transition: 0.25s;
+    transition: $transitionTime;
 
     &__link {
       @include aprop("margin-top", 32px, 28px, 32px, 20px);
     }
 
     &__text {
-      height: 0%;
+      max-height: 0%;
       overflow: hidden;
-      transition: 0.25s;
-      margin-top: 0;
+      transition: $transitionTime;
+    }
+
+    &__text p {
+      max-height: 100%;
+      @include aprop("margin-top", 40px, 40px, 32px, 32px);
+
     }
   }
 
-  .service-item:hover .service-content__text {
-    @include aprop("margin-top", 40px, 40px, 32px, 32px);
-    height: 100%;
+  .service-item:hover .service-content__text{
+    max-height: 100%;
   }
+
 </style>

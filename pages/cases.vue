@@ -1,6 +1,6 @@
 <template>
   <main class="main">
-    <SectionsCasesOffer class="section-cases-offer" />
+    <SectionsCasesOffer class="section-cases-offer"></SectionsCasesOffer>
     <SectionsCasesPortfolio class="section-cases-portfolio" />
   </main>
 </template>

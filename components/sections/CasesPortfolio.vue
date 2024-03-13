@@ -14,6 +14,6 @@
 
 <style lang="scss" scoped>
   .portfolio {
-
+    overflow: hidden;
   }
 </style>

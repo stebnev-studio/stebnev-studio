@@ -39,7 +39,7 @@
 
 <script lang="ts" setup>
   import { ErrorMessage } from 'vee-validate';
-  function onSubmit(values) {
+  function onSubmit(values: any) {
     console.log(values);
   }
 </script>

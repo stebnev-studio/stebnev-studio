@@ -37,6 +37,7 @@
 
     &__owner {
       color: $gray;
+      margin-top: 8px;
     }
 
     &__img {

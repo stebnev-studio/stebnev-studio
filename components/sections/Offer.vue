@@ -2,27 +2,34 @@
   <div class="offer">
       <div class="offer__front">
           <div class="offer__wrapper wrapper">
-            <div class="offer__container container" v-if="route.path != '/about'">
+            <div class="offer__container container" v-if="to">
                 <h1 class="offer__title t1">
-                  Разрабатываем
-                  продвигаем &
-                  поддерживаем сайты
+                  <slot name="offerTitle">
+
+                  </slot>
                 </h1>
                 <div class="offer__description">
                     <span class="offer__text text-med">
-                        С 2008 года разрабатываем сайты в лучших традициях цифровых технологий
+                      <slot name="offerDescription">
+
+                      </slot>
                     </span>
-                    <NuxtLink to="/" class="offer__link btn-text-big">
-                      подробнее
-                      <svg width="15" height="12" viewBox="0 0 15 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0 6H14M14 6L8.68966 1M14 6L8.68966 11" stroke="#0D0D0D"/>
-                      </svg>
-                    </NuxtLink>
+
+                      <NuxtLink :to="to" class="offer__link btn-text-big">
+                        <slot name="offerButton" v-if="to">
+
+                        </slot>
+                        <svg width="15" height="12" viewBox="0 0 15 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M0 6H14M14 6L8.68966 1M14 6L8.68966 11" stroke="#0D0D0D"/>
+                        </svg>
+                      </NuxtLink>
                 </div>
             </div>
-            <div class="offer__container container stebnev-container" v-else>
-                <ElementsStebnevStudioOffer class="offer__stebnev" />
-            </div>
+            <slot name="StebnevStudio" v-if="!to">
+              <div class="offer__container container stebnev-container">
+                  <ElementsStebnevStudioOffer class="offer__stebnev" />
+              </div>
+            </slot>
           </div>
       </div>
       <div class="offer__back">
@@ -32,14 +39,16 @@
 </template>
 
 <script lang="ts" setup>
-const route = useRoute();
+  const { to } = defineProps({
+    to: String
+  })
 
 </script>
 
 <style lang="scss" scoped>
   .offer {
     position: relative;
-    min-height: 200vh;
+    min-height: 200dvh;
     width: 100%;
 
     &__front {
@@ -47,7 +56,7 @@ const route = useRoute();
       top: 0;
       left: 0;
       z-index: 2;
-      height: 90vh;
+      height: 90dvh;
       width: 100%;
       background: $white;
       mix-blend-mode: lighten;
@@ -56,14 +65,14 @@ const route = useRoute();
       align-items: center;
 
       @include mobile {
-        height: 70vh;
+        height: 70dvh;
       }
     }
 
     &__back {
       position: sticky;
       top: 0;
-      height: 100vh;
+      height: 100dvh;
       img {
         width: 100%;
         height: 100%;
@@ -72,7 +81,7 @@ const route = useRoute();
       }
 
       @include mobile {
-        height: 100vh;
+        height: 100dvh;
       }
     }
 
@@ -80,7 +89,7 @@ const route = useRoute();
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      height: 100vh;
+      height: 90dvh;
       width: 100%;
 
       @include mobile {

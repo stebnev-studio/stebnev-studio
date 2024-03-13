@@ -6,7 +6,7 @@
         </NuxtLink>
         <ElementsBurger />
       </div>
-      <div class="header__content" :class="{open: isOpen}">
+      <div class="header__content" :class="{open: isOpen.state}">
         <div class="wrapper">
           <BlocksHeaderContent class="container" />
           <div class="header__footer">
@@ -20,59 +20,57 @@
 
 
 <script setup>
-import {provide } from 'vue';
-import LocomotiveScroll from 'locomotive-scroll';
-const { $ScrollTrigger, $gsap } = useNuxtApp();
-const locomotiveScroll = new LocomotiveScroll({
-    lenisOptions: {
-        wrapper: window,
-        content: document.documentElement,
-        lerp: 0.1,
-        duration: 1.2,
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-        smoothTouch: false,
-        wheelMultiplier: 1,
-        touchMultiplier: 2,
-        normalizeWheel: true,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)), // https://www.desmos.com/calculator/brs54l4xou
-    },
-});
+  import LocomotiveScroll from 'locomotive-scroll';
+  const { $ScrollTrigger, $gsap } = useNuxtApp();
+  const locomotiveScroll = new LocomotiveScroll({
+      lenisOptions: {
+          wrapper: window,
+          content: document.documentElement,
+          lerp: 0.1,
+          duration: 1.2,
+          orientation: 'vertical',
+          gestureOrientation: 'vertical',
+          smoothWheel: true,
+          smoothTouch: false,
+          wheelMultiplier: 1,
+          touchMultiplier: 2,
+          normalizeWheel: true,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)), // https://www.desmos.com/calculator/brs54l4xou
+      },
+  });
 
-onMounted(() => {
-  addClass();
-  $gsap.timeline({
-    scrollTrigger: {
-      trigger: ".main",
-      start: "top top",
-      end: "top+=50px top",
-      onLeave: removeClass,
-      onEnterBack: addClass
-    },
-  })
+  onMounted(() => {
+    addClass();
+    $gsap.timeline({
+      scrollTrigger: {
+        trigger: ".main",
+        start: "top top",
+        end: "top+=50px top",
+        onLeave: removeClass,
+        onEnterBack: addClass
+      },
+    })
 
-  $gsap.timeline({
-    scrollTrigger: {
-      trigger: ".brief",
-      start: "top top",
-      onEnter: addClass,
-      onLeaveBack: removeClass
+    $gsap.timeline({
+      scrollTrigger: {
+        trigger: ".brief",
+        start: "top top",
+        onEnter: addClass,
+        onLeaveBack: removeClass
+      }
+    })
+
+    function addClass() {
+      document.querySelector(".header__visible").classList.add("active");
+    }
+
+    function removeClass() {
+      document.querySelector(".header__visible").classList.remove("active");
     }
   })
 
-  function addClass() {
-    document.querySelector(".header__visible").classList.add("active");
-  }
+  const isOpen = useStateMenu();
 
-  function removeClass() {
-    document.querySelector(".header__visible").classList.remove("active");
-  }
-})
-
-const isOpen = ref(false);
-provide('isOpenMenu', isOpen);
-console.log(isOpen);
 </script>
 
 <style lang="scss" scoped>

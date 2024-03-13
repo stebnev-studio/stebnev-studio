@@ -17,16 +17,19 @@ export default defineNuxtConfig({
   },
   ssr: false,
   routeRules: {
-    '/' : { prerender: true }
+    '/about' : { prerender: false, ssr: true }
   },
   app: {
-
+    // pageTransition: {
+    //   name: "page",
+    //   mode: "out-in"
+    // },
     head: {
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' }
       ],
       script: [{
-        src: 'https://cdn.jsdelivr.net/gh/dixonandmoe/rellax@master/rellax.min.js'
+        src: 'https://cdn.jsdelivr.net/gh/dixonandmoe/rellax@master/rellax.min.js',
       }]
     }
   },
@@ -58,7 +61,8 @@ export default defineNuxtConfig({
     "@nuxt/image", 
     '@vueuse/nuxt', 
     '@hypernym/nuxt-gsap',
-    '@vee-validate/nuxt'
+    '@vee-validate/nuxt',
+    '@pinia/nuxt'
   ],
   veeValidate: {
     // disable or enable auto imports

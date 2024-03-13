@@ -8,11 +8,11 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
-  to: {
-    type: String
-  }
-})
+  const props = defineProps({
+    to: {
+      type: String
+    }
+  })
 </script>
 
 <style lang="scss" scoped>

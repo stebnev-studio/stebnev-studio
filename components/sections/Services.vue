@@ -2,11 +2,15 @@
   <div class="services bg-black">
     <div class="services__wrapper wrapper">
       <div class="services__container container">
-          <h2 class="services__title ts">/ Услуги</h2>
-          <ul class="services__list">
-              <BlocksServiceItem />
-              <BlocksServiceItem />
-              <BlocksServiceItem />
+          <span class="services__subtitle ts" v-if="isSubtitle">/ Услуги </span>
+          <h2 class="services__title t2" v-if="isTitle" :class="{mbn: isDescription, row1: isDescription}">
+            Типы сайтов которые мы разрабатываем
+          </h2>
+            <p class="services__description text-med tm-mob" v-if="isDescription">
+              <slot name="ServicesDescription"></slot>
+            </p>
+          <ul class="services__list" :class="{row3: isTitle}">
+            <slot name="ServicesList"></slot>  
           </ul>
       </div>
     </div>
@@ -15,7 +19,20 @@
 </template>
 
 <script lang="ts" setup>
-const words = reactive(['JAVA script.', 'BRANDING.', 'DEVELOPMENT.', 'UI/UX DESIGN', 'CSS.']);
+
+  const { isSubtitle , isDescription, isTitle } = defineProps({
+    isSubtitle: {
+      default: true
+    },
+    isDescription: {
+      default: false
+    },
+    isTitle: {
+      default: true
+    }
+  });
+
+  const words = reactive(['JAVA script.', 'BRANDING.', 'DEVELOPMENT.', 'UI/UX DESIGN', 'CSS.']);
 </script>
 
 <style scoped lang="scss">
@@ -38,10 +55,11 @@ const words = reactive(['JAVA script.', 'BRANDING.', 'DEVELOPMENT.', 'UI/UX DESI
           }
       }
 
-      &__title {
+      &__subtitle {
         grid-row: 1;
-        grid-column: 4 span;
+        grid-column: 2 span;
         color: $gray;
+
         @include laptop {
           grid-row: 1;
           margin-bottom: 80px;
@@ -57,11 +75,55 @@ const words = reactive(['JAVA script.', 'BRANDING.', 'DEVELOPMENT.', 'UI/UX DESI
         }
       }
 
+      &__title {
+        grid-column: 7 span;
+        @include aprop('margin-bottom', 80px, 60px, 30px, 60px);
+
+        @include laptop {
+          grid-row: 1;
+          margin-bottom: 80px;
+        }
+        @include tablet {
+          grid-column: 8 span;
+          grid-row: 1;
+          margin-bottom: 60px;
+        }
+        @include mobile {
+          grid-column: 4 span;
+          grid-row: 2;
+          margin-bottom: 80px;
+          grid-template-columns: repeat(4, 1fr);
+        }
+
+        &.mbn {
+          margin-bottom: 0;
+        }
+
+
+      }
+
+      &__description {
+        grid-column: 5 / 4 span;
+        @include aprop('margin-top', 80px, 60px, 31px, 60px);
+        @include aprop('margin-bottom', 140px, 60px, 80px, 80px);
+
+        @include laptop{
+          grid-column: 5 / 8 span;
+        }
+
+        @include tablet{
+          grid-column: 3 / 8 span;
+        }
+
+        @include mobile{
+          grid-column: 4 span;
+        }
+      }
+
       &__list {
         grid-column: 5 / 8 span;
         grid-row: 1;
-        row-gap: 120px;
-        @include aprop("row-gap", 120px, 80px, 60px, 60px);
+        // @include aprop("row-gap", 120px, 80px, 60px, 60px);
         display: grid;
 
         @include laptop {

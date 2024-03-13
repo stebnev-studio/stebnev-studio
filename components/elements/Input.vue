@@ -5,11 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-  const { forID, placeholder, warn } = defineProps({
-    forID : String,
-    placeholder: String,
-    warn: {}
-  })
+
 </script>
 
 <style lang="scss" scoped>

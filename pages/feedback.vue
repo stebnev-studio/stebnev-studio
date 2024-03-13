@@ -5,9 +5,9 @@
 </template>
 
 <script lang="ts" setup>
-definePageMeta({
-  layout: 'withoutbrief'
-})
+  definePageMeta({
+    layout: 'withoutbrief'
+  })
 </script>
 
 <style lang="scss" scoped>

@@ -22,11 +22,11 @@
 </template>
 
 <script lang="ts" setup>
-const {figure , text, to} = defineProps({
-  figure: String,
-  text: String,
-  to: String
-})
+  const {figure , text, to} = defineProps({
+    figure: String,
+    text: String,
+    to: String
+  })
 </script>
 
 <style lang="scss" scoped>

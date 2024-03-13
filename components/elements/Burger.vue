@@ -1,5 +1,5 @@
 <template>
-  <div class="burger" @click="openMenu" :class="{open: isOpen}">
+  <div class="burger" @click="openMenu" :class="{open: isOpen.state}">
       <span></span>
       <span></span>
       <span></span>
@@ -7,11 +7,13 @@
 </template>
 
 <script setup>
-let isOpen = inject('isOpenMenu');
+  import { useStateMenu } from '~/composables/state';
 
-function openMenu() {
-  isOpen.value = !isOpen.value;
-}
+  const isOpen = useStateMenu();
+
+  function openMenu() {
+    isOpen.toggle();
+  }
 </script>
 
 <style lang="scss" scoped>

@@ -19,33 +19,27 @@
 
 <script setup>
   import { useMediaQuery } from "@vueuse/core";
-  const route = useRoute();
-  const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
-
-  const { $gsap } = useNuxtApp();
 
   const props = defineProps({
     info: {
       type: Object,
       required: true
     }
-});
+  });
 
-onMounted(() => {
-    document.querySelectorAll("div[portfolio-attr]").forEach(function (e) {
-      e.style.backgroundImage = 'url('+e.getAttribute('portfolio-attr')+')';
-    })
+  const route = useRoute();
+  const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
+  const title = props.info.title;
+  const src = props.info.img;
+  const link = props.info.link;
+  const desc = props.info.desc;
 
-})
+  onMounted(() => {
+      document.querySelectorAll("div[portfolio-attr]").forEach(function (e) {
+        e.style.backgroundImage = 'url('+e.getAttribute('portfolio-attr')+')';
+      })
+  })
 
-function getRandomNumber () {
-  return Math.floor(Math.random() * 100) / 200;
-}
-
-const title = props.info.title;
-const src = props.info.img;
-const link = props.info.link;
-const desc = props.info.desc;
 </script>
 
 <style lang="scss" scoped>
@@ -141,6 +135,7 @@ const desc = props.info.desc;
     @include mobile {
       grid-template-columns: repeat(4, 1fr);
       height: 100%;
+      max-height: 340px;
     }
   }
 

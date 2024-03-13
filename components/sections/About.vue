@@ -13,18 +13,18 @@
 </template>
 
 <script lang="ts" setup>
-const wordsOne = reactive([
-  'EVENT-HALL.',
-  'SOKU',
-  'RODGEN.',
-  'DENTIS'
-])
-const wordsTwo = reactive([
-  'SOKU',  
-  'EVENT-HALL.',
-  'DENTIS',
-  'RODGEN.'
-])
+  const wordsOne = reactive([
+    'EVENT-HALL.',
+    'SOKU',
+    'RODGEN.',
+    'DENTIS'
+  ]);
+  const wordsTwo = reactive([
+    'SOKU',  
+    'EVENT-HALL.',
+    'DENTIS',
+    'RODGEN.'
+  ]);
 </script>
 
 <style lang="scss" scoped>

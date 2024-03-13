@@ -67,7 +67,7 @@
     display: flex;
     flex-direction: column;
     grid-column: 12 span;
-    overflow-x: visible !important;
+    overflow: visible;
 
     @include tablet {
       row-gap: 80px;

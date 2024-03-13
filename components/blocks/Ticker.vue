@@ -16,13 +16,13 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
-  words : {
-    type: Array<String>,
-    required: true
-   }
-});
-const words = props.words;
+  const { words } = defineProps({
+    words : {
+      type: Array<String>,
+      required: true,
+      default: ['JAVA script.', 'BRANDING.', 'DEVELOPMENT.', 'UI/UX DESIGN', 'CSS.']
+    }
+  });
 </script>
 
 <style scoped lang="scss">

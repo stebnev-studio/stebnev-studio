@@ -42,13 +42,13 @@
     &__cite {
       grid-column: -6 / 5 span;
       @include laptop {
-
+        grid-column: 5 / 8 span;
       }
       @include tablet {
-
+        grid-column: 3 / 10 span;
       }
       @include mobile {
-
+        grid-column: 4 span;
       }
     }
   }

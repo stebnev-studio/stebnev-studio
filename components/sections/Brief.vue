@@ -14,12 +14,13 @@
 </template>
 
 <script lang="ts" setup>
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-gsap.registerPlugin(ScrollTrigger);
-import { useMediaQuery } from "@vueuse/core";
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { useMediaQuery } from "@vueuse/core";
 
-const isMobileAndTabletandLaptop = useMediaQuery("(min-width: 340px) and (max-width: 1023.5px)");
+  gsap.registerPlugin(ScrollTrigger);
+
+  const isMobileAndTabletandLaptop = useMediaQuery("(min-width: 340px) and (max-width: 1023.5px)");
 
 </script>
 

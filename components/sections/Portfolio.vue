@@ -2,17 +2,19 @@
   <div class="portfolio">
     <div class="portfolio__wrapper wrapper">
       <div class="portfolio__container container">
-        <BlocksPortfolioHeader class="portfolio__header" />
+        <LazyBlocksPortfolioHeader class="portfolio__header" />
       </div>
     </div>
-    <div class="portfolio__wrapper wrapper"  v-if="!isMobile">
+
+    <div class="portfolio__wrapper wrapper" v-if="!isMobile">
       <div class="portfolio__container container">
-        <BlocksPortfolioContent class="portfolio__content" />
+        <LazyBlocksPortfolioContent class="portfolio__content" />
       </div>
     </div>
-    <div class="portfolio__container-mobile container" v-if="isMobile">
-      <BlocksPortfolioContentMobile class="portfolio__content" />
+    <div class="portfolio__container-mobile container" v-else>
+      <LazyBlocksPortfolioContentMobile class="portfolio__content" />
     </div>
+    
     <div class="portfolio__wrapper wrapper">
       <div class="portfolio__container container">
         <BlocksPortfolioFooter class="portfolio__footer" />
@@ -22,9 +24,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useMediaQuery } from "@vueuse/core";
-
-const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
+  import { useMediaQuery } from "@vueuse/core";
+  const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
 </script>
 
 <style scoped lang="scss">
@@ -45,13 +46,14 @@ const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
       @include mobile {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
+      }
 
-        &-mobile {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          column-gap: $gutter;
-          padding: 0px 30px;
-        }
+      &-mobile {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        column-gap: $gutter;
+        padding: 0px 30px;
+        order: 0;
       }
     }
 
@@ -66,6 +68,10 @@ const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
 
     &__content {
       grid-row: 2;
+
+      @include mobile{
+        grid-row: auto;
+      }
     }
 
     &__footer {
@@ -79,6 +85,10 @@ const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
       @include mobile {
         grid-column: 4 span;
       }
+    }
+
+    @include mobile{
+      max-height: 1180px;
     }
   }
 </style>

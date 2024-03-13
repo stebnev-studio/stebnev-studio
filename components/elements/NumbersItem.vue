@@ -13,11 +13,11 @@
 </template>
 
 <script lang="ts" setup>
-const { item } = defineProps({
-  item: {
-    type: Object || undefined
-  }
-})
+  const { item } = defineProps({
+    item: {
+      type: Object || undefined
+    }
+  })
 </script>
 
 <style lang="scss" scoped>

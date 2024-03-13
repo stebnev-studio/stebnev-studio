@@ -17,16 +17,15 @@
 </template>
 
 <script lang="ts" setup>
-import { useMediaQuery } from '@vueuse/core';
+  import { useMediaQuery } from '@vueuse/core';
 
-const { numbers } = defineProps({
-  numbers : Object
-})
+  const { numbers } = defineProps({
+    numbers : Object
+  })
 
-const isMobile = useMediaQuery('(min-width: 340px) and (max-width: 767.5px)');
-
-const firstNumber = numbers?.[0];
-const otherNumber = numbers?.slice(1);
+  const isMobile = useMediaQuery('(min-width: 340px) and (max-width: 767.5px)');
+  const firstNumber = numbers?.[0];
+  const otherNumber = numbers?.slice(1);
 </script>
 
 <style scoped lang="scss">

@@ -1,13 +1,21 @@
 <template>
   <div class="about-service">
-    <BlocksAboutServiceHeader />
-    <BlocksTicker class="about-service__ticker" :words="words" />
-    <BlocksAboutServiceContent class="about-service__content" />
+    <BlocksAboutServiceHeader :title="info?.title" :description="info?.description" />
+    <BlocksTicker class="about-service__ticker" :words="words" v-if="ticker"/>
+    <BlocksAboutServiceContent class="about-service__content" v-if="stebnev" />
   </div>
 </template>
 
-<script lang="ts" setup>
-const words = reactive(['JAVA script.', 'BRANDING.', 'DEVELOPMENT.', 'UI/UX DESIGN', 'CSS.']);
+<script setup>
+
+  const { ticker, stebnev, info} = defineProps({
+    ticker: Boolean,
+    stebnev: Boolean,
+    info: Object
+  })
+
+  const words = reactive(['JAVA script.', 'BRANDING.', 'DEVELOPMENT.', 'UI/UX DESIGN', 'CSS.']);
+  
 </script>
 
 <style lang="scss" scoped>

@@ -2,10 +2,18 @@
   <div class="about-content">
     <div class="about-content__wrapper wrapper">
       <div class="about-content__container container">
-        <span class="about-content__subtitle ts">
+        <span class="about-content__subtitle ts" v-if="isMobile">
           / О нас
         </span>
-        <NuxtImg class="about-content__img" src="/people2.png" v-if="route.path == '/about'"/>
+      </div>
+    </div>
+    <NuxtImg class="about-content__img" src="/people2.png" v-if="route.path == '/about' && isMobile"/>
+    <div class="about-content__wrapper wrapper">
+      <div class="about-content__container container">
+        <span class="about-content__subtitle ts" v-if="!isMobile">
+          / О нас
+        </span>
+        <NuxtImg class="about-content__img" src="/people2.png" v-if="route.path == '/about' && !isMobile"/>
         <h2 class="about-content__title t2">
           Занимаемся любимым делом, работаем с клиентами по России и за её пределами.
         </h2>
@@ -21,7 +29,8 @@
 </template>
 
 <script lang="ts" setup>
-const route = useRoute();
+  const route = useRoute();
+  const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
 </script>
 
 <style lang="scss" scoped>
@@ -65,7 +74,7 @@ const route = useRoute();
       }
 
       @include mobile {
-        position: absolute;
+        // position: absolute;
         left: 0;
         height: max-content;
         transform: translateY(30px);
@@ -88,7 +97,7 @@ const route = useRoute();
       }
 
       @include mobile {
-        margin-bottom: 221px;
+
       }
 
     }

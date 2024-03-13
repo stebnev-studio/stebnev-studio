@@ -13,23 +13,23 @@
 </template>
 
 <script lang="ts" setup>
-const contactList = reactive([
-  {
-    text: "+7 (473) 200-04-63",
-    to: "tel:+7 (473) 200-04-63",
-    figure: "square"
-  },
-  {
-    text: "mail@stebnev-studio.ru",
-    to: "mailto:mail@stebnev-studio.ru",
-    figure: "circle"
-  },
-  {
-    text: "Россия, г. Воронеж, пр-т Труда, д. 68, к1",
-    to: "google.com",
-    figure: "triangle"
-  }
-])
+  const contactList = reactive([
+    {
+      text: "+7 (473) 200-04-63",
+      to: "tel:+7 (473) 200-04-63",
+      figure: "square"
+    },
+    {
+      text: "mail@stebnev-studio.ru",
+      to: "mailto:mail@stebnev-studio.ru",
+      figure: "circle"
+    },
+    {
+      text: "Россия, г. Воронеж, пр-т Труда, д. 68, к1",
+      to: "google.com",
+      figure: "triangle"
+    }
+  ])
 </script>
 
 <style lang="scss" scoped>
