@@ -19,8 +19,8 @@
 
 <style lang="scss" scoped>
 .good-results {
-  background-color: $black;
-  color: $white;
+  // background-color: $black;
+  // color: $white;
 
   &__container {
     display: grid;

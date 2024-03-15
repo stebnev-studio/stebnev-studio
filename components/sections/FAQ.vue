@@ -50,8 +50,8 @@
 
 <style lang="scss" scoped>
   .faq {
-    background-color: $black;
-    color: $white;
+    // background-color: $black;
+    // color: $white;
 
     &__container {
       display: grid;

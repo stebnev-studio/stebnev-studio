@@ -1,13 +1,11 @@
 <template>
-  <main class="main">
-    <SectionsFeedback />
+  <main class="main bgBlack">
+    <LazySectionsFeedback />
   </main>
 </template>
 
 <script lang="ts" setup>
-  definePageMeta({
-    layout: 'withoutbrief'
-  })
+
 </script>
 
 <style lang="scss" scoped>

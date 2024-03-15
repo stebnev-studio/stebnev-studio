@@ -23,8 +23,8 @@
 <style lang="scss" scoped>
   .feedback {
     min-height: 100vh;
-    background-color: $black;
-    color: $white;
+    // background-color: $black;
+    // color: $white;
 
     &__wrapper {
       display: flex;

@@ -7,13 +7,13 @@
         </span>
       </div>
     </div>
-    <NuxtImg class="about-content__img" src="/people2.png" v-if="route.path == '/about' && isMobile"/>
+    <NuxtImg provider="aliyun"  class="about-content__img" src="/people2.png" v-if="route.path == '/about' && isMobile"/>
     <div class="about-content__wrapper wrapper">
       <div class="about-content__container container">
         <span class="about-content__subtitle ts" v-if="!isMobile">
           / О нас
         </span>
-        <NuxtImg class="about-content__img" src="/people2.png" v-if="route.path == '/about' && !isMobile"/>
+        <NuxtImg provider="aliyun"  class="about-content__img" src="/people2.png" v-if="route.path == '/about' && !isMobile"/>
         <h2 class="about-content__title t2">
           Занимаемся любимым делом, работаем с клиентами по России и за её пределами.
         </h2>

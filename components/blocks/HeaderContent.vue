@@ -24,15 +24,14 @@
 </template>
 
 <script setup>
-  import { inject } from "vue";
-  import { useStateMenu } from "~/composables/state";
+  import { useStateGlobal } from "~/composables/stateGlobal";
   const active = ref('service');
-  const isOpenMenu = useStateMenu();
+  const isOpenMenu = useStateGlobal();
 
   onMounted(() => {
     document.querySelectorAll(['.router-link-active', 'a.menu-item', '.logo', '.submenu a']).forEach(e => {
       e.addEventListener("click", function(){
-        isOpenMenu.set(false);
+        isOpenMenu.setMenu(false);
       })
     })
   })
@@ -88,4 +87,4 @@
       }
     }
   }
-</style>
+</style>~/composables/stateGlobalGlobal

@@ -4,6 +4,7 @@
 @import "__colors";
 @import "__components";
 
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -76,6 +77,9 @@ body, html {
   @include aprop("padding-left", 40px, 32px, 32px, 30px);
   @include aprop("padding-right", 40px, 32px, 32px, 30px);
 }
+.main {
+  transition: 0.3s;
+}
 
 a {
   text-decoration: none;
@@ -89,3 +93,44 @@ a {
   scale: 2.1;
   transition: 0.3s;
 }
+
+.info {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999999999;
+}
+
+.bgBlack .offer__title,
+.bgBlack .offer__text {
+  color: $black;
+}
+
+.main {
+  background-color: $white;
+  color: $black;
+
+  &.bgBlack {
+    background-color: $black;
+    color: $white;
+  }
+
+  @include mobile{
+    background-color: $black;
+    color: $white;
+
+    .offer * {
+      color: $black;
+    }
+
+    .offer__front {
+      mix-blend-mode: normal;
+    }
+  }
+}
+

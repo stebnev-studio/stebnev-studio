@@ -22,6 +22,7 @@
 <script setup lang="ts">
   const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
   const { $gsap } = useNuxtApp();
+  
   if(process.client) {
       onMounted(() => {
         if(isMobile) {
@@ -69,8 +70,8 @@
 
 <style lang="scss" scoped>
   .principles {
-    background-color: $black;
-    color: $white;
+    // background-color: $black;
+    // color: $white;
     min-height: 100vh;
 
     &__container {

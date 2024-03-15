@@ -14,25 +14,27 @@
 </template>
 
 <script lang="ts" setup>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
   import { useMediaQuery } from "@vueuse/core";
-
-  gsap.registerPlugin(ScrollTrigger);
-
+  import { useStateGlobal } from '~/composables/stateGlobal';
   const isMobileAndTabletandLaptop = useMediaQuery("(min-width: 340px) and (max-width: 1023.5px)");
+
+
+  const state = useStateGlobal();
+  const { isBlack } = storeToRefs(state);
 
 </script>
 
 <style lang="scss" scoped>
   .brief {
+    transition: 0.3s;
+    // background-color: $black;
+    // color: $white;
+
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 90vh;
-
-    background-color: $black;
 
     &__text {
       color: $white;

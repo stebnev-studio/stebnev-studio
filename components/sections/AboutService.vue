@@ -20,8 +20,8 @@
 
 <style lang="scss" scoped>
   .about-service {
-    background-color: $black;
-    color: $white;
+    // background-color: $black;
+    // color: $white;
 
     &__ticker {
       @include aprop("margin-top", 300px, 200px, 200px, 140px);

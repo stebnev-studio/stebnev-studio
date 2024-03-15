@@ -29,7 +29,7 @@
     }
 
     &__text {
-      max-height: 0%;
+      max-height: 0px;
       overflow: hidden;
       transition: $transitionTime;
     }
@@ -42,7 +42,7 @@
   }
 
   .service-item:hover .service-content__text{
-    max-height: 100%;
+    max-height: 200px;
   }
 
 </style>

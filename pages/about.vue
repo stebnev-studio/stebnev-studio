@@ -1,18 +1,23 @@
 <template>
-  <main class="main">
-      <SectionsOffer class="section-offer">
+  <main class="main" :class="{bgBlack: isBlack || isMobile }">
+      <LazySectionsOffer class="section-offer">
         <template #StebnevStudio></template>
-      </SectionsOffer>
-      <SectionsAboutService  class="section-about-service" :info="aboutInfo" :ticker="true" :stebnev="true" />
-      <SectionsAboutAbout class="section-about-about" />
-      <SectionsNumbers class="section-about-numbers" :numbers="numbers" :title="numbersTitle" />
-      <SectionsGoodResults class="section-good-results" />
-      <SectionsPrinciples class="section-principles" />
+      </LazySectionsOffer>
+      <LazySectionsAboutService  class="section-about-service" :info="aboutInfo" :ticker="true" :stebnev="true" />
+      <LazySectionsAboutAbout class="section-about-about" />
+      <LazySectionsNumbers class="section-about-numbers" :numbers="numbers" :title="numbersTitle" />
+      <LazySectionsGoodResults class="section-good-results" />
+      <LazySectionsPrinciples class="section-principles" />
+      <LazySectionsBrief class="section-brief" />
   </main>
 </template>
 
 <script setup>
+  import { useStateGlobal } from '~/composables/stateGlobal';
+  const state = useStateGlobal();
+  let { isBlack } = storeToRefs(state);
 
+  const isMobile = useMediaQuery('(min-width: 340px) and (max-width: 767.5px)');
   // О Услуге
   const aboutInfo = reactive({
     title: 'STEBNEV+STUDIO — это веб студия полного цикла',
@@ -54,13 +59,12 @@
 
 <style lang="scss" scoped>
   .main {
-    background-color: $black;
     min-height: 100vh;
-    background-color: white;
   }
 
   .section-about-service {
     @include aprop("padding-top", 300px, 200px, 200px, 140px);
+    transition: 0.3s
   }
   .section-about-about {
     @include aprop("padding-top", 300px, 200px, 200px, 140px);

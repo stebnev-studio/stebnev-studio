@@ -1,5 +1,5 @@
 <template>
-  <div class="burger" @click="openMenu" :class="{open: isOpen.state}">
+  <div class="burger" @click="openMenu" :class="{open: isOpen.isOpenMenu}">
       <span></span>
       <span></span>
       <span></span>
@@ -7,12 +7,11 @@
 </template>
 
 <script setup>
-  import { useStateMenu } from '~/composables/state';
-
-  const isOpen = useStateMenu();
+import { useStateGlobal } from '~/composables/stateGlobal';
+  const isOpen = useStateGlobal();
 
   function openMenu() {
-    isOpen.toggle();
+    isOpen.toggleMenu();
   }
 </script>
 
@@ -65,4 +64,4 @@
 
 
 
-</style>
+</style>~/composables/stateGlobalGlobal

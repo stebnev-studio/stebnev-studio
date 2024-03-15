@@ -25,7 +25,7 @@
       cursor: pointer;
       transition: $transitionTime;
       margin-bottom: 0;
-
+      
       &:hover {
         opacity: 1;
         @include aprop("margin-bottom", 120px, 80px, 60px, 60px);

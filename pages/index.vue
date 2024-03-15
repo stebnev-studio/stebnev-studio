@@ -1,10 +1,8 @@
 <template>
-  <main class="main">
-      <SectionsOffer class="section-offer" to="google.com">
-        <template #offerTitle>
-          Разрабатываем
-          продвигаем &
-          поддерживаем сайты
+  <main class="main" :class="{bgBlack: isBlack}">
+
+      <LazySectionsOffer class="section-offer" to="google.com">
+        <template #offerTitle>Разрабатываем продвигаем & поддерживаем сайты
         </template>
         <template #offerDescription>
           С 2008 года разрабатываем сайты в лучших традициях цифровых технологий
@@ -12,30 +10,32 @@
         <template #offerButton>
           подробнее
         </template>
-      </SectionsOffer>
+      </LazySectionsOffer>
 
-      <SectionsServices class="section-services" :isTitle="false">
+      <LazySectionsServices class="section-services" :isTitle="false">
         <template #ServicesList>
           <BlocksServiceItem />
           <BlocksServiceItem />
           <BlocksServiceItem />
         </template>
-      </SectionsServices>
+      </LazySectionsServices>
 
-      <SectionsPortfolio class="section-portfolio" />
-      <SectionsAbout class="section-about" />
+      <LazySectionsPortfolio class="section-portfolio"/>
+      <LazySectionsAbout class="section-about" />
+      <LazySectionsBrief class="section-brief" />
   </main>
 </template>
 
-<script setup>
+<script setup lang="ts">
+  import { useStateGlobal } from '~/composables/stateGlobal';
+  const state = useStateGlobal();
+  const { isBlack } = storeToRefs(state);
 
 </script>
 
 <style lang="scss" scoped>
   .main {
-    background: red;
     min-height: 300vh;
-    background-color: white;
   }
 
   .section-portfolio {

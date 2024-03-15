@@ -19,8 +19,8 @@
 
 <style lang="scss" scoped>
   .numbers {
-    background-color: $black;
-    color: $white;
+    // background-color: $black;
+    // color: $white;
     overflow: hidden;
 
     &__container {

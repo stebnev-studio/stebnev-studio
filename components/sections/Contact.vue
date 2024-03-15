@@ -34,8 +34,8 @@
 
 <style lang="scss" scoped>
   .contact {
-    background-color: $black;
-    color: $white;
+    // background-color: $black;
+    // color: $white;
     min-height: 100vh;
 
     &__wrapper {

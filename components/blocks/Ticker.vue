@@ -19,7 +19,7 @@
   const { words } = defineProps({
     words : {
       type: Array<String>,
-      required: true,
+      required: false,
       default: ['JAVA script.', 'BRANDING.', 'DEVELOPMENT.', 'UI/UX DESIGN', 'CSS.']
     }
   });

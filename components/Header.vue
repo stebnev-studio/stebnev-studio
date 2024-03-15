@@ -1,12 +1,12 @@
 <template>
     <header class="header">
-      <div class="header__visible">
+      <div class="header__visible" :class="{active: isHeaderActive}">
         <NuxtLink class="header__logo logo" to="/">
           <ElementsLogoSVG />
         </NuxtLink>
         <ElementsBurger />
       </div>
-      <div class="header__content" :class="{open: isOpen.state}">
+      <div class="header__content" :class="{open: isOpenMenu}">
         <div class="wrapper">
           <BlocksHeaderContent class="container" />
           <div class="header__footer">
@@ -20,56 +20,17 @@
 
 
 <script setup>
-  import LocomotiveScroll from 'locomotive-scroll';
-  const { $ScrollTrigger, $gsap } = useNuxtApp();
-  const locomotiveScroll = new LocomotiveScroll({
-      lenisOptions: {
-          wrapper: window,
-          content: document.documentElement,
-          lerp: 0.1,
-          duration: 1.2,
-          orientation: 'vertical',
-          gestureOrientation: 'vertical',
-          smoothWheel: true,
-          smoothTouch: false,
-          wheelMultiplier: 1,
-          touchMultiplier: 2,
-          normalizeWheel: true,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)), // https://www.desmos.com/calculator/brs54l4xou
-      },
-  });
-
+  import { useStateGlobal } from '~/composables/stateGlobal';
+  const { $gsap } = useNuxtApp();
   onMounted(() => {
-    addClass();
-    $gsap.timeline({
-      scrollTrigger: {
-        trigger: ".main",
-        start: "top top",
-        end: "top+=50px top",
-        onLeave: removeClass,
-        onEnterBack: addClass
-      },
+    nextTick(() => {
+      state.setIsHeaderActive(true);
+      state.setIsBlack(false);
     })
-
-    $gsap.timeline({
-      scrollTrigger: {
-        trigger: ".brief",
-        start: "top top",
-        onEnter: addClass,
-        onLeaveBack: removeClass
-      }
-    })
-
-    function addClass() {
-      document.querySelector(".header__visible").classList.add("active");
-    }
-
-    function removeClass() {
-      document.querySelector(".header__visible").classList.remove("active");
-    }
   })
 
-  const isOpen = useStateMenu();
+  const state = useStateGlobal();
+  let { isOpenMenu, isHeaderActive } = storeToRefs(state);
 
 </script>
 

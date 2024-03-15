@@ -3,10 +3,8 @@
       <div class="offer__front">
           <div class="offer__wrapper wrapper">
             <div class="offer__container container" v-if="to">
-                <h1 class="offer__title t1">
-                  <slot name="offerTitle">
-
-                  </slot>
+                <h1 class="offer__title t1" ref="title">
+                  <slot name="offerTitle"></slot>
                 </h1>
                 <div class="offer__description">
                     <span class="offer__text text-med">
@@ -15,32 +13,77 @@
                       </slot>
                     </span>
 
-                      <NuxtLink :to="to" class="offer__link btn-text-big">
+                      <LazyNuxtLink :to="to" class="offer__link btn-text-big">
                         <slot name="offerButton" v-if="to">
 
                         </slot>
                         <svg width="15" height="12" viewBox="0 0 15 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M0 6H14M14 6L8.68966 1M14 6L8.68966 11" stroke="#0D0D0D"/>
                         </svg>
-                      </NuxtLink>
+                      </LazyNuxtLink>
                 </div>
             </div>
             <slot name="StebnevStudio" v-if="!to">
               <div class="offer__container container stebnev-container">
-                  <ElementsStebnevStudioOffer class="offer__stebnev" />
+                  <LazyElementsStebnevStudioOffer class="offer__stebnev" />
               </div>
             </slot>
           </div>
       </div>
       <div class="offer__back">
-          <img src="/background-offer.png" alt="">
+          <NuxtImg provider="aliyun" format="webp" src="/background-offer.png" alt="backface" loading="lazy"/>
       </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  const { to } = defineProps({
-    to: String
+  import { useMediaQuery } from '@vueuse/core';
+
+  const { $gsap } = useNuxtApp();
+  const { to } = defineProps({ to: String });
+  const title = ref(null);
+
+  onMounted(() => {
+    const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
+    if (!isMobile.value) {
+
+      if(!document.querySelector('.offer__stebnev')) {
+
+        nextTick(() => {
+
+          title.value = splitToSpan(title);
+
+          const words = $gsap.utils.toArray('.offer__title span');
+
+          $gsap.fromTo(words, {
+            clipPath: "inset(100% 0% 0% 0%)",
+            transform: 'translateY(-25px)'
+          }, {
+            stagger: 0.065,
+            clipPath: "inset(0% 0% 0% 0%)",
+            transform: 'translateY(0)',
+          })
+          
+    
+          $gsap.fromTo('.offer__text' ,{
+            opacity: 0,
+            blur: 100
+          }, {
+            opacity: 1,
+            blur: 0,
+            duration: 0.2
+          }, '+=0.025')
+          })
+
+      }
+    }
+
+    function splitToSpan(word: any) {
+      let container = word.value;
+      let str = container.innerHTML;
+      return container.innerHTML = str.split(' ').map(s => `<span>${s}</span>`).join(' ');
+    }
+
   })
 
 </script>
@@ -118,6 +161,10 @@
 
     &__title {
       grid-column: 3 / 6 span;
+
+      & > span {
+        display: block;
+      }
 
       @include laptop {
         grid-column: 3 / 7 span;

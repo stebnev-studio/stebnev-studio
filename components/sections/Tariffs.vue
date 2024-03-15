@@ -37,8 +37,8 @@
 
 <style lang="scss" scoped>
   .tariffs {
-    background-color: $black;
-    color: $white;
+    // background-color: $black;
+    // color: $white;
     overflow: hidden;
 
     &__header {

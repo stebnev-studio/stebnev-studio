@@ -12,10 +12,10 @@
       </svg>
     </div>
     <div class="principles-item-first__img big-img">
-      <NuxtImg src="/img_right.png" format="webp" height="596"/>
+      <NuxtImg provider="aliyun"  src="/img_right.png" format="webp" height="596"/>
     </div>
     <div class="principles-item-first__img-small img-small">
-      <NuxtImg format="webp" src="/hands.png" />
+      <NuxtImg provider="aliyun"  format="webp" src="/hands.png" />
     </div>
     <p class="principles-item-first__description-small text-med">Работаем в тандеме с клиентом. Советуем, рекомендуем только лучшее</p>
     <p class="principles-item-first__description text-med">
@@ -27,7 +27,7 @@
       / Принципы
     </span>
     <div class="principles-item-second__img big-img">
-      <NuxtImg src="/img_right2.png" format="webp" height="596"/>
+      <NuxtImg provider="aliyun"  src="/img_right2.png" format="webp" height="596"/>
     </div>
     <div class="principles-item-second__numbers principles-number">
       <svg width="259" height="144" viewBox="0 0 259 144" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -49,7 +49,7 @@
     </p>
     <p class="principles-item-second__description-small text-med">Фиксированные стоимость и сроки обслуживания, без дополнительных затрат</p>
     <div class="principles-item-second__img-small img-small">
-      <NuxtImg format="webp" src="/dude1.png" />
+      <NuxtImg provider="aliyun"  format="webp" src="/dude1.png" />
     </div>
   </div>
   <div class="principles-item principles-item-third" v-if="order == 3">
@@ -58,7 +58,7 @@
     </span>
     <p class="principles-item-third__description-small text-med">Добросовестно подходим к работе. Прямо говорим обо всех нюансах работы и ожидаем того же от наших клиентов </p>
     <div class="principles-item-third__img big-img">
-      <NuxtImg src="/people4.png" format="webp" height="596"/>
+      <NuxtImg provider="aliyun"  src="/people4.png" format="webp" height="596"/>
     </div>
     <div class="principles-item-third__numbers principles-number">
       <svg width="256" height="144" viewBox="0 0 256 144" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -76,7 +76,7 @@
       </svg>
     </div>
     <div class="principles-item-third__img-small img-small">
-      <NuxtImg format="webp" src="/people3.png" />
+      <NuxtImg provider="aliyun"  format="webp" src="/people3.png" />
     </div>
     <p class="principles-item-third__description text-med">
       Ценим честность и равенство в деловых отношениях
@@ -87,7 +87,7 @@
       / Принципы
     </span>
     <div class="principles-item-four__img big-img">
-      <NuxtImg src="/big-hand.png" format="webp" height="596"/>
+      <NuxtImg provider="aliyun"  src="/big-hand.png" format="webp" height="596"/>
     </div>
     <div class="principles-item-four__numbers principles-number">
       <svg width="280" height="144" viewBox="0 0 280 144" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -102,7 +102,7 @@
     </p>
     <p class="principles-item-four__description-small text-med">Информируем обо всех этапах работы, предостерегаем от возможных ошибок</p>
     <div class="principles-item-four__img-small img-small">
-      <NuxtImg format="webp" src="/people5.png" />
+      <NuxtImg provider="aliyun"  format="webp" src="/people5.png" />
     </div>
   </div>
 </template>

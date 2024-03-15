@@ -1,5 +1,5 @@
 <template>
-  <div class="services bg-black">
+  <div class="services">
     <div class="services__wrapper wrapper">
       <div class="services__container container">
           <span class="services__subtitle ts" v-if="isSubtitle">/ Услуги </span>
@@ -19,7 +19,6 @@
 </template>
 
 <script lang="ts" setup>
-
   const { isSubtitle , isDescription, isTitle } = defineProps({
     isSubtitle: {
       default: true
@@ -31,12 +30,12 @@
       default: true
     }
   });
-
   const words = reactive(['JAVA script.', 'BRANDING.', 'DEVELOPMENT.', 'UI/UX DESIGN', 'CSS.']);
 </script>
 
 <style scoped lang="scss">
   .services {
+      transition: 0.3s;
       &__container {
           display: grid;
           grid-template-columns: repeat(12, 1fr);

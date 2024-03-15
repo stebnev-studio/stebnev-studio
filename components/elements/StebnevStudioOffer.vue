@@ -1,6 +1,6 @@
 <template>
   <div class="stebnev">
-    <div class="stebnev__title">STEBNEV</div>
+    <h1 class="stebnev__title">STEBNEV</h1>
     <div class="stebnev__subtitle">studio</div>
   </div>
 </template>

@@ -29,8 +29,9 @@
 
 <style lang="scss" scoped>
   .about {
-    background-color: $black;
-    color: $white;
+    transition: 0.3s;
+    // background-color: $black;
+    // color: $white;
     overflow-x: hidden;;
 
     &__header {

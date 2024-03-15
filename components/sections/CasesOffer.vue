@@ -20,7 +20,8 @@
 
 <style lang="scss" scoped>
     .cases-offer {
-      color: $black;
+      // color: $black;
+
       &__container {
         display: grid;
         grid-template-columns: repeat(12, 1fr);

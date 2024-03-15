@@ -1,9 +1,10 @@
 <template>
-  <main class="main">
-    <SectionsOffer to="google.com">
+  <main class="main" :class="{bgBlack: isBlack || isMobile }">
+
+    <LazySectionsOffer to="google.com">
       <template #offerTitle>
         Реклама, которая
-        приводит <br>
+        приводит
         целевых клиентов
       </template>
       <template #offerDescription>
@@ -12,21 +13,25 @@
       <template #offerButton>
         подробнее
       </template>
-    </SectionsOffer>
-    <SectionsAboutService class="section-about-service" :ticker="false" :stebnev="false" :info="aboutInfo" />
-    <SectionsTariffs class="section-tariffs" />
-    <BlocksTicker class="ticker" />
-    <SectionsResultsInfo class="section-results-info" />
-    <SectionsNumbers class="section-about-numbers" :numbers="numbers" :title="numbersTitle"/>
-    <SectionsStages class="section-stages" />
-    <BlocksDoubleTicker class="ticker" />
-    <SectionsFAQ class="section-faq" />
+    </LazySectionsOffer>
+    <LazySectionsAboutService class="section-about-service" :ticker="false" :stebnev="false" :info="aboutInfo" />
+    <LazySectionsTariffs class="section-tariffs" />
+    <LazyBlocksTicker class="ticker" />
+    <LazySectionsResultsInfo class="section-results-info" />
+    <LazySectionsNumbers class="section-about-numbers" :numbers="numbers" :title="numbersTitle"/>
+    <LazySectionsStages class="section-stages" />
+    <LazyBlocksDoubleTicker class="ticker" />
+    <LazySectionsFAQ class="section-faq" />
+    <LazySectionsBrief class="section-brief" />
   </main>
 </template>
 
 <script lang="ts" setup>
+  import { useStateGlobal } from '~/composables/stateGlobal';
+  const state = useStateGlobal();
+  let { isBlack } = storeToRefs(state);
 
-
+  const isMobile = useMediaQuery('(min-width: 340px) and (max-width: 767.5px)');
   // О Услуге
   const aboutInfo = reactive({
     title: 'Настройка и оптимизация контекстной и таргетированной рекламы',
@@ -59,9 +64,7 @@
 
 <style lang="scss" scoped>
   .main {
-      background-color: $black;
       min-height: 100vh;
-      background-color: white;
 
       .section-about-service {
         @include aprop("padding-top", 300px, 200px, 200px, 140px);
@@ -87,8 +90,8 @@
       }
 
       .ticker {
-        background-color: $black;
-        color: $white;
+        // background-color: $black;
+        // color: $white;
         @include aprop("padding-top", 300px, 200px, 200px, 140px);
       }
   }

@@ -1,9 +1,18 @@
 <template>
   <div class="portfolio-content-item row">
-    <NuxtLink :to="link" class="portfolio-content-item__content">
+    <LazyNuxtLink :to="link" class="portfolio-content-item__content">
       <div class="portfolio-content-item__picture">
-        <!-- <div :src="src" :portfolio-attr="src" class="portfolio-content-item__img"></div> -->
-        <NuxtImg :src="src" :portfolio-attr="src" class="portfolio-content-item__img" :class="{img_phone: isMobile && route.path != '/cases'}"/>
+        <NuxtImg provider="aliyun" 
+           class="portfolio-content-item__img" 
+          :class="{img_phone: isMobile && route.path != '/cases'}"
+          :src="src" 
+          :portfolio-attr="src" 
+          data-scroll
+          data-scroll-position="middle,middle"
+          data-scroll-speed="0.1"
+          densities="x1"
+          format="webp" 
+          />
       </div>
       <div class="portfolio-content-item__wrapper">
         <div class="portfolio-content-item__title btn-text-big">
@@ -13,7 +22,7 @@
           {{ desc }}
         </div>
       </div>
-    </NuxtLink>
+    </LazyNuxtLink>
   </div>
 </template>
 
@@ -35,9 +44,11 @@
   const desc = props.info.desc;
 
   onMounted(() => {
+    nextTick(() => {
       document.querySelectorAll("div[portfolio-attr]").forEach(function (e) {
         e.style.backgroundImage = 'url('+e.getAttribute('portfolio-attr')+')';
       })
+    })
   })
 
 </script>
@@ -84,6 +95,7 @@
       background-repeat: no-repeat;
       background-attachment: fixed;
       background-size: contain;
+      scale: 1.5;
 
       @include laptop {
         min-height: 355px;

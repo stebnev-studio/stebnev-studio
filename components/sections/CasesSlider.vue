@@ -118,8 +118,8 @@
 
 <style lang="scss" scoped>
 .cases {
-  background-color: $white;
-  color: $black;
+  // background-color: $white;
+  // color: $black;
 
   &__container {
     display: grid;

@@ -1,7 +1,7 @@
 <template>
   <NuxtLink class="case">
     <div class="case__img">
-      <img :src="caseItem?.img" alt="" class="case__source">
+      <NuxtImg provider="aliyun" :src="caseItem?.img" format="webp" alt="" class="case__source" />
     </div>
     <div class="case__footer">
       <p class="case__title btn-text-big">

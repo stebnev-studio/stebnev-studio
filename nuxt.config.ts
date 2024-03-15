@@ -15,15 +15,19 @@ export default defineNuxtConfig({
   build: {
     transpile: ['gsap'],
   },
-  ssr: false,
+  ssr: true,
   routeRules: {
-    '/about' : { prerender: false, ssr: true }
+    '/' : { prerender: true, ssr: false },
+    '/about' : { prerender: true, ssr: true },
+    '/dev' : { prerender: true, ssr: true },
+    '/support' : { prerender: true, ssr: true },
+    '/advert' : { prerender: true, ssr: true },
   },
   app: {
-    // pageTransition: {
-    //   name: "page",
-    //   mode: "out-in"
-    // },
+    pageTransition: {
+      name: "page",
+      mode: "out-in"
+    },
     head: {
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' }
@@ -44,10 +48,16 @@ export default defineNuxtConfig({
     },
   },
   plugins: [
-    '~/plugins/vee-validate'
+    '~/plugins/vee-validate',
+    {
+      src:'~/plugins/LenisLocomotiveScroll',
+      mode: 'client'
+    },
+    '~/plugins/changeBackgroundColor'
   ],
   modules: [
     ['@nuxtjs/google-fonts', {
+      preload: true,
       families: {
         Montserrat: {
           wght: '100..900'
@@ -78,5 +88,10 @@ export default defineNuxtConfig({
   },
   gsap: {
     composables: true
-  }
+  },
+  image: {
+    aliyun: {
+      baseURL: "https://proto.stebnev-studio.ru/",
+    },
+  },
 })

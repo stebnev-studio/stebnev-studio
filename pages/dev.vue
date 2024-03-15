@@ -1,9 +1,9 @@
 <template>
-  <main class="main">
-    <SectionsOffer to="google.com">
+  <main class="main" :class="{bgBlack: isBlack || isMobile}">
+    <LazySectionsOffer to="google.com">
       <template #offerTitle>
         Разрабатываем 
-        удобные <br/>
+        удобные
         и стильные сайты
       </template>
       <template #offerDescription>
@@ -12,36 +12,41 @@
       <template #offerButton>
         подробнее
       </template>
-    </SectionsOffer>
-    <SectionsAboutService class="section-about-service" :ticker="false" :stebnev="false" :info="aboutInfo" />
-    <SectionsServices class="section-services" :isSubtitle="false" :isTitle="true" :isDescription="true">
+    </LazySectionsOffer>
+    <LazySectionsAboutService class="section-about-service" :ticker="false" :stebnev="false" :info="aboutInfo" />
+    <LazySectionsServices class="section-services" :isSubtitle="false" :isTitle="true" :isDescription="true">
       <template #ServicesDescription >
         Стоимость каждого проекта рассчитывается индивидуально
       </template>
       <template #ServicesList>
-        <BlocksServiceItem />
-        <BlocksServiceItem />
-        <BlocksServiceItem />
-        <BlocksServiceItem />
-        <BlocksServiceItem />
-        <BlocksServiceItem />
-        <BlocksServiceItem />
+        <LazyBlocksServiceItem />
+        <LazyBlocksServiceItem />
+        <LazyBlocksServiceItem />
+        <LazyBlocksServiceItem />
+        <LazyBlocksServiceItem />
+        <LazyBlocksServiceItem />
+        <LazyBlocksServiceItem />
       </template>
-    </SectionsServices>
+    </LazySectionsServices>
 
-    <SectionsCasesSlider class="section-cases-slider">
+    <LazySectionsCasesSlider class="section-cases-slider" :class="{bgWhite: isMobile}">
 
-    </SectionsCasesSlider>
+    </LazySectionsCasesSlider>
 
-    <BlocksDoubleTicker class="ticker" />
-    <SectionsNumbers class="section-about-numbers" :numbers="numbers" :title="numbersTitle"/>
-    <SectionsStages class="section-stages" />
-    <BlocksDoubleTicker class="ticker" />
-    <SectionsFAQ class="section-faq" :questions="questions" />
+    <LazyBlocksDoubleTicker class="ticker" />
+    <LazySectionsNumbers class="section-about-numbers" :numbers="numbers" :title="numbersTitle"/>
+    <LazySectionsStages class="section-stages" />
+    <LazyBlocksDoubleTicker class="ticker" />
+    <LazySectionsFAQ class="section-faq" :questions="questions" />
+    <LazySectionsBrief class="section-brief" />
   </main>
 </template>
 
 <script lang="ts" setup>
+  import { useStateGlobal } from '~/composables/stateGlobal';
+  const state = useStateGlobal();
+  let { isBlack } = storeToRefs(state);
+  const isMobile = useMediaQuery('(min-width: 340px) and (max-width: 767.5px)');
 
   //ЧаВо
   const questions = reactive([
@@ -94,9 +99,7 @@
 
 <style lang="scss" scoped>
   .main {
-      background-color: $black;
       min-height: 100vh;
-      background-color: white;
 
       .section-about-service {
         @include aprop("padding-top", 300px, 200px, 200px, 140px);
@@ -126,8 +129,8 @@
       }
 
       .ticker {
-        background-color: $black;
-        color: $white;
+        // background-color: $black;
+        // color: $white;
         @include aprop("padding-top", 300px, 200px, 200px, 140px);
       }
   }

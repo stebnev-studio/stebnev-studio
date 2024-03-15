@@ -8,7 +8,7 @@
 
     <div class="portfolio__wrapper wrapper" v-if="!isMobile">
       <div class="portfolio__container container">
-        <LazyBlocksPortfolioContent class="portfolio__content" />
+        <LazyBlocksPortfolioContent class="portfolio__content"/>
       </div>
     </div>
     <div class="portfolio__container-mobile container" v-else>
@@ -33,7 +33,7 @@
 
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
+    overflow: hidden;   
     @include aprop("row-gap", 200px, 120px, 120px, 80px);
 
     &__container {

@@ -1,17 +1,21 @@
 <template>
-  <main class="main">
-    <SectionsCasesOffer class="section-cases-offer"></SectionsCasesOffer>
-    <SectionsCasesPortfolio class="section-cases-portfolio" />
+  <main class="main" :class="{bgBlack: isBlack || isMobile}">
+    <LazySectionsCasesOffer class="section-cases-offer"></LazySectionsCasesOffer>
+    <LazySectionsCasesPortfolio class="section-cases-portfolio" />
+    <LazySectionsBrief class="section-brief" />
   </main>
 </template>
 
-
+<script setup lang="ts">
+  import { useStateGlobal } from '~/composables/stateGlobal';
+  const state = useStateGlobal();
+  let { isBlack } = storeToRefs(state);
+  const isMobile = useMediaQuery('(min-width: 340px) and (max-width: 767.5px)');
+</script>
 
 <style lang="scss" scoped>
   .main {
-    background: $white;
     min-height: 300vh;
-    background-color: white;
 
     .section-cases {
       &-offer {

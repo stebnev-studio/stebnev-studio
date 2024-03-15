@@ -40,7 +40,7 @@
           v-if="!isMobile"
           >
           <SwiperSlide class="stages__slide" v-for="(item, idx) in slides" :key="idx">
-            <img :src="item.img" :alt="item.description">
+            <NuxtImg provider="aliyun"  :src="item.img" :alt="item.description" />
           </SwiperSlide>
         </Swiper>
       </div>
@@ -56,7 +56,7 @@
           @slideChange="slideChange"
           >
           <SwiperSlide class="stages__slide" v-for="(item, idx) in slides" :key="idx">
-            <img :src="item.img" :alt="item.description">
+            <NuxtImg provider="aliyun"  :src="item.img" :alt="item.description" />
           </SwiperSlide>
         </Swiper>
     </div>
@@ -103,8 +103,8 @@
 <style scoped lang="scss">
 .stages {
 
-  background-color: $black;
-  color: $white;
+  // background-color: $black;
+  // color: $white;
 
   &__container {
     display: grid;

@@ -5,8 +5,8 @@
         <span class="about-content__subtitle ts">
           / О нас
         </span>
-        <NuxtImg class="about-content__img" src="/people.png" v-if="route.path == '/'"/>
-        <NuxtImg class="about-content__img" src="/people2.png" v-if="route.path == '/about'"/>
+        <NuxtImg provider="aliyun" class="about-content__img" format="webp" src="/people.png" v-if="route.path == '/'"/>
+        <NuxtImg provider="aliyun" class="about-content__img" format="webp" src="/people2.png" v-if="route.path == '/about'"/>
         <h2 class="about-content__title t2">
           Цель нашей команды — создание не просто красивых, но и полезных продуктов.
         </h2>

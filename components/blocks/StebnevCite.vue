@@ -5,7 +5,7 @@
     </div>
     <div class="stebnev-cite__content">
       <div class="stebnev-cite__photo">
-        <NuxtImg class="stebnev-cite__img" src="/stebnev-face.png" />
+        <NuxtImg provider="aliyun"  class="stebnev-cite__img" src="/stebnev-face.png" />
       </div>
       <div class="stebnev-cite__bio">
         <span class="stebnev-cite__name t3">
