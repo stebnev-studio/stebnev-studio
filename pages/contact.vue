@@ -8,11 +8,18 @@
 <script lang="ts" setup>
   import { useStateGlobal } from '~/composables/stateGlobal';
   const state = useStateGlobal();
-  onMounted(() => {
+  const { $ScrollTrigger } = useNuxtApp();
+
+  onMounted(async () => {
+    await nextTick();
+    await $ScrollTrigger.refresh();
     state.setIsHeaderActive(true);
-    nextTick(() => {
-      state.setIsHeaderActive(true);
-    })
+  })
+
+  onUnmounted(async () => {
+    await nextTick();
+    $ScrollTrigger.killAll();
+    $ScrollTrigger.refresh();
   })
   
 </script>

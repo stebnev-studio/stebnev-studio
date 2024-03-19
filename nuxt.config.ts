@@ -53,7 +53,7 @@ export default defineNuxtConfig({
       src:'~/plugins/LenisLocomotiveScroll',
       mode: 'client'
     },
-    '~/plugins/changeBackgroundColor'
+    '~/plugins/changeBackgroundColor',
   ],
   modules: [
     ['@nuxtjs/google-fonts', {
@@ -87,7 +87,10 @@ export default defineNuxtConfig({
     },
   },
   gsap: {
-    composables: true
+    composables: true,
+    extraPlugins: {
+      scrollTrigger: true
+    }
   },
   image: {
     aliyun: {

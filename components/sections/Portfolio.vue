@@ -1,5 +1,6 @@
 <template>
   <div class="portfolio">
+    
     <div class="portfolio__wrapper wrapper">
       <div class="portfolio__container container">
         <LazyBlocksPortfolioHeader class="portfolio__header" />
@@ -11,6 +12,7 @@
         <LazyBlocksPortfolioContent class="portfolio__content"/>
       </div>
     </div>
+
     <div class="portfolio__container-mobile container" v-else>
       <LazyBlocksPortfolioContentMobile class="portfolio__content" />
     </div>
@@ -20,6 +22,7 @@
         <BlocksPortfolioFooter class="portfolio__footer" />
       </div>
     </div>
+
   </div>
 </template>
 

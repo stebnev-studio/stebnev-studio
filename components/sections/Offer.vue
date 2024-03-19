@@ -31,49 +31,56 @@
           </div>
       </div>
       <div class="offer__back">
-          <NuxtImg provider="aliyun" format="webp" src="/background-offer.png" alt="backface" loading="lazy"/>
+          <video autoplay muted loop poster="/background-offer.png" v-if="!isMobile">
+            <source
+            src="/stebnev-offer.mp4"
+            type="video/mp4" />
+          </video>
+          <img src="/background-offer.png" v-else>
       </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { useMediaQuery } from '@vueuse/core';
+  import { useMediaQuery } from '@vueuse/core';  
 
   const { $gsap } = useNuxtApp();
   const { to } = defineProps({ to: String });
   const title = ref(null);
+  const isMobile = useMediaQuery('(min-width: 340px) and (max-width: 767.5px)');
 
-  onMounted(() => {
+  onMounted(async () => {
     const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
     if (!isMobile.value) {
 
       if(!document.querySelector('.offer__stebnev')) {
 
-        nextTick(() => {
-
+          await nextTick();
           title.value = splitToSpan(title);
-
-          const words = $gsap.utils.toArray('.offer__title span');
-
-          $gsap.fromTo(words, {
-            clipPath: "inset(100% 0% 0% 0%)",
-            transform: 'translateY(-25px)'
-          }, {
-            stagger: 0.065,
-            clipPath: "inset(0% 0% 0% 0%)",
-            transform: 'translateY(0)',
-          })
           
-    
-          $gsap.fromTo('.offer__text' ,{
-            opacity: 0,
-            blur: 100
-          }, {
-            opacity: 1,
-            blur: 0,
-            duration: 0.2
-          }, '+=0.025')
-          })
+            const words = $gsap.utils.toArray('.offer__title span');
+
+            $gsap.fromTo(words, {
+              clipPath: "inset(100% 0% 0% 0%)",
+              transform: 'translateY(-25px)'
+            }, {
+              stagger: 0.065,
+              clipPath: "inset(0% 0% 0% 0%)",
+              transform: 'translateY(0)',
+            })     
+
+            $gsap.set('.offer__text',
+            {
+              opacity: 0,
+              blur: 100,
+            });
+            
+            $gsap.to('.offer__text', 
+            {
+              opacity: 1,
+              blur: 0,
+              duration: 0.2
+            }, '+=0.025')
 
       }
     }
@@ -116,6 +123,12 @@
       position: sticky;
       top: 0;
       height: 100dvh;
+      video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+      }
       img {
         width: 100%;
         height: 100%;

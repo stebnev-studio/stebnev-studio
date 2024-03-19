@@ -28,6 +28,7 @@
 
 <script setup>
   import { useMediaQuery } from "@vueuse/core";
+  import LocomotiveScroll from 'locomotive-scroll';
 
   const props = defineProps({
     info: {
@@ -43,11 +44,11 @@
   const link = props.info.link;
   const desc = props.info.desc;
 
-  onMounted(() => {
-    nextTick(() => {
-      document.querySelectorAll("div[portfolio-attr]").forEach(function (e) {
-        e.style.backgroundImage = 'url('+e.getAttribute('portfolio-attr')+')';
-      })
+  onMounted(async () => {
+    await nextTick();
+    new LocomotiveScroll();
+    document.querySelectorAll("div[portfolio-attr]").forEach(function (e) {
+      e.style.backgroundImage = 'url('+e.getAttribute('portfolio-attr')+')';
     })
   })
 

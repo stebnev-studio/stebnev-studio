@@ -24,8 +24,11 @@
 
 <script lang="ts" setup>
   import { useStateGlobal } from '~/composables/stateGlobal';
+  const { $ScrollTrigger } = useNuxtApp();
   const state = useStateGlobal();
   let { isBlack } = storeToRefs(state);
+
+
 
   const isMobile = useMediaQuery('(min-width: 340px) and (max-width: 767.5px)');
   // О Услуге
@@ -55,6 +58,12 @@
   ]);
 
   const numbersTitle = ref('Ответственность и профессиональный подход к проведению работ');
+
+  onMounted(() => {
+    nextTick(() => {
+      $ScrollTrigger.refresh();
+    })
+  })
   
 </script>
 

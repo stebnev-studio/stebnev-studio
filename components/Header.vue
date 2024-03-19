@@ -21,12 +21,10 @@
 
 <script setup>
   import { useStateGlobal } from '~/composables/stateGlobal';
-  const { $gsap } = useNuxtApp();
-  onMounted(() => {
-    nextTick(() => {
-      state.setIsHeaderActive(true);
-      state.setIsBlack(false);
-    })
+  onMounted(async () => {
+    await nextTick();
+    state.setIsHeaderActive(true);
+    state.setIsBlack(false);
   })
 
   const state = useStateGlobal();

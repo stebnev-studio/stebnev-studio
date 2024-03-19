@@ -30,6 +30,7 @@
   import { useStateGlobal } from '~/composables/stateGlobal';
   const state = useStateGlobal();
   let { isBlack } = storeToRefs(state);
+  const { $ScrollTrigger } = useNuxtApp();
 
   const isMobile = useMediaQuery('(min-width: 340px) and (max-width: 767.5px)');
   // О Услуге
@@ -59,6 +60,12 @@
   ]);
 
   const numbersTitle = ref('Контекстная и таргетированная <br> реклама сегодня — лидер рынка');
+
+  onMounted(() => {
+    nextTick(() => {
+      $ScrollTrigger.refresh();
+    })
+  })
   
 </script>
 
