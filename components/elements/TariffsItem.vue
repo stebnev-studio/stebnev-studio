@@ -1,54 +1,41 @@
 <template>
   <div class="tariff-item">
     <div class="tariff-item__title t3">
-      Яндекс.директ
+      {{ item.title }}
     </div>
     <div class="tariff-item__list">
-      <li class="tariff-item__list-item text-med">
+      <li class="tariff-item__list-item text-med" v-for="i in item.list">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="12" cy="12" r="4.5" stroke="#A9A9A9"/>
         </svg>
         <p>
-          Сделаем хорошую рекламу по вашему бюджету
+          {{ i.text }}
         </p>
       </li>
-      <li class="tariff-item__list-item text-med">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="4.5" stroke="#A9A9A9"/>
-        </svg>
-        <p>
-          Сделаем хорошую рекламу по вашему бюджету
-        </p>
-      </li>
-      <li class="tariff-item__list-item text-med">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="4.5" stroke="#A9A9A9"/>
-        </svg>
-        <p>
-          Сделаем хорошую рекламу по вашему бюджету
-        </p>
-      </li>
-      <li class="tariff-item__list-item text-med">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="4.5" stroke="#A9A9A9"/>
-        </svg>
-        <p>
-          Сделаем хорошую рекламу по вашему бюджету
-        </p>
-      </li>
-
     </div>
     <p class="tariff-item__price price-text">
-      25 000 ₽ / месяц
+      {{ item.price }}
     </p>
-    <ElementsLinkAdditional to="https://google.com">
-      Оставить заявку
+    <ElementsLinkAdditional :to="item.button.link">
+      {{ item.button.text }}
     </ElementsLinkAdditional>
   </div>
 </template>
 
 <script lang="ts" setup>
-
+  defineProps<{
+    item: {
+      title: string,
+      list: [{
+        text: string
+      }],
+      price: string,
+      button: {
+        text: string,
+        link: string
+      }
+    }
+  }>();
 </script>
 
 <style lang="scss" scoped>

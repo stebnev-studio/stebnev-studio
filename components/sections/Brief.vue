@@ -3,7 +3,7 @@
     <div class="brief__content">
       <div class="brief-big brief__text" v-if="!isMobileAndTabletandLaptop">БРИФ</div>
       <div class="brief-small brief__text" v-else>БРИФ</div>
-      <NuxtLink class="brief__link btn-text-big" to="/">
+      <NuxtLink class="brief__link btn-text-big" to="/feedback">
         Обсудить проект
         <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M0.5 6H14.5M14.5 6L9.18966 1M14.5 6L9.18966 11" stroke="#FAFAFA"/>

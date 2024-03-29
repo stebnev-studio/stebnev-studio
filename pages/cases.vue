@@ -1,7 +1,7 @@
 <template>
-  <main class="main" :class="{ bgBlack: isBlack || isMobile }">
-    <LazySectionsCasesOffer class="section-cases-offer"></LazySectionsCasesOffer>
-    <LazySectionsCasesPortfolio class="section-cases-portfolio" />
+  <main class="main" :class="{bgBlack: isBlack, bgWhite: isMobile }">
+    <LazySectionsCasesOffer class="section-cases-offer" :offer="data.acf.offer"></LazySectionsCasesOffer>
+    <LazySectionsCasesPortfolio class="section-cases-portfolio" :cases="data.acf.cases.repeater"/>
     <LazySectionsBrief class="section-brief" />
   </main>
 </template>
@@ -13,6 +13,15 @@ let { isBlack } = storeToRefs(state);
 const isMobile = useMediaQuery('(min-width: 340px) and (max-width: 767.5px)');
 const { $ScrollTrigger } = useNuxtApp();
 
+const { data: page } = await useAsyncData("page", async () => {
+  const [data] = await Promise.all([
+    $fetch("https://stebnev-studio.ru/api/wp-json/wp/v2/pages?slug=cases"),
+  ]);
+
+  return { data };
+});
+const data = page.value.data[0];
+console.log(data);
 
 onMounted(async () => {
   await state.setIsBlack(false);
@@ -94,16 +103,18 @@ onMounted(async () => {
 
 onUnmounted(async () => {
   await nextTick();
-  $ScrollTrigger.killAll();
-  $ScrollTrigger.refresh();
+  await $ScrollTrigger.killAll();
+  await $ScrollTrigger.refresh();
 })
 </script>
 
 <style lang="scss" scoped>
 .main {
+  
   min-height: 300vh;
 
   .section-cases {
+
     &-offer {
       @include aprop("padding-bottom", 300px, 200px, 200px, 140px);
       @include aprop("padding-top", 300px, 200px, 200px, 140px);
@@ -112,6 +123,7 @@ onUnmounted(async () => {
     &-portfolio {
       @include aprop("padding-bottom", 300px, 200px, 200px, 140px);
     }
+
   }
 
 }

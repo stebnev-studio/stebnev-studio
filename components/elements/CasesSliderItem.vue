@@ -1,14 +1,14 @@
 <template>
-  <NuxtLink class="case">
+  <NuxtLink :to="caseItem?.link" class="case">
     <div class="case__img">
-      <NuxtImg provider="aliyun" :src="caseItem?.img" format="webp" alt="" class="case__source" />
+      <NuxtImg :src="caseItem?.image" format="webp" alt="" class="case__source" />
     </div>
     <div class="case__footer">
       <p class="case__title btn-text-big">
-        website.com
+        {{ caseItem?.title }}
       </p>
       <span class="case__desc ts">
-        Work / 2019
+        {{ caseItem?.description }}
       </span>
     </div>
   </NuxtLink>

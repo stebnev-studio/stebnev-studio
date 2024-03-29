@@ -1,6 +1,6 @@
 <template>
   <main class="main bgBlack">
-    <LazySectionsContact class="section-contact" />
+    <LazySectionsContact class="section-contact" :contacts="data.acf.contacts"/>
     <LazySectionsBrief class="section-brief" />
   </main>
 </template>
@@ -9,6 +9,16 @@
   import { useStateGlobal } from '~/composables/stateGlobal';
   const state = useStateGlobal();
   const { $ScrollTrigger } = useNuxtApp();
+
+  const { data: page } = await useAsyncData("page", async () => {
+    const [data] = await Promise.all([
+      $fetch("https://stebnev-studio.ru/api/wp-json/wp/v2/pages?slug=contacts"),
+    ]);
+
+    return { data };
+  });
+  const data = page.value.data[0];
+  console.log(data);
 
   onMounted(async () => {
     await nextTick();

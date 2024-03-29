@@ -1,89 +1,81 @@
 <template>
   <main class="main" :class="{ bgBlack: isBlack || isMobile }">
-    <LazySectionsOffer class="section-offer">
+    <LazySectionsOffer
+      class="section-offer"
+      :video="data.acf.offer.offer_video"
+      :poster="data.acf.offer.offer_poster"
+      :title_stebnev="data.acf.offer.offer_title"
+      :subtitle="data.acf.offer.offer_description"
+    >
       <template #StebnevStudio></template>
     </LazySectionsOffer>
-    <LazySectionsAboutService class="section-about-service" :info="aboutInfo" :ticker="true" :stebnev="true" />
-    <LazySectionsAboutAbout class="section-about-about" />
-    <LazySectionsNumbers class="section-about-numbers" :numbers="numbers" :title="numbersTitle" />
-    <LazySectionsGoodResults class="section-good-results" />
-    <LazySectionsPrinciples class="section-principles" />
+    <LazySectionsAboutService
+      class="section-about-service"
+      :info="{
+        title: data?.acf.about_service.title,
+        description: data?.acf.about_service.description,
+      }"
+      :ticker="{ enabled: true, words: data.acf.about_service.ticker.words }"
+      :stebnev="true"
+      :cite="data?.acf.about_service.cite"
+    />
+    <LazySectionsAboutAbout class="section-about-about" :about="data.acf.about" />
+    <LazySectionsNumbers
+      class="section-about-numbers"
+      :numbers="data.acf.numbers.repeater"
+      :title="data.acf.numbers.title"
+    />
+    <LazySectionsGoodResults class="section-good-results" :title="data.acf.numbers.good_results.title" :description="data.acf.numbers.good_results.description" />
+    <LazySectionsPrinciples class="section-principles" :first="data.acf.principles.first" :second="data.acf.principles.second" :three="data.acf.principles.three" :four="data.acf.principles.four" />
     <LazySectionsBrief class="section-brief" />
   </main>
 </template>
 
 <script setup>
-import { useStateGlobal } from '~/composables/stateGlobal';
+import { useStateGlobal } from "~/composables/stateGlobal";
 const state = useStateGlobal();
 const { $ScrollTrigger } = useNuxtApp();
 let { isBlack } = storeToRefs(state);
 
-const isMobile = useMediaQuery('(min-width: 340px) and (max-width: 767.5px)');
-// О Услуге
-const aboutInfo = reactive({
-  title: 'STEBNEV+STUDIO — это веб студия полного цикла',
-  description: 'Наши специалисты обладают большим опытом работы и высокой квалификацией. Мы гарантируем быстрое решение поставленных задач и выполнение работ в полном объёме, поэтому наши клиенты остаются довольны сотрудничеством.'
-})
+const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
 
-// Цифры
-const numbers = reactive([
-  {
-    number: "500+",
-    title: "Успешных кейсов",
-    description: "Создание и доработка сайтов, продвижение и реклама в интернете."
-  },
-  {
-    number: "2013",
-    title: "Год основания компании",
-    description: "Более 10 лет помогаем вашему бизнесу развиваться на просторах сети интернета"
-  },
-  {
-    number: "40+",
-    title: "отраслей бизнеса клиентов",
-    description: "Более 10 лет помогаем вашему бизнесу развиваться на просторах сети интернета"
-  },
-  {
-    number: "5",
-    title: "Иностранных компаний",
-    description: "Нам доверяют не только клиенты из России"
-  },
-  {
-    number: "24",
-    title: "Города наших клиентов",
-    description: "Работаем с клиентами по всей России"
-  }
-])
+const { data: page } = await useAsyncData("page", async () => {
+  const [data] = await Promise.all([
+    $fetch("https://stebnev-studio.ru/api/wp-json/wp/v2/pages?slug=about"),
+  ]);
 
-const numbersTitle = ref('Эти цифры говорят о нашем <br> опыте');
+  return { data };
+});
+const data = page.value.data[0];
+console.log(data);
 
 onMounted(async () => {
+  await state.setIsBlack(false);
   await nextTick();
   await $ScrollTrigger.refresh();
 
-  if (document.querySelector('.offer')) {
+  if (document.querySelector(".offer")) {
     const offer = $ScrollTrigger.create({
-      trigger: '.offer',
+      trigger: ".offer",
       start: "top bottom",
       end: "bottom bottom",
       onEnterBack() {
         state.setIsBlack(false);
         state.setIsHeaderActive(true);
-        console.log('enterBack');
+        console.log("enterBack");
       },
       onLeave() {
         state.setIsBlack(true);
 
         state.setIsHeaderActive(false);
-        console.log('Leave');
-
-      }
-    })
+        console.log("Leave");
+      },
+    });
   }
 
-  if (document.querySelector('.brief')) {
-
+  if (document.querySelector(".brief")) {
     const brief = $ScrollTrigger.create({
-      trigger: '.brief',
+      trigger: ".brief",
       start: "top center",
       end: "bottom center",
       onEnter() {
@@ -98,24 +90,21 @@ onMounted(async () => {
         state.setIsHeaderActive(false);
         const route = useRoute();
         const path = route.path;
-        if (path == '/contact') {
+        if (path == "/contact") {
           state.setIsHeaderActive(true);
         } else {
           state.setIsHeaderActive(false);
         }
-      }
-    })
-
+      },
+    });
   }
-
-})
+});
 
 onUnmounted(async () => {
   await nextTick();
-  $ScrollTrigger.killAll();
-  $ScrollTrigger.refresh();
-})
-
+  await $ScrollTrigger.killAll();
+  await $ScrollTrigger.refresh();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -125,7 +114,7 @@ onUnmounted(async () => {
 
 .section-about-service {
   @include aprop("padding-top", 300px, 200px, 200px, 140px);
-  transition: 0.3s
+  transition: 0.3s;
 }
 
 .section-about-about {

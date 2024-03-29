@@ -6,10 +6,10 @@
           / Вопросы
         </span>
         <h2 class="faq__title t2">
-          Часто задаваемые вопросы наших клиентов
+          {{ faq.title }}
         </h2>
         <BlocksFAQContent class="faq__content">
-          <ElementsFAQItem v-for="(item, idx) in faqItems" :title="item.title" :text="item.text" @click="open(item)" :class="{open: item.isActive}" :isActive="item.isActive"/>
+          <ElementsFAQItem v-for="(item, idx) in faqItems" :title="item.question" :text="item.answer" @click="open(item)" :class="{open: item.isActive}" :isActive="item.isActive"/>
         </BlocksFAQContent>
       </div>
     </div>
@@ -18,30 +18,13 @@
 
 <script lang="ts" setup>
 
-  const { questions } = defineProps({
-    questions: {
+  const { faq } = defineProps({
+    faq: {
       type: Object,
-      default: reactive([
-        {
-          title: 'Что нельзя рекламировать?',
-          text: 'Рекламировать товары, копирующие известные бренды, реплики, использовать авторский контент, размещать на изображениях или упоминать в тексте чужие торговые марки, товарные знаки;, публиковать фотографии, нарушающие конфиденциальность личной жизни и данных людей;',
-          isActive: false
-        },
-        {
-          title: 'Что нельзя рекламировать?',
-          text: 'Рекламировать товары, копирующие известные бренды, реплики, использовать авторский контент, размещать на изображениях или упоминать в тексте чужие торговые марки, товарные знаки;, публиковать фотографии, нарушающие конфиденциальность личной жизни и данных людей;',
-          isActive: false  
-        },
-        {
-          title: 'Что нельзя рекламировать?',
-          text: 'Рекламировать товары, копирующие известные бренды, реплики, использовать авторский контент, размещать на изображениях или упоминать в тексте чужие торговые марки, товарные знаки;, публиковать фотографии, нарушающие конфиденциальность личной жизни и данных людей;',
-          isActive: false  
-        },
-      ])
     }
   })
 
-  const faqItems = questions;
+  const faqItems = faq.list;
 
   function open(e) {
     return e.isActive = !e.isActive

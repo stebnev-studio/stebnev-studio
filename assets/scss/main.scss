@@ -120,6 +120,11 @@ a {
     color: $white;
   }
 
+  &.bgWhite {
+    background-color: $white;
+    color: $black;
+  }
+
   @include mobile{
     background-color: $black;
     color: $white;
@@ -132,5 +137,7 @@ a {
       mix-blend-mode: normal;
     }
   }
+
+
 }
 

@@ -7,15 +7,23 @@
             / Результаты
           </span>
           <h2 class="results-info__title t2">
-            Наша реклама даёт результаты
+            {{ results.title }}
           </h2>
         </div>
-        <div class="results-info__content">
-          <BlocksResultsContent class="results-info__item" />
-        </div>
+        <LazySwiper
+          :modules="[SwiperNavigation, SwiperController]"
+          :free-mode="true"
+          class="results-info__swiper"
+          :loop="true"
+          @init="initSwiper"
+         >
+          <LazySwiperSlide class="results-info__content" v-for="(i, idx) in results.slides" :key="idx">
+            <LazyBlocksResultsContent :item="i" />
+          </LazySwiperSlide>
+        </LazySwiper>
         <div class="results-info__footer">
           <p class="results-info__description text-med">
-            Настраиваем рекламу с точностью до географической области, пола и возрастной группы. Это позволяет сконцентрировать рекламу на конкретном аудитории и увеличить конверсию.
+            {{ results.description }}
           </p>
         </div>
       </div>
@@ -24,7 +32,13 @@
 </template>
 
 <script lang="ts" setup>
-
+    const { results } = defineProps({
+      results: Object
+    });
+    const riSwiper = inject('riSwiper');
+    function initSwiper(e: any) {
+      riSwiper.value = e;
+    }
 </script>
 
 <style lang="scss" scoped>
@@ -69,6 +83,8 @@
     }
 
     &__content {
+
+      position: relative;
 
       @include aprop('padding-top', 80px, 60px, 60px, 80px);
       @include aprop('padding-bottom', 80px, 60px, 60px, 80px);

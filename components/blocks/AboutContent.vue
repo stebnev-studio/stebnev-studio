@@ -5,17 +5,16 @@
         <span class="about-content__subtitle ts">
           / О нас
         </span>
-        <NuxtImg provider="aliyun" class="about-content__img" format="webp" src="/people.png" v-if="route.path == '/'"/>
-        <NuxtImg provider="aliyun" class="about-content__img" format="webp" src="/people2.png" v-if="route.path == '/about'"/>
+        <LazyNuxtImg densities="x1" class="about-content__img" format="webp" :src="img" />
         <h2 class="about-content__title t2">
-          Цель нашей команды — создание не просто красивых, но и полезных продуктов.
+          {{ title }}
         </h2>
         <div class="about-content__desc text-med">
-          Мы внимательны к деталям, требовательны к себе, любим своё дело и стремимся к непрерывному развитию
+          {{ description }}
         </div>
         <div class="about-content__link">
-          <ElementsLinkAdditional to="/">
-            Подробнее
+          <ElementsLinkAdditional :to="button?.link">
+            {{ button?.text }}
           </ElementsLinkAdditional>
         </div>
       </div>
@@ -24,7 +23,23 @@
 </template>
 
 <script lang="ts" setup>
-  const route = useRoute();
+  const { img, title, description, button } = defineProps({
+    img: {
+      type: String,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    },
+     button: {
+      type: Object
+     }
+  });
 </script>
 
 <style lang="scss" scoped>

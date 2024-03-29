@@ -1,26 +1,15 @@
 <template>
   <ul class="links">
     <li class="links__item" v-for="(link) in links">
-      <NuxtLink class="links__link text-med" :to="link.link">{{ link.title }}</NuxtLink>
+      <NuxtLink class="links__link text-med" target="_blank" :to="link.link">{{ link.link_text }}</NuxtLink>
     </li>
   </ul>
 </template>
 
 <script lang="ts" setup>
-  const links = reactive([
-    {
-      title: "Dp",
-      link: "https://google.com"
-    },
-    {
-      title: "Vk",
-      link: "https://vk.com"
-    },
-    {
-      title: "Dp",
-      link: "https://diprofile.com"
-    },
-  ]);
+  const { links } = defineProps({
+    links: Object
+  })
 </script>
 
 <style lang="scss" scoped>

@@ -5,30 +5,29 @@
       :modules="[SwiperNavigation]"
       :slides-per-view="'auto'"
       :navigation="{
-        nextEl: props.prev,
-        prevEl: props.next,
+        nextEl: prev,
+        prevEl: next,
       }"
     >
-      <SwiperSlide class="active-tariffs__slide">
-        <ElementsTariffsItem />
-      </SwiperSlide>
-      <SwiperSlide class="active-tariffs__slide">
-        <ElementsTariffsItem />
-      </SwiperSlide>
-      <SwiperSlide class="active-tariffs__slide">
-        <ElementsTariffsItem />
+      <SwiperSlide class="active-tariffs__slide" v-for="item in tariffs">
+        <ElementsTariffsItem :item="item" />
       </SwiperSlide>
     </Swiper>
   </div>
 </template>
 
 <script setup>
+  const { next, prev, tariffs} = defineProps({
+    next: {
+      
+    },
+    prev: {
 
-  const props = defineProps({
-    next: {},
-    prev: {}
-  })
-
+    },
+    tariffs: {
+      type: Object
+    }
+  });
 </script>
 
 <style lang="scss" scoped>

@@ -2,12 +2,12 @@
   <div class="cases-offer">
     <div class="cases-offer__wrapper wrapper">
       <div class="cases-offer__container container">
-        <h1 class="cases-offer__title t1">Наши работы</h1>
+        <h1 class="cases-offer__title t1">{{ offer.title }}</h1>
         <p class="cases-offer__description text-med">
-          С 2013 года мы запустили более 500 проектов. Здесь мы собрали самые яркие и интересные кейсы, которыми мы гордимся!
+          {{ offer.description }}
         </p>
-        <ElementsLinkAdditional class="cases-offer__link black" to="/">
-          Оставить заявку
+        <ElementsLinkAdditional class="cases-offer__link black" :to="offer.button.link">
+          {{ offer.button.text }}
         </ElementsLinkAdditional>
       </div>
     </div>
@@ -15,7 +15,11 @@
 </template>
 
 <script lang="ts" setup>
-
+const { offer } = defineProps({
+  offer: {
+    type: Object
+  }
+})
 </script>
 
 <style lang="scss" scoped>

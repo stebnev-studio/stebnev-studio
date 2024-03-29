@@ -1,18 +1,18 @@
 <template>
   <div class="stebnev-cite">
     <div class="stebnev-cite__description text-med">
-      «Ценим долгосрочные отношения, доводим каждый проект до запуска. Готовы продолжать сотрудничество в плане развития и продвижения»
+      {{ text }}
     </div>
     <div class="stebnev-cite__content">
       <div class="stebnev-cite__photo">
-        <NuxtImg provider="aliyun"  class="stebnev-cite__img" src="/stebnev-face.png" />
+        <NuxtImg class="stebnev-cite__img" :src="img" />
       </div>
       <div class="stebnev-cite__bio">
         <span class="stebnev-cite__name t3">
-          Стебнев Александр
+          {{ fio }}
         </span>
         <span class="stebnev-cite__owner">
-          Основатель компании, более 10 лет в разработке
+          {{ stebnev }}
         </span>
       </div>
     </div>
@@ -20,7 +20,12 @@
 </template>
 
 <script lang="ts" setup>
-
+const { stebnev, fio, text, img } = defineProps({
+  stebnev: String,
+  fio: String,
+  text: String,
+  img: String || undefined
+})
 </script>
 
 <style lang="scss" scoped>

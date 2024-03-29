@@ -3,16 +3,21 @@
     <div class="about-service-content__wrapper wrapper">
       <div class="about-service-content__container container">
         <h2 class="about-service-content__title t2">
-          Делаем то, что любим. Работаем по России и за её пределами.
+          {{ cite?.title }}
         </h2>
-        <BlocksStebnevCite class="about-service-content__cite" />
+        <BlocksStebnevCite class="about-service-content__cite" :text="cite?.text" :fio="cite?.fio" :stebnev="cite?.stebnev" :img="cite?.image" />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-
+const { cite } = defineProps({
+  cite: {
+    type: Object,
+    required: true
+  }
+})
 </script>
 
 <style lang="scss" scoped>

@@ -3,9 +3,11 @@
     <div class="contact__wrapper wrapper">
       <div class="contact__container container">
         <span class="contact__subtitle ts">/ Контакты</span>
-        <h2 class="contact__title t2">Вам нужен сайт? <br> У нас есть идея!</h2>
+        <h2 class="contact__title t2">{{ contacts.title }}</h2>
         <ul class="contact__list">
-          <ElementsContactListItem v-for="(item, idx) in contactList" :figure="item.figure" :to="item.to" :text="item.text" />
+          <ElementsContactListItem figure="square" :to="contacts.phone_link" :text="contacts.phone" />
+          <ElementsContactListItem figure="triangle" :to="contacts.mail" :text="contacts.mail" />
+          <ElementsContactListItem figure="circle" :to="contacts.address_link" :text="contacts.address" />
         </ul>
       </div>
     </div>
@@ -16,7 +18,7 @@
   const contactList = reactive([
     {
       text: "+7 (473) 200-04-63",
-      to: "tel:+7 (473) 200-04-63",
+      to: "tel:+74732000463",
       figure: "square"
     },
     {
@@ -26,10 +28,16 @@
     },
     {
       text: "Россия, г. Воронеж, пр-т Труда, д. 68, к1",
-      to: "google.com",
+      to: "/",
       figure: "triangle"
     }
   ])
+
+  const { contacts } = defineProps({
+    contacts: {
+      type: Object
+    }
+  })
 </script>
 
 <style lang="scss" scoped>

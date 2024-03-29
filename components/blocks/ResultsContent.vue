@@ -1,29 +1,35 @@
 <template>
   <div class="results-item">
     <div class="results-item__top">
-      <span>Клиннинг</span>
-      <span>Яндекс.директ</span>
+      <span>{{ item.title }}</span>
+      <span>{{ item.subtitle }}</span>
     </div>
     <div class="results-item__statistic">
       <svg width="12" height="119" viewBox="0 0 12 119" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M6 0V118M6 118L1 112.595M6 118L11 112.595" stroke="#FAFAFA"/>
       </svg>
       <p class="numeral-big">
-        420 ₽
+        {{ item.number }}
       </p>
     </div>
     <p class="results-item__statistic-description text-med">
-      Стоимость лида
+      {{ item.description }}
     </p>
   </div>
 </template>
 
 <script lang="ts" setup>
 
+  const { item } = defineProps({
+    item: Object
+  });
+
+  console.log(item)
 </script>
 
 <style lang="scss" scoped>
   .results-item {
+    grid-column: 3 / 4 span;
     display: flex;
     flex-direction: column;
 
@@ -62,6 +68,18 @@
         color: $gray;
         margin-top: 16px;
       }
+    }
+
+    @include laptop{
+      grid-column: 3 / 4 span;
+    }
+
+    @include tablet{
+      grid-column: 3 / 6 span;
+    }
+
+    @include mobile{
+      grid-column: 4 span;
     }
 
   }

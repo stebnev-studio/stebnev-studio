@@ -7,21 +7,21 @@
         </span>
       </div>
     </div>
-    <NuxtImg provider="aliyun"  class="about-content__img" src="/people2.png" v-if="route.path == '/about' && isMobile"/>
+    <NuxtImg class="about-content__img" :src="content.image" v-if="route.path == '/about' && isMobile"/>
     <div class="about-content__wrapper wrapper">
       <div class="about-content__container container">
         <span class="about-content__subtitle ts" v-if="!isMobile">
           / О нас
         </span>
-        <NuxtImg provider="aliyun"  class="about-content__img" src="/people2.png" v-if="route.path == '/about' && !isMobile"/>
+        <NuxtImg class="about-content__img" :src="content.image" v-if="route.path == '/about' && !isMobile"/>
         <h2 class="about-content__title t2">
-          Занимаемся любимым делом, работаем с клиентами по России и за её пределами.
+          {{ content.title }}
         </h2>
         <div class="about-content__desc text-med">
-          Миссия нашей компании — это оказание качественных услуг, которые будут соответствовать требованиям современных технологий и пожеланиям заказчика.
+          {{ content.first_description }}
         </div>
         <div class="about-content__desc-additional text-med">
-          Мы не просто умеем делать сайты, мы умеем их делать правильно. При разработке сайтов мы делаем упор на качество, а не на количество. Автоматизация процессов и использования лучших технологий позволяет нам предоставить клиентам надёжные и современные решения.
+          {{ content.second_description }}
         </div>
       </div>
     </div>
@@ -31,6 +31,13 @@
 <script lang="ts" setup>
   const route = useRoute();
   const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
+
+  const { content } = defineProps({
+    content: {
+      type: Object,
+      required: true
+    }
+  })
 </script>
 
 <style lang="scss" scoped>

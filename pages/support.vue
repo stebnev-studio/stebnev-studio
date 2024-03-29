@@ -1,104 +1,102 @@
 <template>
-  <main class="main" :class="{bgBlack: isBlack || isMobile}">
-    <LazySectionsOffer to="google.com">
+  <main class="main" :class="{ bgBlack: isBlack || isMobile }">
+    <LazySectionsOffer
+      :to="data.acf.offer.button.link"
+      :video="data.acf.offer.video"
+      :poster="data.acf.offer.poster"
+    >
       <template #offerTitle>
-        Полная поддержка и сопровождение сайтов
+        {{ data.acf.offer.title }}
       </template>
       <template #offerDescription>
-        Обеспечиваем стабильную работу и своевременное обновление контента
+        {{ data.acf.offer.description }}
       </template>
       <template #offerButton>
-        подробнее
+        {{ data.acf.offer.button.text }}
       </template>
     </LazySectionsOffer>
-    <LazySectionsAboutService class="section-about-service" :ticker="false" :stebnev="false" :info="aboutInfo" />
-    <LazySectionsTariffs class="section-tariffs" />
-    <LazyBlocksTicker class="ticker" />
-    <LazySectionsNumbers class="section-about-numbers" :numbers="numbers" :title="numbersTitle"/>
-    <LazySectionsStages class="section-stages" />
-    <LazyBlocksDoubleTicker class="ticker" />
-    <LazySectionsFAQ class="section-faq" />
+    <LazySectionsAboutService
+      class="section-about-service"
+      :ticker="{
+        enabled: false,
+      }"
+      :stebnev="false"
+      :info="{
+        title: data.acf.about_service.title,
+        description: data.acf.about_service.description,
+      }"
+    />
+    <LazySectionsTariffs class="section-tariffs" :tariffs="data.acf.tariffs" />
+    <LazyBlocksTicker class="ticker" :words="data.acf.ticker.words" />
+    <LazySectionsNumbers
+      class="section-about-numbers"
+      :numbers="data.acf.numbers.repeater"
+      :title="data.acf.numbers.title"
+    />
+    <LazySectionsStages class="section-stages" :stages="data.acf.stages"/>
+    <LazyBlocksDoubleTicker class="ticker" :doubleticker="data.acf.doubleticker" />
+    <LazySectionsFAQ class="section-faq" :faq="data.acf.faq" />
     <LazySectionsBrief class="section-brief" />
   </main>
 </template>
 
 <script lang="ts" setup>
-  import { useStateGlobal } from '~/composables/stateGlobal';
-  const { $ScrollTrigger } = useNuxtApp();
-  const state = useStateGlobal();
-  let { isBlack } = storeToRefs(state);
+import { useStateGlobal } from "~/composables/stateGlobal";
+const { $ScrollTrigger } = useNuxtApp();
+const state = useStateGlobal();
+let { isBlack } = storeToRefs(state);
 
+const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
 
-
-  const isMobile = useMediaQuery('(min-width: 340px) and (max-width: 767.5px)');
-  // О Услуге
-  const aboutInfo = reactive({
-    title: 'Комплекс услуг по техническому сопровождению и обслуживанию сайтов',
-    description: 'Сайт требует регулярного обновления, грамотного наполнения и решения текущих задач. Мы обеспечим бесперебойную и стабильную работу вашего ресурса.<br/><br/> При необходимости, наши специалисты разместят новую информацию, обновят прайс, разместят актуальные фото — и видеоматериалы.'
-  })
-
-  // Цифры
-  const numbers = reactive([
-    {
-      number: "60+",
-      title: "Клиентов на сопровождении",
-      description: "Выстраиваем долгие и доверительные партнёрские отношения."
-    },
-    {
-      number: "24/7",
-      title: "мониторинг работы сайта",
-      description: "Предоставляем бесперебойную работу сайта. Оперативно реагируем на проблемы."
-    },
-    {
-      number: "780+",
-      title: "задач по поддержке в  месяц",
-      description: "Всегда на связи и готовы выполнить вашу задачу. Выполняем качественно и в срок."
-    },
- 
+const { data: page } = await useAsyncData("page", async () => {
+  const [data] = await Promise.all([
+    $fetch("https://stebnev-studio.ru/api/wp-json/wp/v2/pages?slug=support"),
   ]);
 
-  const numbersTitle = ref('Ответственность и профессиональный подход к проведению работ');
+  return { data };
+});
+const data = page.value.data[0];
+console.log(data);
 
-  onMounted(() => {
-    nextTick(() => {
-      $ScrollTrigger.refresh();
-    })
-  })
-  
+onMounted(() => {
+  nextTick(() => {
+    $ScrollTrigger.refresh();
+  });
+});
 </script>
 
 <style lang="scss" scoped>
-  .main {
-      background-color: $black;
-      min-height: 100vh;
+.main {
+  background-color: $black;
+  min-height: 100vh;
 
-      .section-about-service {
-        @include aprop("padding-top", 300px, 200px, 200px, 140px);
-      }
-
-      .section-tariffs {
-        @include aprop("padding-top", 300px, 200px, 200px, 140px);
-      }
-
-      .section-about-numbers {
-        @include aprop("padding-top", 300px, 200px, 200px, 140px);
-      }
-      .section-results-info {
-        @include aprop("padding-top", 300px, 200px, 200px, 140px);
-      }
-      .section-faq {
-        @include aprop("padding-top", 300px, 200px, 200px, 140px);
-        @include aprop("padding-bottom", 300px, 200px, 200px, 140px);
-      }
-
-      .section-stages {
-        @include aprop("padding-top", 300px, 200px, 200px, 140px);
-      }
-
-      .ticker {
-        // background-color: $black;
-        // color: $white;
-        @include aprop("padding-top", 300px, 200px, 200px, 140px);
-      }
+  .section-about-service {
+    @include aprop("padding-top", 300px, 200px, 200px, 140px);
   }
+
+  .section-tariffs {
+    @include aprop("padding-top", 300px, 200px, 200px, 140px);
+  }
+
+  .section-about-numbers {
+    @include aprop("padding-top", 300px, 200px, 200px, 140px);
+  }
+  .section-results-info {
+    @include aprop("padding-top", 300px, 200px, 200px, 140px);
+  }
+  .section-faq {
+    @include aprop("padding-top", 300px, 200px, 200px, 140px);
+    @include aprop("padding-bottom", 300px, 200px, 200px, 140px);
+  }
+
+  .section-stages {
+    @include aprop("padding-top", 300px, 200px, 200px, 140px);
+  }
+
+  .ticker {
+    // background-color: $black;
+    // color: $white;
+    @include aprop("padding-top", 300px, 200px, 200px, 140px);
+  }
+}
 </style>

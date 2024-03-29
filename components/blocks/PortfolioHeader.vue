@@ -4,14 +4,18 @@
       / Кейсы
     </span>
     <h2 class="portfolio-header__title t2">
-      Наши работы
+      {{ header?.title }}
     </h2>
-    <p class="portfolio-header__description text-med">STEBNEV+STUDIO сделает хорошую работу для хороших клиентов, что приведёт к следующей хорошей работе для других хороших клиентов</p>
+    <p class="portfolio-header__description text-med">{{ header?.description }}</p>
   </div>
 </template>
 
 <script lang="ts" setup>
-
+const { header } = defineProps({
+  header: {
+    type: Object
+  }
+})
 </script>
 
 <style lang="scss" scoped>

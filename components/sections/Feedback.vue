@@ -6,7 +6,7 @@
           / Заявка
         </span>
         <h2 class="feedback__title t2">
-          Мы перезвоним вам сами
+          {{ feedback.title }}
         </h2>
         <div class="feedback__form">
           <BlocksFeedbackForm />
@@ -17,6 +17,15 @@
 </template>
 
 <script lang="ts" setup>
+const { feedback } = defineProps({
+  feedback: {
+    type: Object
+  }
+})
+import { useStateGlobal } from "~/composables/stateGlobal";
+const state = useStateGlobal();
+const { popupDescription } = storeToRefs(state);
+popupDescription.value = feedback.popup_description;
 
 </script>
 

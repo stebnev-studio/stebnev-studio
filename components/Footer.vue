@@ -3,7 +3,7 @@
         <div class="wrapper footer__wrapper">
             <div class="container footer__container">
                 <div class="footer__ars ts">
-                    2008–2023. © Stebnev + Studio. All rights reserved
+                    {{ footer.copyright }}
                 </div>
                 <div class="footer__logo">
                     <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -84,14 +84,18 @@
                 </svg>
 
                 </div>
-                <BlocksFooterLinks class="footer__links" />
+                <BlocksFooterLinks class="footer__links" :links="footer.repeater" />
             </div>
         </div>
-
     </footer>
 </template>
 
 <script lang="ts" setup>
+const { footer } = defineProps({
+    footer: {
+        type: Object
+    }
+})
 
 </script>
 

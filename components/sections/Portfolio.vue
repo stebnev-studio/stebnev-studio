@@ -1,25 +1,25 @@
 <template>
-  <div class="portfolio">
+  <div class="portfolio" :class="{bgWhite: isMobile}">
     
     <div class="portfolio__wrapper wrapper">
       <div class="portfolio__container container">
-        <LazyBlocksPortfolioHeader class="portfolio__header" />
+        <LazyBlocksPortfolioHeader class="portfolio__header" :header="portfolio.header" />
       </div>
     </div>
 
     <div class="portfolio__wrapper wrapper" v-if="!isMobile">
       <div class="portfolio__container container">
-        <LazyBlocksPortfolioContent class="portfolio__content"/>
+        <LazyBlocksPortfolioContent class="portfolio__content" :repeater="portfolio.repeater"/>
       </div>
     </div>
 
     <div class="portfolio__container-mobile container" v-else>
-      <LazyBlocksPortfolioContentMobile class="portfolio__content" />
+      <LazyBlocksPortfolioContentMobile class="portfolio__content" :repeater="portfolio.repeater"/>
     </div>
     
     <div class="portfolio__wrapper wrapper">
       <div class="portfolio__container container">
-        <BlocksPortfolioFooter class="portfolio__footer" />
+        <BlocksPortfolioFooter class="portfolio__footer" :footer="portfolio.footer" />
       </div>
     </div>
 
@@ -29,6 +29,12 @@
 <script lang="ts" setup>
   import { useMediaQuery } from "@vueuse/core";
   const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
+
+  const { portfolio } = defineProps({
+    portfolio: {
+      type: Object
+    }
+  })
 </script>
 
 <style scoped lang="scss">

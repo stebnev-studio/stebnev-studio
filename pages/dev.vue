@@ -1,129 +1,111 @@
 <template>
   <main class="main" :class="{ bgBlack: isBlack || isMobile }">
-    <LazySectionsOffer to="google.com">
-      <template #offerTitle>
-        Разрабатываем
-        удобные
-        и стильные сайты
+    <LazySectionsOffer
+      :to="data.acf.offer.button.link"
+      :video="data.acf.offer.video"
+      :poster="data.acf.offer.poster"
+    >
+      <template #offerTitle>{{ data.acf.offer.title }}
       </template>
       <template #offerDescription>
-        Проектируем, разрабатываем и запускаем. Сайты под ключ!
+        {{ data.acf.offer.description }}
       </template>
       <template #offerButton>
-        подробнее
+        {{ data.acf.offer.button.text }}
       </template>
     </LazySectionsOffer>
-    <LazySectionsAboutService class="section-about-service" :ticker="false" :stebnev="false" :info="aboutInfo" />
-    <LazySectionsServices class="section-services" :isSubtitle="false" :isTitle="true" :isDescription="true">
+    <LazySectionsAboutService
+      class="section-about-service"
+      :ticker="{
+        enabled: false,
+      }"
+      :stebnev="false"
+      :info="{
+        title: data.acf.about_service.title,
+        description: data.acf.about_service.description,
+      }"
+    />
+
+    <LazySectionsServices
+      class="section-services"
+      :isSubtitle="false"
+      :isTitle="true"
+      :isDescription="true"
+      :words="data.acf.ticker.words"
+      :title="data.acf.accordeon.title"
+      :description="data.acf.accordeon.description"
+    >
       <template #ServicesDescription>
-        Стоимость каждого проекта рассчитывается индивидуально
+        {{ data.acf.accordeon.description }}
       </template>
       <template #ServicesList>
-        <LazyBlocksServiceItem />
-        <LazyBlocksServiceItem />
-        <LazyBlocksServiceItem />
-        <LazyBlocksServiceItem />
-        <LazyBlocksServiceItem />
-        <LazyBlocksServiceItem />
-        <LazyBlocksServiceItem />
+        <LazyBlocksServiceItem v-for="(item, idx) in data.acf.accordeon.list" :key="idx" :item="item"/>
       </template>
     </LazySectionsServices>
 
-    <LazySectionsCasesSlider class="section-cases-slider" :class="{ bgWhite: isMobile }">
-
+    <LazySectionsCasesSlider
+      class="section-cases-slider"
+      :class="{ bgWhite: isMobile }"
+      :cases="data.acf.cases"
+    >
     </LazySectionsCasesSlider>
 
-    <LazyBlocksDoubleTicker class="ticker" />
-    <LazySectionsNumbers class="section-about-numbers" :numbers="numbers" :title="numbersTitle" />
-    <LazySectionsStages class="section-stages" />
-    <LazyBlocksDoubleTicker class="ticker" />
-    <LazySectionsFAQ class="section-faq" :questions="questions" />
+    <LazyBlocksDoubleTicker class="ticker" :doubleticker="data.acf.doubleticker" />
+    <LazySectionsNumbers
+      class="section-about-numbers"
+      :numbers="data.acf.numbers.repeater"
+      :title="data.acf.numbers.title"
+    />
+    <LazySectionsStages class="section-stages" :stages="data.acf.stages" />
+    <LazyBlocksDoubleTicker class="ticker" :doubleticker="data.acf.doubleticker_copy" />
+    <LazySectionsFAQ class="section-faq" :faq="data.acf.faq" />
     <LazySectionsBrief class="section-brief" />
   </main>
 </template>
 
 <script lang="ts" setup>
-import { useStateGlobal } from '~/composables/stateGlobal';
+import { useStateGlobal } from "~/composables/stateGlobal";
 const { $ScrollTrigger } = useNuxtApp();
 const state = useStateGlobal();
 let { isBlack } = storeToRefs(state);
-const isMobile = useMediaQuery('(min-width: 340px) and (max-width: 767.5px)');
+const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
 
-//ЧаВо
-const questions = reactive([
-  {
-    title: 'Что нельзя рекламировать? 1',
-    text: 'Рекламировать товары, копирующие известные бренды, реплики, использовать авторский контент, размещать на изображениях или упоминать в тексте чужие торговые марки, товарные знаки;, публиковать фотографии, нарушающие конфиденциальность личной жизни и данных людей;',
-    isActive: false
-  },
-  {
-    title: 'Что нельзя рекламировать? 2',
-    text: 'Рекламировать товары, копирующие известные бренды, реплики, использовать авторский контент, размещать на изображениях или упоминать в тексте чужие торговые марки, товарные знаки;, публиковать фотографии, нарушающие конфиденциальность личной жизни и данных людей;',
-    isActive: false
-  },
-  {
-    title: 'Что нельзя рекламировать? 3',
-    text: 'Рекламировать товары, копирующие известные бренды, реплики, использовать авторский контент, размещать на изображениях или упоминать в тексте чужие торговые марки, товарные знаки;, публиковать фотографии, нарушающие конфиденциальность личной жизни и данных людей;',
-    isActive: false
-  },
-]);
+const { data: page } = await useAsyncData("page", async () => {
+  const [data] = await Promise.all([
+    $fetch("https://stebnev-studio.ru/api/wp-json/wp/v2/pages?slug=dev"),
+  ]);
 
-// О Услуге
-const aboutInfo = reactive({
-  title: 'Проектирование и разработка сайта — основное направление нашей студии',
-  description: 'Наличие сайта – обязательное условие для привлечения клиентов из интернета. Сайт рассказывает посетителю о ваших предложениях, тем самым работая на повышение имиджа компании и расширение клиентской базы. <br/><br/>Мы осуществляем полный комплекс работ по созданию сайтов информационного и коммерческого типа. Разрабатываем сайты на самых современных CMS и framework. Нашими клиентами является преимущество торговые и производственные предприятия.'
-})
-
-// Цифры
-const numbers = reactive([
-  {
-    number: "60+",
-    title: "Клиентов на сопровождении",
-    description: "Выстраиваем долгие и доверительные партнёрские отношения."
-  },
-  {
-    number: "24/7",
-    title: "мониторинг работы сайта",
-    description: "Предоставляем бесперебойную работу сайта. Оперативно реагируем на проблемы."
-  },
-  {
-    number: "780+",
-    title: "задач по поддержке в  месяц",
-    description: "Всегда на связи и готовы выполнить вашу задачу. Выполняем качественно и в срок."
-  },
-
-]);
-
-const numbersTitle = ref('Ответственность и профессиональный подход к проведению работ');
+  return { data };
+});
+const data = page.value.data[0];
+console.log(data);
 
 onMounted(async () => {
   await nextTick();
   await $ScrollTrigger.refresh();
 
-  if (document.querySelector('.offer')) {
+  if (document.querySelector(".offer")) {
     const offer = $ScrollTrigger.create({
-      trigger: '.offer',
+      trigger: ".offer",
       start: "top bottom",
       end: "bottom bottom",
       onEnterBack() {
         state.setIsBlack(false);
         state.setIsHeaderActive(true);
-        console.log('enterBack');
+        console.log("enterBack");
       },
       onLeave() {
         state.setIsBlack(true);
 
         state.setIsHeaderActive(false);
-        console.log('Leave');
-
-      }
-    })
+        console.log("Leave");
+      },
+    });
   }
 
-  if (document.querySelector('.brief')) {
-
+  if (document.querySelector(".brief")) {
     const brief = $ScrollTrigger.create({
-      trigger: '.brief',
+      trigger: ".brief",
       start: "top center",
       end: "bottom center",
       onEnter() {
@@ -138,19 +120,18 @@ onMounted(async () => {
         state.setIsHeaderActive(false);
         const route = useRoute();
         const path = route.path;
-        if (path == '/contact') {
+        if (path == "/contact") {
           state.setIsHeaderActive(true);
         } else {
           state.setIsHeaderActive(false);
         }
-      }
-    })
-
+      },
+    });
   }
 
-  if (document.querySelector('.cases')) {
+  if (document.querySelector(".cases")) {
     const cases = $ScrollTrigger.create({
-      trigger: '.cases',
+      trigger: ".cases",
       start: "top center",
       end: "bottom center",
       onEnter() {
@@ -158,25 +139,22 @@ onMounted(async () => {
       },
       onEnterBack() {
         state.setIsBlack(false);
-      }
-      ,
+      },
       onLeaveBack() {
         state.setIsBlack(true);
       },
       onLeave() {
         state.setIsBlack(true);
-      }
-    })
+      },
+    });
   }
-
 });
 
 onUnmounted(async () => {
   await nextTick();
   $ScrollTrigger.killAll();
   $ScrollTrigger.refresh();
-})
-
+});
 </script>
 
 <style lang="scss" scoped>

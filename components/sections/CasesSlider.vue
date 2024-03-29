@@ -7,10 +7,10 @@
             / Кейсы
           </span>
           <h2 class="cases__title t2">
-            Наши работы
+            {{ cases.title }}
           </h2>
           <p class="cases__description text-med">
-            STEBNEV+STUDIO сделает хорошую работу для хороших клиентов, что приведёт к следующей хорошей работе для других хороших клиентов
+            {{ cases.description_header }}
           </p>
         </div>
       </div>
@@ -20,8 +20,8 @@
         <div class="cases__container container">
           <div class="cases__content-header">
             <div class="cases__numbers">
-              <span class="numeral-big">0{{ currentSlide + 1 }}</span>
-              <span class="t2"> /{{ maxSlide }}</span>
+              <span class="numeral-big">{{ (currentSlide + 1).toString().padStart(2,0) }}</span>
+              <span class="t2"> /{{ maxSlide.toString().padStart(2,0) }}</span>
             </div>
             <div class="cases__arrows">
               <div class="cases__prev" ref="prev">
@@ -48,7 +48,7 @@
           :initialSlide="0"
           @slideChange="slideChange"
           class="cases__swiper">
-            <SwiperSlide class="cases__slide" v-for="(item, idx) in cases" :key="idx">
+            <SwiperSlide class="cases__slide" v-for="(item, idx) in cases.repeater" :key="idx">
               <ElementsCasesSliderItem :caseItem="item" />
             </SwiperSlide>
           </Swiper>
@@ -60,13 +60,10 @@
         <div class="cases__container container">
           <div class="cases__footer-wrapper">
             <p class="cases__description-link">
-              С 2013 года разработали и запустили более 500 проектов разных типов и отраслей. 
-              <br>
-              <br>
-              На текущий момент продолжаем сотрудничество с клиентами по продвижению и сопровождению сайтов.
+              {{ cases.description_footer }}
             </p>
-            <ElementsLinkAdditional class="cases__link black">
-              смотреть все кейсы
+            <ElementsLinkAdditional :to="cases.button.link" class="cases__link black">
+              {{ cases.button.text }}
             </ElementsLinkAdditional>
           </div>
         </div>
@@ -79,36 +76,44 @@
   import { Swiper, SwiperSlide } from 'swiper/vue';
   const next = ref(null);
   const prev = ref(null);
-  const cases = reactive([
-    {
-      img: '/slidebig.png',
-      title: 'website.com',
-      desc: 'Work / 2019'
-    },
-    {
-      img: '/slidebig.png',
-      title: 'website.com',
-      desc: 'Work / 2019'
-    },
-    {
-      img: '/slidebig.png',
-      title: 'website.com',
-      desc: 'Work / 2019'
-    },
-    {
-      img: '/slidebig.png',
-      title: 'website.com',
-      desc: 'Work / 2019'
-    },
-    {
-      img: '/slidebig.png',
-      title: 'website.com',
-      desc: 'Work / 2019'
-    },
+  // const cases = reactive([
+  //   {
+  //     img: '/slidebig.png',
+  //     title: 'website.com',
+  //     desc: 'Work / 2019'
+  //   },
+  //   {
+  //     img: '/slidebig.png',
+  //     title: 'website.com',
+  //     desc: 'Work / 2019'
+  //   },
+  //   {
+  //     img: '/slidebig.png',
+  //     title: 'website.com',
+  //     desc: 'Work / 2019'
+  //   },
+  //   {
+  //     img: '/slidebig.png',
+  //     title: 'website.com',
+  //     desc: 'Work / 2019'
+  //   },
+  //   {
+  //     img: '/slidebig.png',
+  //     title: 'website.com',
+  //     desc: 'Work / 2019'
+  //   },
 
-  ])
+  // ])
 
-  const maxSlide = cases.length;
+  const { cases } = defineProps({
+    cases: {
+      type: Object,
+      required: true
+    }
+  })
+
+  const maxSlide = ref(cases.repeater.length);
+  console.log(cases);
   const  currentSlide = ref(0);
 
   function slideChange(e) {

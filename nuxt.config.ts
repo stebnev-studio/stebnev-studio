@@ -1,43 +1,44 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-
   devtools: {
     enabled: true,
 
     vscode: {
-      reuseExistingServer: true
+      reuseExistingServer: true,
     },
 
     timeline: {
-      enabled: true
-    }
+      enabled: true,
+    },
   },
   build: {
-    transpile: ['gsap'],
+    transpile: ["gsap"],
   },
   ssr: true,
   routeRules: {
-    '/' : { prerender: true, ssr: false },
-    '/about' : { prerender: true, ssr: true },
-    '/dev' : { prerender: true, ssr: true },
-    '/support' : { prerender: true, ssr: true },
-    '/advert' : { prerender: true, ssr: true },
+    "/": { prerender: true, ssr: false },
+    "/about": { prerender: false, ssr: false },
+    "/dev": { prerender: false, ssr: false },
+    "/support": { prerender: false, ssr: false },
+    "/advert": { prerender: false, ssr: false },
+    "/cases": { prerender: false, ssr: false },
+    "/feedback": { prerender: false, ssr: false },
   },
   app: {
     pageTransition: {
       name: "page",
-      mode: "out-in"
+      mode: "out-in",
     },
     head: {
-      meta: [
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+      meta: [{ name: "viewport", content: "width=device-width, initial-scale=1" }],
+      script: [
+        {
+          src: "https://cdn.jsdelivr.net/gh/dixonandmoe/rellax@master/rellax.min.js",
+        },
       ],
-      script: [{
-        src: 'https://cdn.jsdelivr.net/gh/dixonandmoe/rellax@master/rellax.min.js',
-      }]
-    }
+    },
   },
-  css: ['~/assets/css/global.css'],
+  css: ["~/assets/css/global.css"],
   vite: {
     css: {
       preprocessorOptions: {
@@ -46,33 +47,40 @@ export default defineNuxtConfig({
         },
       },
     },
+    server: {
+      cors: false,
+    },
   },
   plugins: [
-    '~/plugins/vee-validate',
+    "~/plugins/vee-validate",
     {
-      src:'~/plugins/LenisLocomotiveScroll',
-      mode: 'client'
+      src: "~/plugins/LenisLocomotiveScroll",
+      mode: "client",
     },
-    '~/plugins/changeBackgroundColor',
+    "~/plugins/changeBackgroundColor",
   ],
   modules: [
-    ['@nuxtjs/google-fonts', {
-      preload: true,
-      families: {
-        Montserrat: {
-          wght: '100..900'
-        }
-      }
-    }], 
-    'nuxt-swiper', 
-    '@vueuse/nuxt', 
-    '@nuxt/devtools', 
-    'nuxt-headlessui', 
-    "@nuxt/image", 
-    '@vueuse/nuxt', 
-    '@hypernym/nuxt-gsap',
-    '@vee-validate/nuxt',
-    '@pinia/nuxt'
+    [
+      "@nuxtjs/google-fonts",
+      {
+        preload: true,
+        families: {
+          Montserrat: {
+            wght: "100..900",
+          },
+        },
+      },
+    ],
+    "nuxt-swiper",
+    "@vueuse/nuxt",
+    "@nuxt/devtools",
+    "nuxt-headlessui",
+    "@nuxt/image",
+    "@vueuse/nuxt",
+    "@hypernym/nuxt-gsap",
+    "@vee-validate/nuxt",
+    "@pinia/nuxt",
+    "nuxt-build-cache",
   ],
   veeValidate: {
     // disable or enable auto imports
@@ -80,21 +88,16 @@ export default defineNuxtConfig({
     // Use different names for components
 
     componentNames: {
-      Form: 'VeeForm',
-      Field: 'VeeField',
-      FieldArray: 'VeeFieldArray',
-      ErrorMessage: 'VeeErrorMessage',
+      Form: "VeeForm",
+      Field: "VeeField",
+      FieldArray: "VeeFieldArray",
+      ErrorMessage: "VeeErrorMessage",
     },
   },
   gsap: {
     composables: true,
     extraPlugins: {
-      scrollTrigger: true
-    }
-  },
-  image: {
-    aliyun: {
-      baseURL: "https://proto.stebnev-studio.ru/",
+      scrollTrigger: true,
     },
   },
-})
+});

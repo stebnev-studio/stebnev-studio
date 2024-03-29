@@ -4,7 +4,7 @@
       <div class="services__container container">
           <span class="services__subtitle ts" v-if="isSubtitle">/ Услуги </span>
           <h2 class="services__title t2" v-if="isTitle" :class="{mbn: isDescription, row1: isDescription}">
-            Типы сайтов которые мы разрабатываем
+            {{ title }}
           </h2>
             <p class="services__description text-med tm-mob" v-if="isDescription">
               <slot name="ServicesDescription"></slot>
@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-  const { isSubtitle , isDescription, isTitle } = defineProps({
+  const { isSubtitle , isDescription, isTitle, title, words } = defineProps({
     isSubtitle: {
       default: true
     },
@@ -28,9 +28,15 @@
     },
     isTitle: {
       default: true
+    },
+    title: {
+      type: String
+    },
+    words: {
+      type: Object
     }
   });
-  const words = reactive(['JAVA script.', 'BRANDING.', 'DEVELOPMENT.', 'UI/UX DESIGN', 'CSS.']);
+
 </script>
 
 <style scoped lang="scss">
@@ -122,7 +128,7 @@
       &__list {
         grid-column: 5 / 8 span;
         grid-row: 1;
-        // @include aprop("row-gap", 120px, 80px, 60px, 60px);
+        @include aprop("row-gap", 0px, 80px, 60px, 60px);
         display: grid;
 
         @include laptop {

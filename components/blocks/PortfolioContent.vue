@@ -1,14 +1,17 @@
 <template>
   <div class="portfolio-content">
-      <ElementsPortfolioContentItem class="portfolio-content__item" v-for="(item, idx) in cases" :key="idx" :info="item" v-if="route.path != '/cases'"/>
-      <ElementsPortfolioContentItem class="portfolio-cases-content__item" v-for="(item, idx) in cases" :key="idx" :info="item" v-if="route.path == '/cases'" />
+      <ElementsPortfolioContentItem class="portfolio-content__item" v-for="(item, idx) in repeater" :key="idx" :info="item" v-if="route.path != '/cases'"/>
+      <ElementsPortfolioContentItem class="portfolio-cases-content__item" v-for="(item, idx) in repeater" :key="idx" :info="item" v-if="route.path == '/cases'" />
   </div>
 </template>
 
 <script lang="ts" setup>
   const route = useRoute();
-  const state = useStateGlobal();
-  const cases = state.cases;
+  const { repeater } = defineProps({
+    repeater: {
+      type: Object
+    }
+  })
 </script>
 
 <style lang="scss" scoped>

@@ -3,12 +3,12 @@
     <div class="ticker__wrapper">
       <div class="ticker__line">
       <span v-for="(item, idx) in words" :idx="idx" :class="{tickerBig: idx % 2 == 0, tickerSmall: idx % 2 != 0}">
-        {{ item }}
+        {{ item?.word }}
       </span>
     </div>
     <div class="ticker__line">
       <span v-for="(item, idx) in words" :idx="idx" :class="{tickerBig: idx % 2 == 0, tickerSmall: idx % 2 != 0}">
-        {{ item }}
+        {{ item?.word }}
       </span>
     </div>
     </div>
@@ -20,7 +20,7 @@
     words : {
       type: Array<String>,
       required: false,
-      default: ['JAVA script.', 'BRANDING.', 'DEVELOPMENT.', 'UI/UX DESIGN', 'CSS.']
+      // default: ['JAVA script.', 'BRANDING.', 'DEVELOPMENT.', 'UI/UX DESIGN', 'CSS.']
     }
   });
 </script>

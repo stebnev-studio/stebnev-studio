@@ -1,17 +1,20 @@
 <template>
   <div class="portfolio-footer">
     <div class="portfolio-footer__description text-med">
-      С 2013 года разработали и запустили более 500 проектов разных типов и отраслей. <br><br>
-      На текущий момент продолжаем сотрудничество с клиентами по продвижению и сопровождению сайтов.
+      {{ footer?.description }}
     </div>
-    <ElementsLinkAdditional class="black portfolio-footer__link" to="/">
-      Смотреть все кейсы
+    <ElementsLinkAdditional class="black portfolio-footer__link" :to="footer?.button_link">
+      {{ footer?.button_text }}
     </ElementsLinkAdditional>
   </div>
 </template>
 
 <script lang="ts" setup>
-
+  const { footer } = defineProps({
+    footer: {
+      type: Object
+    }
+  })
 </script>
 
 <style lang="scss" scoped>
