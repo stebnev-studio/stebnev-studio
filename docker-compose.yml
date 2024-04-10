@@ -1,0 +1,8 @@
+version: '3.3'
+services:
+  stebnev-studio:
+    build: .
+    container_name: stebnev-studio
+    restart: unless-stopped
+    ports:
+      - 80:80

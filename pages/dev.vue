@@ -4,9 +4,9 @@
       :to="data.acf.offer.button.link"
       :video="data.acf.offer.video"
       :poster="data.acf.offer.poster"
+      :title="data.acf.offer.title"
+      :description="data.acf.offer.description"
     >
-      <template #offerTitle>{{ data.acf.offer.title }}
-      </template>
       <template #offerDescription>
         {{ data.acf.offer.description }}
       </template>
@@ -39,7 +39,11 @@
         {{ data.acf.accordeon.description }}
       </template>
       <template #ServicesList>
-        <LazyBlocksServiceItem v-for="(item, idx) in data.acf.accordeon.list" :key="idx" :item="item"/>
+        <LazyBlocksServiceItem
+          v-for="(item, idx) in data.acf.accordeon.list"
+          :key="idx"
+          :item="item"
+        />
       </template>
     </LazySectionsServices>
 
@@ -50,14 +54,20 @@
     >
     </LazySectionsCasesSlider>
 
-    <LazyBlocksDoubleTicker class="ticker" :doubleticker="data.acf.doubleticker" />
+    <LazyBlocksDoubleTicker
+      class="ticker"
+      :doubleticker="data.acf.doubleticker"
+    />
     <LazySectionsNumbers
       class="section-about-numbers"
       :numbers="data.acf.numbers.repeater"
       :title="data.acf.numbers.title"
     />
     <LazySectionsStages class="section-stages" :stages="data.acf.stages" />
-    <LazyBlocksDoubleTicker class="ticker" :doubleticker="data.acf.doubleticker_copy" />
+    <LazyBlocksDoubleTicker
+      class="ticker"
+      :doubleticker="data.acf.doubleticker_copy"
+    />
     <LazySectionsFAQ class="section-faq" :faq="data.acf.faq" />
     <LazySectionsBrief class="section-brief" />
   </main>
@@ -68,11 +78,12 @@ import { useStateGlobal } from "~/composables/stateGlobal";
 const { $ScrollTrigger } = useNuxtApp();
 const state = useStateGlobal();
 let { isBlack } = storeToRefs(state);
+state.setIsBlack(true);
 const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
 
 const { data: page } = await useAsyncData("page", async () => {
   const [data] = await Promise.all([
-    $fetch("https://stebnev-studio.ru/api/wp-json/wp/v2/pages?slug=dev"),
+    $fetch("https://api.stebnev-studio.ru/main/wp-json/wp/v2/pages?slug=dev"),
   ]);
 
   return { data };
@@ -80,9 +91,12 @@ const { data: page } = await useAsyncData("page", async () => {
 const data = page.value.data[0];
 console.log(data);
 
+const { $router } = useNuxtApp();
+
 onMounted(async () => {
+  await state.setIsBlack(true);
   await nextTick();
-  await $ScrollTrigger.refresh();
+  state.setIsBlack(true);
 
   if (document.querySelector(".offer")) {
     const offer = $ScrollTrigger.create({
@@ -148,12 +162,18 @@ onMounted(async () => {
       },
     });
   }
+
+  $ScrollTrigger.refresh();
+
+  $router.afterEach(() => {
+    $ScrollTrigger.refresh();
+  });
 });
 
-onUnmounted(async () => {
-  await nextTick();
-  $ScrollTrigger.killAll();
-  $ScrollTrigger.refresh();
+onUnmounted(() => {
+  if (process.client) {
+    $ScrollTrigger.getAll().forEach((st) => st.kill());
+  }
 });
 </script>
 

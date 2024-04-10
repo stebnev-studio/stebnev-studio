@@ -60,6 +60,7 @@
     &__img {
       z-index: 0;
       grid-column: 5 / 8 span;
+      width: 100%;
       grid-row: 1;
       transform: translateY(80px);
 
@@ -77,7 +78,7 @@
       }
 
       @include mobile {
-        position: absolute;
+        // position: absolute;
         left: 0;
         height: max-content;
         transform: translateY(30px);
@@ -100,7 +101,7 @@
       }
 
       @include mobile {
-        margin-bottom: 221px;
+        // margin-bottom: 221px;
       }
 
     }

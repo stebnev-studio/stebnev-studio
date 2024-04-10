@@ -1,6 +1,7 @@
 <template>
   <main class="main" :class="{ bgBlack: isBlack || isMobile }">
     <LazySectionsOffer
+      v-if="data.acf.offer"
       class="section-offer"
       :video="data.acf.offer.offer_video"
       :poster="data.acf.offer.offer_poster"
@@ -10,23 +11,41 @@
       <template #StebnevStudio></template>
     </LazySectionsOffer>
     <LazySectionsAboutService
+      v-if="data.acf.about_service"
       class="section-about-service"
       :info="{
-        title: data?.acf.about_service.title,
-        description: data?.acf.about_service.description,
+        title: data.acf.about_service.title,
+        description: data.acf.about_service.description,
       }"
       :ticker="{ enabled: true, words: data.acf.about_service.ticker.words }"
       :stebnev="true"
-      :cite="data?.acf.about_service.cite"
+      :cite="data.acf.about_service.cite"
     />
-    <LazySectionsAboutAbout class="section-about-about" :about="data.acf.about" />
+    <LazySectionsAboutAbout
+      v-if="data.acf.about"
+      class="section-about-about"
+      :about="data.acf.about"
+    />
     <LazySectionsNumbers
+      v-if="data.acf.numbers"
       class="section-about-numbers"
       :numbers="data.acf.numbers.repeater"
       :title="data.acf.numbers.title"
     />
-    <LazySectionsGoodResults class="section-good-results" :title="data.acf.numbers.good_results.title" :description="data.acf.numbers.good_results.description" />
-    <LazySectionsPrinciples class="section-principles" :first="data.acf.principles.first" :second="data.acf.principles.second" :three="data.acf.principles.three" :four="data.acf.principles.four" />
+    <LazySectionsGoodResults
+      class="section-good-results"
+      v-if="data.acf.numbers.good_results"
+      :title="data.acf.numbers.good_results.title"
+      :description="data.acf.numbers.good_results.description"
+    />
+    <LazySectionsPrinciples
+      v-if="data.acf.principles"
+      class="section-principles"
+      :first="data.acf.principles.first"
+      :second="data.acf.principles.second"
+      :three="data.acf.principles.three"
+      :four="data.acf.principles.four"
+    />
     <LazySectionsBrief class="section-brief" />
   </main>
 </template>
@@ -35,26 +54,26 @@
 import { useStateGlobal } from "~/composables/stateGlobal";
 const state = useStateGlobal();
 const { $ScrollTrigger } = useNuxtApp();
+const { $router } = useNuxtApp();
 let { isBlack } = storeToRefs(state);
 
 const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
 
 const { data: page } = await useAsyncData("page", async () => {
   const [data] = await Promise.all([
-    $fetch("https://stebnev-studio.ru/api/wp-json/wp/v2/pages?slug=about"),
+    $fetch("https://api.stebnev-studio.ru/main/wp-json/wp/v2/pages?slug=about"),
   ]);
 
   return { data };
 });
 const data = page.value.data[0];
-console.log(data);
 
 onMounted(async () => {
-  await state.setIsBlack(false);
-  await nextTick();
-  await $ScrollTrigger.refresh();
+  if (process.client) {
+    await state.setIsBlack(false);
+    await nextTick();
+    state.setIsBlack(false);
 
-  if (document.querySelector(".offer")) {
     const offer = $ScrollTrigger.create({
       trigger: ".offer",
       start: "top bottom",
@@ -71,9 +90,7 @@ onMounted(async () => {
         console.log("Leave");
       },
     });
-  }
 
-  if (document.querySelector(".brief")) {
     const brief = $ScrollTrigger.create({
       trigger: ".brief",
       start: "top center",
@@ -97,13 +114,19 @@ onMounted(async () => {
         }
       },
     });
+
+    $ScrollTrigger.refresh();
+
+    $router.afterEach(() => {
+      $ScrollTrigger.refresh();
+    });
   }
 });
 
-onUnmounted(async () => {
-  await nextTick();
-  await $ScrollTrigger.killAll();
-  await $ScrollTrigger.refresh();
+onUnmounted(() => {
+  if (process.client) {
+    $ScrollTrigger.getAll().forEach((st) => st.kill());
+  }
 });
 </script>
 

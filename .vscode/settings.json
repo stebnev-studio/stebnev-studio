@@ -1,3 +1,22 @@
 {
-    "editor.fontFamily": "JetBrains Mono, monospace"
+    "editor.fontFamily": "JetBrains Mono, monospace",
+    "liveServer.settings.AdvanceCustomBrowserCmdLine": "",
+    "vetur.validation.template": false,
+    "vetur.format.defaultFormatter.html": "none",
+    // Set the default
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    // Enable per-language
+    "[vue]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[php]": {
+        "editor.formatOnSave": true
+    },
+    "CodeGPT.apiKey": "OpenAI"
 }

@@ -43,8 +43,6 @@
 
 <style lang="scss" scoped>
   .results-info {
-    // background-color: $black;
-    // color: $white;
 
     &__header {
       width: 100%;

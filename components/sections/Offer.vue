@@ -3,12 +3,12 @@
     <div class="offer__front" :class="{ mix: route.fullPath == '/about' }">
       <div class="offer__wrapper wrapper">
         <div class="offer__container container" v-if="to">
-          <h1 class="offer__title t1" ref="title">
-            <slot name="offerTitle"></slot>
+          <h1 class="offer__title t1" ref="titleS">
+            {{ title }}
           </h1>
           <div class="offer__description">
             <span class="offer__text text-med">
-              <slot name="offerDescription"> </slot>
+              {{ description }}
             </span>
 
             <LazyNuxtLink :to="to" class="offer__link btn-text-big">
@@ -28,7 +28,7 @@
             </LazyNuxtLink>
           </div>
         </div>
-        
+
         <slot name="StebnevStudio" v-if="!to">
           <div class="offer__container container stebnev-container">
             <LazyElementsStebnevStudioOffer class="offer__stebnev" :title_stebnev="title_stebnev" :subtitle="subtitle" />
@@ -54,7 +54,7 @@
 <script lang="ts" setup>
   import { useMediaQuery } from "@vueuse/core";
   const { $gsap } = useNuxtApp();
-  const { to, video, poster, title_stebnev, subtitle } = defineProps({
+  const { to, video, poster, title_stebnev, subtitle, title, description } = defineProps({
     to: {
       type: String,
     },
@@ -69,22 +69,27 @@
     },
     subtitle: {
       type: String
+    },
+    title: {
+      type: String
+    },
+    description: {
+      type: String
     }
   });
 
-  console.log(title_stebnev)
-
-  const title = ref(null);
+  const titleS = ref(null);
   const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
   const route = useRoute();
 
   onMounted(async () => {
-    const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
+    if (process.client) {
+      const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
     if (!isMobile.value) {
       if (!document.querySelector(".offer__stebnev")) {
         await nextTick();
 
-        title.value = splitToSpan(title);
+        titleS.value = splitToSpan(titleS);
 
         const words = $gsap.utils.toArray(".offer__title span");
 
@@ -125,6 +130,7 @@
         .split(" ")
         .map((s: any) => `<span>${s}</span>`)
         .join(" "));
+    }
     }
   });
 

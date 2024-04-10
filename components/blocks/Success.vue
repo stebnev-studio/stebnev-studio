@@ -85,10 +85,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useStateGlobal } from "~/composables/stateGlobal";
-const state = useStateGlobal();
-const { modalOpen, formSent, formResponse, popupDescription } = storeToRefs(state);
-console.log(formSent.value);
+  import { useStateGlobal } from "~/composables/stateGlobal";
+  const state = useStateGlobal();
+  const { modalOpen, formSent, formResponse, popupDescription } = storeToRefs(state);
 </script>
 
 <style lang="scss" scoped>

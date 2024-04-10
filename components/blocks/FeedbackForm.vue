@@ -24,39 +24,35 @@
 <script lang="ts" setup>
 import { ErrorMessage } from "vee-validate";
 
-import { useStateGlobal } from '~/composables/stateGlobal';
+import { useStateGlobal } from "~/composables/stateGlobal";
 const state = useStateGlobal();
 const { modalOpen, formSent, formResponse } = storeToRefs(state);
 
-
-async function onSubmit(_values: any) {
+async function onSubmit(_values: any, { resetForm }) {
   let bodyRequest = new FormData();
-  bodyRequest.append("_wpcf7_unit_tag", '572');
+  bodyRequest.append("_wpcf7_unit_tag", "294");
   for (let key in _values) {
     bodyRequest.append("custom_" + key, _values[key]);
   }
-try {
-  const data = await $fetch("https://stebnev-studio.ru/api/wp-json/contact-form-7/v1/contact-forms/572/feedback", {
-        method: "POST",
-        body: bodyRequest,
-  })
+  try {
+    const data = await $fetch("https://api.stebnev-studio.ru/main/wp-json/contact-form-7/v1/contact-forms/294/feedback", {
+      method: "POST",
+      body: bodyRequest,
+    });
 
-  await console.log(_values);
-  await console.log(data);
-
-  if ((data.status == "mail_sent")) {
-    formSent.value = "success";
-    formResponse.value = data.message;
-    modalOpen.value = true;
-  } else {
-    formSent.value = "failed";
-    formResponse.value = data.message;
-    modalOpen.value = true;
+    if (data.status == "mail_sent") {
+      formSent.value = "success";
+      formResponse.value = data.message;
+      modalOpen.value = true;
+      resetForm();
+    } else {
+      formSent.value = "failed";
+      formResponse.value = data.message;
+      modalOpen.value = true;
+    }
+  } catch (err) {
+    console.log(err);
   }
-} catch (err) {
-  console.log(err)
-}
-
 }
 </script>
 

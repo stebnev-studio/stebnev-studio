@@ -2,7 +2,7 @@
   <div class="about-service-header">
     <div class="about-service-header__wrapper wrapper">
       <div class="about-service-header__container container">
-        <span class="about-service-header__subtitle ts">/ Об услуге</span>
+        <span class="about-service-header__subtitle ts">/ О нас</span>
         <h2 class="about-service-header__title t2">
           {{ title }}
         </h2>
@@ -46,7 +46,7 @@
 
     &__title {
       grid-column: 6 span;
-      
+
       @include laptop {
         grid-column: 8 span;
       }

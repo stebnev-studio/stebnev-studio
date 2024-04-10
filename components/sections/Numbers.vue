@@ -19,8 +19,7 @@
 
 <style lang="scss" scoped>
   .numbers {
-    // background-color: $black;
-    // color: $white;
+
     overflow: hidden;
 
     &__container {
@@ -65,8 +64,8 @@
 
       @include laptop{
         grid-column: 5 / 8 span;
-      } 
-      
+      }
+
       @include tablet{
         grid-column: 3 / 10 span;
       }

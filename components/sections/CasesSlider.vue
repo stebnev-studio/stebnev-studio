@@ -21,7 +21,7 @@
           <div class="cases__content-header">
             <div class="cases__numbers">
               <span class="numeral-big">{{ (currentSlide + 1).toString().padStart(2,0) }}</span>
-              <span class="t2"> /{{ maxSlide.toString().padStart(2,0) }}</span>
+              <span class="t2"> /{{ maxSlide.toString() }}</span>
             </div>
             <div class="cases__arrows">
               <div class="cases__prev" ref="prev">
@@ -37,7 +37,7 @@
             </div>
           </div>
 
-          <Swiper 
+          <Swiper
           :modules="[SwiperNavigation]"
           slidesPerView="auto"
           spaceBetween="20px"
@@ -59,8 +59,7 @@
       <div class="cases__wrapper wrapper">
         <div class="cases__container container">
           <div class="cases__footer-wrapper">
-            <p class="cases__description-link">
-              {{ cases.description_footer }}
+            <p class="cases__description-link" v-html="cases.description_footer">
             </p>
             <ElementsLinkAdditional :to="cases.button.link" class="cases__link black">
               {{ cases.button.text }}
@@ -76,34 +75,6 @@
   import { Swiper, SwiperSlide } from 'swiper/vue';
   const next = ref(null);
   const prev = ref(null);
-  // const cases = reactive([
-  //   {
-  //     img: '/slidebig.png',
-  //     title: 'website.com',
-  //     desc: 'Work / 2019'
-  //   },
-  //   {
-  //     img: '/slidebig.png',
-  //     title: 'website.com',
-  //     desc: 'Work / 2019'
-  //   },
-  //   {
-  //     img: '/slidebig.png',
-  //     title: 'website.com',
-  //     desc: 'Work / 2019'
-  //   },
-  //   {
-  //     img: '/slidebig.png',
-  //     title: 'website.com',
-  //     desc: 'Work / 2019'
-  //   },
-  //   {
-  //     img: '/slidebig.png',
-  //     title: 'website.com',
-  //     desc: 'Work / 2019'
-  //   },
-
-  // ])
 
   const { cases } = defineProps({
     cases: {
@@ -113,7 +84,6 @@
   })
 
   const maxSlide = ref(cases.repeater.length);
-  console.log(cases);
   const  currentSlide = ref(0);
 
   function slideChange(e) {
@@ -123,8 +93,6 @@
 
 <style lang="scss" scoped>
 .cases {
-  // background-color: $white;
-  // color: $black;
 
   &__container {
     display: grid;

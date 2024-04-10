@@ -21,6 +21,7 @@
     align-items: center;
     column-gap: 8px;
     color: $white;
+    transition: $transitionTime;
 
     &.black {
       color: $black;
@@ -31,5 +32,28 @@
       }
     }
 
+  }
+
+  .bgBlack .link-add{
+
+    &.black {
+      color: $white;
+
+      svg * {
+        fill: $white;
+        stroke: $white;
+      }
+    }
+
+    @include mobile {
+      &.black {
+      color: $black;
+
+      svg * {
+        fill: $black;
+        stroke: $black;
+      }
+    }
+    }
   }
 </style>

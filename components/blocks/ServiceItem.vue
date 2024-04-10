@@ -2,15 +2,18 @@
   <li class="service-item">
     <div class="service-item__title t3">
       <i class="service-item__icon">
-        <svg
-          width="16"
-          height="20"
-          viewBox="0 0 15 15"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect x="0" y="1" width="15" height="15" stroke="#FAFAFA" />
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" v-if="idx == 0">
+          <rect x="8.5" y="8.5" width="15" height="15" stroke="#FAFAFA"/>
         </svg>
+
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" v-if="idx == 1">
+          <path d="M6.47372 23.5L16 7L25.5263 23.5H6.47372Z" stroke="#FAFAFA"/>
+        </svg>
+
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" v-if="idx == 2">
+          <circle cx="16" cy="16" r="8.5" stroke="#FAFAFA"/>
+        </svg>
+
       </i>
       <p class="t3">{{ item?.title }}</p>
     </div>
@@ -25,10 +28,15 @@
 </template>
 
 <script lang="ts" setup>
+import { number } from 'yup';
+
 const { item } = defineProps({
   item: {
     type: Object,
   },
+  idx: {
+    type: Number
+  }
 });
 </script>
 

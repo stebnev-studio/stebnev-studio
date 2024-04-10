@@ -4,13 +4,9 @@
       :to="data.acf.offer.button.link"
       :video="data.acf.offer.video"
       :poster="data.acf.offer.poster"
+      :title="data.acf.offer.title"
+      :description="data.acf.offer.description"
     >
-      <template #offerTitle>
-        {{ data.acf.offer.title }}
-      </template>
-      <template #offerDescription>
-        {{ data.acf.offer.description }}
-      </template>
       <template #offerButton>
         {{ data.acf.offer.button.text }}
       </template>
@@ -33,8 +29,11 @@
       :numbers="data.acf.numbers.repeater"
       :title="data.acf.numbers.title"
     />
-    <LazySectionsStages class="section-stages" :stages="data.acf.stages"/>
-    <LazyBlocksDoubleTicker class="ticker" :doubleticker="data.acf.doubleticker" />
+    <LazySectionsStages class="section-stages" :stages="data.acf.stages" />
+    <LazyBlocksDoubleTicker
+      class="ticker"
+      :doubleticker="data.acf.doubleticker"
+    />
     <LazySectionsFAQ class="section-faq" :faq="data.acf.faq" />
     <LazySectionsBrief class="section-brief" />
   </main>
@@ -43,6 +42,7 @@
 <script lang="ts" setup>
 import { useStateGlobal } from "~/composables/stateGlobal";
 const { $ScrollTrigger } = useNuxtApp();
+
 const state = useStateGlobal();
 let { isBlack } = storeToRefs(state);
 
@@ -50,18 +50,80 @@ const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
 
 const { data: page } = await useAsyncData("page", async () => {
   const [data] = await Promise.all([
-    $fetch("https://stebnev-studio.ru/api/wp-json/wp/v2/pages?slug=support"),
+    $fetch(
+      "https://api.stebnev-studio.ru/main/wp-json/wp/v2/pages?slug=support",
+    ),
   ]);
 
   return { data };
 });
 const data = page.value.data[0];
-console.log(data);
 
-onMounted(() => {
-  nextTick(() => {
+const { $router } = useNuxtApp();
+
+onMounted(async () => {
+  if (process.client) {
+    await state.setIsBlack(true);
+    await nextTick();
+    state.setIsBlack(true);
+
+    if (document.querySelector(".offer")) {
+      const offer = $ScrollTrigger.create({
+        trigger: ".offer",
+        start: "top bottom",
+        end: "bottom bottom",
+        onEnterBack() {
+          state.setIsBlack(false);
+          state.setIsHeaderActive(true);
+          console.log("enterBack");
+        },
+        onLeave() {
+          state.setIsBlack(true);
+
+          state.setIsHeaderActive(false);
+          console.log("Leave");
+        },
+      });
+    }
+
+    if (document.querySelector(".brief")) {
+      const brief = $ScrollTrigger.create({
+        trigger: ".brief",
+        start: "top center",
+        end: "bottom center",
+        onEnter() {
+          state.setIsHeaderActive(true);
+          state.setIsBlack(true);
+        },
+        onLeave() {
+          state.setIsBlack(true);
+          state.setIsHeaderActive(true);
+        },
+        onLeaveBack() {
+          state.setIsHeaderActive(false);
+          const route = useRoute();
+          const path = route.path;
+          if (path == "/contact") {
+            state.setIsHeaderActive(true);
+          } else {
+            state.setIsHeaderActive(false);
+          }
+        },
+      });
+    }
+
     $ScrollTrigger.refresh();
-  });
+
+    $router.afterEach(() => {
+      $ScrollTrigger.refresh();
+    });
+  }
+});
+
+onUnmounted(() => {
+  if (process.client) {
+    $ScrollTrigger.getAll().forEach((st) => st.kill());
+  }
 });
 </script>
 

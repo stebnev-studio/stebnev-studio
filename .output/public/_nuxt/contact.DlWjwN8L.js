@@ -1,7 +1,0 @@
-import{u as d,b as f,c as r,_ as y}from"./entry.D_ny8HTx.js";import{u as h}from"./asyncData.CUuF9oys.js";import{d as g,Z as v,B as w,n as c,_ as x,G as A,R as b,J as _,u as k,N as i}from"./swiper-vue.BGf882uR.js";const B=i(()=>r(()=>import("./Contact.Bv_snI6A.js"),__vite__mapDeps([0,1,2,3,4,5,6]),import.meta.url).then(t=>t.default||t)),E=i(()=>r(()=>import("./Brief.CAq3fAG1.js"),__vite__mapDeps([7,1,2,3,4,5,8,9]),import.meta.url).then(t=>t.default||t)),z={class:"main bgBlack"},C=g({__name:"contact",async setup(t){let a,s;const l=d(),{$ScrollTrigger:e}=f(),{data:p}=([a,s]=v(async()=>h("page",async()=>{const[o]=await Promise.all([$fetch("https://stebnev-studio.ru/api/wp-json/wp/v2/pages?slug=contacts")]);return{data:o}})),a=await a,s(),a),n=p.value.data[0];return console.log(n),w(async()=>{await c(),await e.refresh(),l.setIsHeaderActive(!0)}),x(async()=>{await c(),e.killAll(),e.refresh()}),(o,I)=>{const u=B,m=E;return A(),b("main",z,[_(u,{class:"section-contact",contacts:k(n).acf.contacts},null,8,["contacts"]),_(m,{class:"section-brief"})])}}}),T=y(C,[["__scopeId","data-v-931d14c6"]]);export{T as default};
-function __vite__mapDeps(indexes) {
-  if (!__vite__mapDeps.viteFileDeps) {
-    __vite__mapDeps.viteFileDeps = ["./Contact.Bv_snI6A.js","./nuxt-link.B5fbHNff.js","./entry.D_ny8HTx.js","./swiper-vue.BGf882uR.js","./swiper-vue.C8kddlLw.css","./entry.GI64rjja.css","./Contact.BCXgwhkG.css","./Brief.CAq3fAG1.js","./index.CXVCIj8V.js","./Brief.DRqArQuC.css"]
-  }
-  return indexes.map((i) => __vite__mapDeps.viteFileDeps[i])
-}

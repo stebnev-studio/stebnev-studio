@@ -1,0 +1,17 @@
+.*
+*.log
+*.swp
+coverage
+test
+tests
+temp
+docs
+types
+scripts
+
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+
+.nuxt
+.output

@@ -4,13 +4,9 @@
       :to="data.acf.offer.button.link"
       :video="data.acf.offer.video"
       :poster="data.acf.offer.poster"
+      :title="data.acf.offer.title"
+      :description="data.acf.offer.description"
     >
-      <template #offerTitle>
-        {{ data.acf.offer.title }}
-      </template>
-      <template #offerDescription>
-        {{ data.acf.offer.description }}
-      </template>
       <template #offerButton>
         {{ data.acf.offer.button.text }}
       </template>
@@ -28,14 +24,20 @@
     />
     <LazySectionsTariffs class="section-tariffs" :tariffs="data.acf.tariffs" />
     <LazyBlocksTicker class="ticker" :words="data.acf.ticker.words" />
-    <LazySectionsResultsInfo class="section-results-info" :results="data.acf.results" />
+    <LazySectionsResultsInfo
+      class="section-results-info"
+      :results="data.acf.results"
+    />
     <LazySectionsNumbers
       class="section-about-numbers"
       :numbers="data.acf.numbers.repeater"
       :title="data.acf.numbers.title"
     />
     <LazySectionsStages class="section-stages" :stages="data.acf.stages" />
-    <LazyBlocksDoubleTicker class="ticker" :doubleticker="data.acf.doubleticker" />
+    <LazyBlocksDoubleTicker
+      class="ticker"
+      :doubleticker="data.acf.doubleticker"
+    />
     <LazySectionsFAQ class="section-faq" :faq="data.acf.faq" />
     <LazySectionsBrief class="section-brief" />
   </main>
@@ -43,104 +45,107 @@
 
 <script lang="ts" setup>
 import { useStateGlobal } from "~/composables/stateGlobal";
+const { $ScrollTrigger } = useNuxtApp();
 
 const state = useStateGlobal();
 let { isBlack } = storeToRefs(state);
-const { $ScrollTrigger } = useNuxtApp();
+state.setIsBlack(true);
 
 const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
+const riSwiper = ref();
 
 const { data: page } = await useAsyncData("page", async () => {
   const [data] = await Promise.all([
-    $fetch("https://stebnev-studio.ru/api/wp-json/wp/v2/pages?slug=advert"),
+    $fetch(
+      "https://api.stebnev-studio.ru/main/wp-json/wp/v2/pages?slug=advert",
+    ),
   ]);
 
   return { data };
 });
 const data = page.value.data[0];
-console.log(data);
-
-const riSwiper = ref();
 
 provide("riSwiper", riSwiper);
 
+const { $router } = useNuxtApp();
+
 onMounted(async () => {
-  await state.setIsBlack(true);
-  await nextTick();
-  await $ScrollTrigger.refresh();
+  if (process.client) {
+    await state.setIsBlack(true);
+    await nextTick();
+    state.setIsBlack(true);
 
-  if (document.querySelector(".offer")) {
-    const offer = $ScrollTrigger.create({
-      trigger: ".offer",
-      start: "top bottom",
-      end: "bottom bottom",
-      onEnterBack() {
-        state.setIsBlack(false);
-        state.setIsHeaderActive(true);
-        console.log("enterBack");
-      },
-      onLeave() {
-        state.setIsBlack(true);
-
-        state.setIsHeaderActive(false);
-        console.log("Leave");
-      },
-    });
-  }
-
-  if (document.querySelector(".brief")) {
-    const brief = $ScrollTrigger.create({
-      trigger: ".brief",
-      start: "top center",
-      end: "bottom center",
-      onEnter() {
-        state.setIsHeaderActive(true);
-        state.setIsBlack(true);
-      },
-      onLeave() {
-        state.setIsBlack(true);
-        state.setIsHeaderActive(true);
-      },
-      onLeaveBack() {
-        state.setIsHeaderActive(false);
-        const route = useRoute();
-        const path = route.path;
-        if (path == "/contact") {
+    if (document.querySelector(".offer")) {
+      const offer = $ScrollTrigger.create({
+        trigger: ".offer",
+        start: "top bottom",
+        end: "bottom bottom",
+        onEnterBack() {
+          state.setIsBlack(false);
           state.setIsHeaderActive(true);
-        } else {
+          console.log("enterBack");
+        },
+        onLeave() {
+          state.setIsBlack(true);
+
           state.setIsHeaderActive(false);
+          console.log("Leave");
+        },
+      });
+    }
+
+    if (document.querySelector(".brief")) {
+      const brief = $ScrollTrigger.create({
+        trigger: ".brief",
+        start: "top center",
+        end: "bottom center",
+        onEnter() {
+          state.setIsHeaderActive(true);
+          state.setIsBlack(true);
+        },
+        onLeave() {
+          state.setIsBlack(true);
+          state.setIsHeaderActive(true);
+        },
+        onLeaveBack() {
+          state.setIsHeaderActive(false);
+          const route = useRoute();
+          const path = route.path;
+          if (path == "/contact") {
+            state.setIsHeaderActive(true);
+          } else {
+            state.setIsHeaderActive(false);
+          }
+        },
+      });
+    }
+
+    await $ScrollTrigger.create({
+      trigger: ".section-results-info",
+      start: "top+=10% top",
+      end: "bottom+=300% center",
+      pin: true,
+      pinSpacing: true,
+      onUpdate: async (self) => {
+        const progress = useToNumber(self.progress.toFixed(2));
+        if (progress.value % 0.03125 == 0) {
+          await riSwiper.value.slideNext();
         }
       },
     });
-  }
 
-  await $ScrollTrigger.create({
-    trigger: ".section-results-info",
-    start: "top+=10% top",
-    end: "bottom+=400% center",
-    pin: true,
-    pinSpacing: true,
-    onUpdate: async (self) => {
-      const progress = useToNumber(self.progress.toFixed(2));
-      if (progress.value == 0.25) {
-        await riSwiper.value.slideNext();
-      }
-      if (progress.value == 0.5) {
-        await riSwiper.value.slideNext();
-      }
-      if (progress.value == 0.75) {
-        await riSwiper.value.slideNext();
-      }
-      if (progress.value == 1) {
-        await riSwiper.value.slideNext();
-      }
-    },
-  });
+    $ScrollTrigger.refresh();
+
+    $router.afterEach(() => {
+      $ScrollTrigger.refresh();
+    });
+  }
 });
 
-onUnmounted(async () => {
-  await $ScrollTrigger.killAll();
-  await $ScrollTrigger.refresh();
+onUnmounted(() => {
+  if (process.client) {
+    $ScrollTrigger.getAll().forEach((st) => st.kill());
+  }
 });
 </script>
 

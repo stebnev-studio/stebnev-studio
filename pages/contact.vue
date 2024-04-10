@@ -1,41 +1,52 @@
 <template>
   <main class="main bgBlack">
-    <LazySectionsContact class="section-contact" :contacts="data.acf.contacts"/>
+    <LazySectionsContact
+      class="section-contact"
+      :contacts="data.acf.contacts"
+    />
     <LazySectionsBrief class="section-brief" />
   </main>
 </template>
 
 <script lang="ts" setup>
-  import { useStateGlobal } from '~/composables/stateGlobal';
-  const state = useStateGlobal();
-  const { $ScrollTrigger } = useNuxtApp();
+import { useStateGlobal } from "~/composables/stateGlobal";
+const state = useStateGlobal();
+const { $ScrollTrigger } = useNuxtApp();
 
-  const { data: page } = await useAsyncData("page", async () => {
-    const [data] = await Promise.all([
-      $fetch("https://stebnev-studio.ru/api/wp-json/wp/v2/pages?slug=contacts"),
-    ]);
+const { data: page } = await useAsyncData("page", async () => {
+  const [data] = await Promise.all([
+    $fetch(
+      "https://api.stebnev-studio.ru/main/wp-json/wp/v2/pages?slug=contacts",
+    ),
+  ]);
 
-    return { data };
-  });
-  const data = page.value.data[0];
-  console.log(data);
+  return { data };
+});
+const data = page.value.data[0];
+console.log(data);
+const { $router } = useNuxtApp();
 
-  onMounted(async () => {
+onMounted(async () => {
+  if (process.client) {
     await nextTick();
-    await $ScrollTrigger.refresh();
     state.setIsHeaderActive(true);
-  })
 
-  onUnmounted(async () => {
-    await nextTick();
-    $ScrollTrigger.killAll();
     $ScrollTrigger.refresh();
-  })
-  
+
+    $router.afterEach(() => {
+      $ScrollTrigger.refresh();
+    });
+  }
+});
+
+onUnmounted(() => {
+  if (process.client) {
+    $ScrollTrigger.getAll().forEach((st) => st.kill());
+  }
+});
 </script>
 
 <style scoped lang="scss">
-  .section-contact {
-    
-  }
+.section-contact {
+}
 </style>

@@ -68,10 +68,10 @@ const { first, second, three, four } = defineProps({
 onMounted(async () => {
   await nextTick();
   const isMobile = await useMediaQuery(
-    "(min-width: 340px) and (max-width: 767.5px)"
+    "(min-width: 340px) and (max-width: 767.5px)",
   );
   if (!isMobile.value) {
-    await $gsap
+    $gsap
       .timeline({
         scrollTrigger: {
           trigger: ".principles__container",
@@ -132,6 +132,10 @@ onMounted(async () => {
     width: 100%;
     justify-content: center;
     align-items: center;
+
+    @include mobile {
+      position: relative;
+    }
   }
 
   &__frame-item {

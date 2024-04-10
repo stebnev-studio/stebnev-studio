@@ -16,13 +16,17 @@ export default defineNuxtConfig({
   },
   ssr: true,
   routeRules: {
-    "/": { prerender: true, ssr: false },
-    "/about": { prerender: false, ssr: false },
-    "/dev": { prerender: false, ssr: false },
-    "/support": { prerender: false, ssr: false },
-    "/advert": { prerender: false, ssr: false },
-    "/cases": { prerender: false, ssr: false },
-    "/feedback": { prerender: false, ssr: false },
+    "/": {
+      prerender: false,
+      ssr: true,
+      delayHydration: 'mount'
+    },
+    "/about": { prerender: false, ssr: true },
+    "/dev": { prerender: false, ssr: true },
+    "/support": { prerender: false, ssr: true },
+    "/advert": { prerender: false, ssr: true },
+    "/cases": { prerender: false, ssr: true },
+    "/feedback": { prerender: false, ssr: true },
   },
   app: {
     pageTransition: {
@@ -30,13 +34,16 @@ export default defineNuxtConfig({
       mode: "out-in",
     },
     head: {
-      meta: [{ name: "viewport", content: "width=device-width, initial-scale=1" }],
+      meta: [{ name: "viewport", content: "width=device-width, initial-scale=1, user-scalable=no" }],
       script: [
         {
           src: "https://cdn.jsdelivr.net/gh/dixonandmoe/rellax@master/rellax.min.js",
         },
       ],
     },
+  },
+  experimental: {
+    payloadExtraction: false
   },
   css: ["~/assets/css/global.css"],
   vite: {
@@ -80,6 +87,7 @@ export default defineNuxtConfig({
     "@hypernym/nuxt-gsap",
     "@vee-validate/nuxt",
     "@pinia/nuxt",
+    'nuxt-delay-hydration',
     "nuxt-build-cache",
   ],
   veeValidate: {
@@ -93,6 +101,12 @@ export default defineNuxtConfig({
       FieldArray: "VeeFieldArray",
       ErrorMessage: "VeeErrorMessage",
     },
+  },
+  delayHydration: {
+    // enables nuxt-delay-hydration in dev mode for testing
+    // NOTE: you should disable this once you've finished testing, it will break HMR
+    mode: 'mount',
+    // debug: process.env.NODE_ENV === 'development'
   },
   gsap: {
     composables: true,

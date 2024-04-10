@@ -29,7 +29,7 @@ let { isBlack } = storeToRefs(state);
 .app {
   display: flex;
   flex-direction: column;
-  transition: 0.3s;
+  transition: $transitionTime;
 
   &__header {
     order: 1;

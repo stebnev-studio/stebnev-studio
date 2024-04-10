@@ -53,7 +53,11 @@
       text-transform: uppercase;
       color: $black;
     }
-    
+
+    &__desc {
+      color: $black;
+    }
+
     &__img {
       max-height: 700px;
       overflow: hidden;

@@ -15,7 +15,7 @@
         <path d="M6.47372 23.5L16 7L25.5263 23.5H6.47372Z" stroke="#FAFAFA"/>
       </svg>
     </i>
-    <NuxtLink class="contact-item__link t3" :to="to">
+    <NuxtLink class="contact-item__link t3" :to="`mailto:`+to">
       {{ text }}
     </NuxtLink>
   </li>

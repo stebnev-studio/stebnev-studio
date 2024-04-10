@@ -4,7 +4,9 @@
       <div class="stages__container container">
         <div class="stages__header">
           <span class="stages__subtitle ts">/ Этапы работы</span>
-          <div class="stages__title t2">{{ stages.title }}</div>
+          <div class="stages__title t2">
+            {{ title }}
+          </div>
         </div>
         <div class="stages__content">
           <div class="stages__counter">
@@ -15,7 +17,7 @@
               <span class="stages__counter-small t2"> /{{ maxSlides.toString().padStart(2,0) }}</span>
             </div>
             <div class="stages__arrows">
-              <div class="stages__prev" ref="prev">
+              <div class="stages__prev" ref="prev" :class="{isOpacity: isStart}">
                 <svg
                   width="32"
                   height="32"
@@ -29,7 +31,7 @@
                   />
                 </svg>
               </div>
-              <div class="stages__next" ref="next">
+              <div class="stages__next" ref="next" :class="{isOpacity: isEnd}">
                 <svg
                   width="32"
                   height="32"
@@ -64,6 +66,7 @@
             v-for="(item, idx) in stages.repeater"
             :key="idx"
           >
+
             <NuxtImg :src="item.image" :alt="item.description" />
           </SwiperSlide>
         </Swiper>
@@ -81,10 +84,10 @@
       >
         <SwiperSlide
           class="stages__slide"
-          v-for="(item, idx) in slides"
+          v-for="(item, idx) in stages.repeater"
           :key="idx"
         >
-          <NuxtImg :src="item.img" :alt="item.description" />
+          <NuxtImg :src="item.image" :alt="item.description" />
         </SwiperSlide>
       </Swiper>
     </div>
@@ -108,19 +111,35 @@ const prev = ref(null);
 const slides = stages.repeater;
 
 const description = ref(slides[0].description);
+const title = ref(slides[0].title);
 const currentSlide = ref(1);
 const maxSlides = ref(slides.length);
+const isEnd = ref(false);
+const isStart = ref(true);
 
 function slideChange(e) {
   description.value = slides[e.activeIndex].description;
+  title.value = slides[e.activeIndex].title;
   currentSlide.value = e.activeIndex + 1;
+
+  isStart.value = e.isBeginning;
+  isEnd.value = e.isEnd;
+
 }
 </script>
 
 <style scoped lang="scss">
 .stages {
-  // background-color: $black;
-  // color: $white;
+  .swiper-button-disabled,
+  &__prev,
+  &__next {
+    transition-duration: 0.35s;
+    cursor: pointer;
+  }
+
+  .isOpacity {
+    opacity: 0;
+  }
 
   &__container {
     display: grid;
@@ -186,6 +205,9 @@ function slideChange(e) {
     max-height: 650px;
     width: 100%;
     object-fit: cover;
+    cursor: pointer;
+    user-select: none;
+
 
     @include laptop {
       max-height: 352px;

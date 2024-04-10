@@ -1,6 +1,6 @@
 <template>
   <div class="portfolio-content-item row">
-    <LazyNuxtLink :to="info.link" class="portfolio-content-item__content">
+    <LazyNuxtLink :to="info.link" class="portfolio-content-item__content" target="_blank">
       <div class="portfolio-content-item__picture">
         <LazyNuxtImg
           class="portfolio-content-item__img"
@@ -28,9 +28,8 @@
 
 <script setup>
 import { useMediaQuery } from "@vueuse/core";
-import LocomotiveScroll from "locomotive-scroll";
 
-const props = defineProps({
+const { info } = defineProps({
   info: {
     type: Object,
     required: true,
@@ -39,17 +38,15 @@ const props = defineProps({
 
 const route = useRoute();
 const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
-const title = props.info.title;
-const src = props.info.img;
-const link = props.info.link;
-const desc = props.info.desc;
 
 onMounted(async () => {
-  await nextTick();
-  new LocomotiveScroll();
-  document.querySelectorAll("div[portfolio-attr]").forEach(function (e) {
-    e.style.backgroundImage = "url(" + e.getAttribute("portfolio-attr") + ")";
-  });
+  if (process.client) {
+    await nextTick();
+    // new LocomotiveScroll();
+    document.querySelectorAll("div[portfolio-attr]").forEach(function (e) {
+      e.style.backgroundImage = "url(" + e.getAttribute("portfolio-attr") + ")";
+    });
+  }
 });
 </script>
 
@@ -58,7 +55,7 @@ onMounted(async () => {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   column-gap: $gutter;
-
+  overflow: hidden;
   &__content {
     display: flex;
     flex-direction: column;
@@ -123,6 +120,10 @@ onMounted(async () => {
 
       @include tablet {
         grid-column: 5 / 8 span;
+      }
+
+      @include mobile {
+        grid-column: 4 span
       }
     }
   }
