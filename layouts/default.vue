@@ -9,9 +9,11 @@
 <script lang="ts" setup>
 import { useStateGlobal } from "~/composables/stateGlobal";
 const { $gsap } = useNuxtApp();
-const getPromiseHeader = await $fetch("https://stebnev-studio.ru/api/wp-json/wp/v2/pages?slug=header");
+// const getPromiseHeader = await $fetch("https://stebnev-studio.ru/api/wp-json/wp/v2/pages?slug=header");
+const getPromiseHeader = await $fetch("https://api.stebnev-studio.ru/main/wp-json/wp/v2/pages?slug=header");
 const dataHeader = getPromiseHeader[0];
-const getPromiseFooter = await $fetch("https://stebnev-studio.ru/api/wp-json/wp/v2/pages?slug=footer");
+// const getPromiseFooter = await $fetch("https://stebnev-studio.ru/api/wp-json/wp/v2/pages?slug=footer");
+const getPromiseFooter = await $fetch("https://api.stebnev-studio.ru/main/wp-json/wp/v2/pages?slug=footer");
 const dataFooter = getPromiseFooter[0];
 console.log(dataFooter)
 onMounted(() => {
