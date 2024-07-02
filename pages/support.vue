@@ -75,13 +75,13 @@ onMounted(async () => {
         onEnterBack() {
           state.setIsBlack(false);
           state.setIsHeaderActive(true);
-          console.log("enterBack");
+          // console.log("enterBack");
         },
         onLeave() {
           state.setIsBlack(true);
 
           state.setIsHeaderActive(false);
-          console.log("Leave");
+          // console.log("Leave");
         },
       });
     }

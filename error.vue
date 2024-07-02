@@ -51,6 +51,7 @@
     await nextTick();
     state.setIsHeaderActive(true);
     state.setIsBlack(true);
+    console.log(error);
   });
 
   const state = useStateGlobal();

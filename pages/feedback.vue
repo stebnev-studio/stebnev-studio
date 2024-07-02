@@ -15,7 +15,7 @@ const { data: page } = await useAsyncData("page", async () => {
   return { data };
 });
 const data = page.value.data[0];
-console.log(data);
+// console.log(data);
 
 const { $router } = useNuxtApp();
 
