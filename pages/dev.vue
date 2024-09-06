@@ -28,9 +28,9 @@
 
     <LazySectionsServices
       class="section-services"
-      :isSubtitle="false"
-      :isTitle="true"
-      :isDescription="true"
+      :is-subtitle="false"
+      :is-title="true"
+      :is-description="true"
       :words="data.acf.ticker.words"
       :title="data.acf.accordeon.title"
       :description="data.acf.accordeon.description"
@@ -51,8 +51,7 @@
       class="section-cases-slider"
       :class="{ bgWhite: isMobile }"
       :cases="data.acf.cases"
-    >
-    </LazySectionsCasesSlider>
+    />
 
     <LazyBlocksDoubleTicker
       class="ticker"
@@ -81,14 +80,10 @@ let { isBlack } = storeToRefs(state);
 state.setIsBlack(true);
 const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
 
-const { data: page } = await useAsyncData("page", async () => {
-  const [data] = await Promise.all([
-    $fetch("https://api.stebnev-studio.ru/main/wp-json/wp/v2/pages?slug=dev"),
-  ]);
+const { page, fetchPage } = usePage("dev");
+await fetchPage();
 
-  return { data };
-});
-const data = page.value.data[0];
+const data = page.value[0];
 // console.log(data);
 
 const { $router } = useNuxtApp();

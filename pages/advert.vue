@@ -54,16 +54,10 @@ state.setIsBlack(true);
 const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
 const riSwiper = ref();
 
-const { data: page } = await useAsyncData("page", async () => {
-  const [data] = await Promise.all([
-    $fetch(
-      "https://api.stebnev-studio.ru/main/wp-json/wp/v2/pages?slug=advert",
-    ),
-  ]);
+const { page, fetchPage } = usePage("advert");
+await fetchPage();
 
-  return { data };
-});
-const data = page.value.data[0];
+const data = page.value[0];
 
 provide("riSwiper", riSwiper);
 

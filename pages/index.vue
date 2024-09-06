@@ -15,7 +15,7 @@
 
     <SectionsServices
       class="section-services"
-      :isTitle="data.acf.services.title.length != 0"
+      :is-title="data.acf.services.title.length != 0"
       :title="data.acf.services.title"
       :words="data.acf.services.ticker"
     >
@@ -38,14 +38,11 @@
 <script setup>
 import { useStateGlobal } from "~/composables/stateGlobal";
 
-const { data: page } = await useAsyncData("page", async () => {
-  const [data, navigation] = await Promise.all([
-    $fetch("https://api.stebnev-studio.ru/main/wp-json/wp/v2/pages?slug=index"),
-  ]);
+const { page, fetchPage } = usePage("index");
+await fetchPage();
 
-  return { data, navigation };
-});
-const data = page.value.data[0];
+const data = page.value[0];
+
 // console.log(data);
 
 const state = useStateGlobal();

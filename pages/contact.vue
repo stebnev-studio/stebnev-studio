@@ -13,16 +13,10 @@ import { useStateGlobal } from "~/composables/stateGlobal";
 const state = useStateGlobal();
 const { $ScrollTrigger } = useNuxtApp();
 
-const { data: page } = await useAsyncData("page", async () => {
-  const [data] = await Promise.all([
-    $fetch(
-      "https://api.stebnev-studio.ru/main/wp-json/wp/v2/pages?slug=contacts",
-    ),
-  ]);
+const { page, fetchPage } = usePage("contacts");
+await fetchPage();
 
-  return { data };
-});
-const data = page.value.data[0];
+const data = page.value[0];
 // console.log(data);
 const { $router } = useNuxtApp();
 

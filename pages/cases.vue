@@ -3,7 +3,7 @@
     <LazySectionsCasesOffer
       class="section-cases-offer"
       :offer="data.acf.offer"
-    ></LazySectionsCasesOffer>
+    />
     <LazySectionsCasesPortfolio
       class="section-cases-portfolio"
       :cases="data.acf.cases.repeater"
@@ -19,15 +19,10 @@ let { isBlack } = storeToRefs(state);
 const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
 const { $ScrollTrigger } = useNuxtApp();
 
-const { data: page } = await useAsyncData("page", async () => {
-  const [data] = await Promise.all([
-    $fetch("https://api.stebnev-studio.ru/main/wp-json/wp/v2/pages?slug=cases"),
-  ]);
+const { page, fetchPage } = usePage("cases");
+await fetchPage();
 
-  return { data };
-});
-const data = page.value.data[0];
-console.log(data);
+const data = page.value[0];
 
 const { $router } = useNuxtApp();
 

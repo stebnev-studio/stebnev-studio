@@ -8,7 +8,7 @@
       :title_stebnev="data.acf.offer.offer_title"
       :subtitle="data.acf.offer.offer_description"
     >
-      <template #StebnevStudio></template>
+      <template #StebnevStudio />
     </LazySectionsOffer>
     <LazySectionsAboutService
       v-if="data.acf.about_service"
@@ -33,8 +33,8 @@
       :title="data.acf.numbers.title"
     />
     <LazySectionsGoodResults
-      class="section-good-results"
       v-if="data.acf.numbers.good_results"
+      class="section-good-results"
       :title="data.acf.numbers.good_results.title"
       :description="data.acf.numbers.good_results.description"
     />
@@ -59,14 +59,10 @@ let { isBlack } = storeToRefs(state);
 
 const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
 
-const { data: page } = await useAsyncData("page", async () => {
-  const [data] = await Promise.all([
-    $fetch("https://api.stebnev-studio.ru/main/wp-json/wp/v2/pages?slug=about"),
-  ]);
+const { page, fetchPage } = usePage("about");
+await fetchPage();
 
-  return { data };
-});
-const data = page.value.data[0];
+const data = page.value[0];
 
 onMounted(async () => {
   if (process.client) {

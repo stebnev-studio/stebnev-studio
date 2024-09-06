@@ -7,14 +7,10 @@
 <script lang="ts" setup>
 const { $ScrollTrigger } = useNuxtApp();
 
-const { data: page } = await useAsyncData("page", async () => {
-  const [data] = await Promise.all([
-    $fetch("https://api.stebnev-studio.ru/main/wp-json/wp/v2/pages?slug=form"),
-  ]);
+const { page, fetchPage } = usePage("form");
+await fetchPage();
 
-  return { data };
-});
-const data = page.value.data[0];
+const data = page.value[0];
 // console.log(data);
 
 const { $router } = useNuxtApp();
