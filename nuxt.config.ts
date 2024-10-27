@@ -31,7 +31,7 @@ export default defineNuxtConfig({
   app: {
     pageTransition: {
       name: "page",
-      mode: "out-in",
+      mode: "default",
     },
     head: {
       meta: [{ name: "viewport", content: "width=device-width, initial-scale=1, user-scalable=no" }],
