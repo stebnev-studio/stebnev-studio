@@ -61,4 +61,14 @@ jobs:
           chmod 600 /tmp/deploy_key
 
           # Копируем файлы сборки на сервер
-          rsync -avz -e "ssh -i /tmp/deploy_key" ./nuxt-dist/ $USER@$HOST:/var/www/stebnev-
+          rsync -avz -e "ssh -i /tmp/deploy_key" ./nuxt-dist/ $USER@$HOST:/var/www/stebnev-studio.ru/html/
+
+          # Удаляем временный ключ
+          rm -f /tmp/deploy_key
+
+          # Выполняем команды на сервере для установки зависимостей и перезапуска PM2
+          ssh -i /tmp/deploy_key $USER@$HOST << 'EOF'
+            cd /var/www/stebnev-studio.ru/html
+            npm ci --production
+            pm2 reload ecosystem.config.cjs --env production
+          EOF
