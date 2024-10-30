@@ -6,7 +6,7 @@
           {{ footer.copyright }}
         </div>
         <div class="footer__logo">
-          <NuxtImg src="/footer_logo.svg" alt="logo" />
+          <img src="/footer_logo.svg" alt="logo" />
         </div>
         <BlocksFooterLinks class="footer__links" :links="footer.repeater" />
       </div>
