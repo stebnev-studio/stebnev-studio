@@ -3,9 +3,7 @@
     <div class="offer__front" :class="{ mix: route.fullPath == '/about' }">
       <div class="offer__wrapper wrapper">
         <div class="offer__container container" v-if="to">
-          <h1 class="offer__title t1" ref="titleS">
-            {{ title }}
-          </h1>
+          <h1 class="offer__title t1" ref="titleS">{{ title }}123</h1>
           <div class="offer__description">
             <span class="offer__text text-med">
               {{ description }}
@@ -31,19 +29,17 @@
 
         <slot name="StebnevStudio" v-if="!to">
           <div class="offer__container container stebnev-container">
-            <LazyElementsStebnevStudioOffer class="offer__stebnev" :title_stebnev="title_stebnev" :subtitle="subtitle" />
+            <LazyElementsStebnevStudioOffer
+              class="offer__stebnev"
+              :title_stebnev="title_stebnev"
+              :subtitle="subtitle"
+            />
           </div>
         </slot>
       </div>
     </div>
     <div class="offer__back">
-      <video
-        autoplay
-        muted
-        loop
-        :poster="poster"
-        v-if="!isMobile"
-      >
+      <video autoplay muted loop :poster="poster" v-if="!isMobile">
         <source :src="video" type="video/mp4" />
       </video>
       <img :src="poster" v-else />
@@ -52,9 +48,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { useMediaQuery } from "@vueuse/core";
-  const { $gsap } = useNuxtApp();
-  const { to, video, poster, title_stebnev, subtitle, title, description } = defineProps({
+import { useMediaQuery } from "@vueuse/core";
+const { $gsap } = useNuxtApp();
+const { to, video, poster, title_stebnev, subtitle, title, description } =
+  defineProps({
     to: {
       type: String,
     },
@@ -62,29 +59,31 @@
       type: String,
     },
     poster: {
-      type: String
+      type: String,
     },
     title_stebnev: {
-      type: String
+      type: String,
     },
     subtitle: {
-      type: String
+      type: String,
     },
     title: {
-      type: String
+      type: String,
     },
     description: {
-      type: String
-    }
+      type: String,
+    },
   });
 
-  const titleS = ref(null);
-  const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
-  const route = useRoute();
+const titleS = ref(null);
+const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
+const route = useRoute();
 
-  onMounted(async () => {
-    if (process.client) {
-      const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
+onMounted(async () => {
+  if (process.client) {
+    const isMobile = useMediaQuery(
+      "(min-width: 340px) and (max-width: 767.5px)",
+    );
     if (!isMobile.value) {
       if (!document.querySelector(".offer__stebnev")) {
         await nextTick();
@@ -103,7 +102,7 @@
             stagger: 0.065,
             clipPath: "inset(0% 0% 0% 0%)",
             transform: "translateY(0)",
-          }
+          },
         );
 
         $gsap.set(".offer__text", {
@@ -118,7 +117,7 @@
             blur: 0,
             duration: 0.2,
           },
-          "+=0.025"
+          "+=0.025",
         );
       }
     }
@@ -131,9 +130,8 @@
         .map((s: any) => `<span>${s}</span>`)
         .join(" "));
     }
-    }
-  });
-
+  }
+});
 </script>
 
 <style lang="scss" scoped>
