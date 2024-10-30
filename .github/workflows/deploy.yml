@@ -3,62 +3,60 @@ name: Deploy Nuxt 3 App
 on:
   push:
     branches:
-      - main  # Запускать на пуш в ветку main
+      - main # Запускать на пуш в ветку main
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 'lts/*'
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "lts/*"
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Build Nuxt App
-      run: npm run build
+      - name: Build Nuxt App
+        run: npm run build
 
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: nuxt-dist
-        path: .output  # Убедитесь, что это правильный путь к собранной сборке
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: nuxt-dist
+          path: .output # Убедитесь, что папка соответствует выходной директории Nuxt
 
   deploy:
     runs-on: ubuntu-latest
     needs: build-deploy
 
     steps:
-    - name: Download artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: nuxt-dist
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: nuxt-dist
 
-    - name: Deploy to VPS
-      env:
-        HOST: ${{ secrets.VPS_HOST }}
-        USER: ${{ secrets.VPS_USER }}
-        KEY: ${{ secrets.VPS_SSH_KEY }}
+      - name: Deploy to VPS
+        env:
+          HOST: ${{ secrets.VPS_HOST }}
+          USER: ${{ secrets.VPS_USER }}
+          KEY: ${{ secrets.VPS_SSH_KEY }}
 
-      run: |
-        echo "${KEY}" > /tmp/deploy_key
-        chmod 600 /tmp/deploy_key
+        run: |
+          echo "${KEY}" > /tmp/deploy_key
+          chmod 600 /tmp/deploy_key
 
-        # Копируем файлы на сервер
-        rsync -avz -e "ssh -i /tmp/deploy_key" .output/ $USER@$HOST:/var/www/stebnev-studio.ru/html
+          # Копируем файлы сборки на сервер
+          rsync -avz -e "ssh -i /tmp/deploy_key" .output/ $USER@$HOST:/var/www/stebnev-studio.ru/html
 
-        # Выполняем команду на сервере для установки зависимостей и перезапуска PM2
-        ssh -i /tmp/deploy_key $USER@$HOST << 'EOF'
-          cd /var/www/stebnev-studio.ru/html
-          npm ci
-          pm2 restart nuxt-app || pm2 start npm --name nuxt-app -- start
-EOF
+          # Выполняем команды на сервере для установки зависимостей и перезапуска PM2
+          ssh -i /tmp/deploy_key $USER@$HOST << 'EOF'
+            cd /var/www/stebnev-studio.ru/html
+            npm ci
+            pm2 restart nuxt-app || pm2 start npm --name nuxt-app -- start 
 
-      continue-on-error: false
-
+          EOF
