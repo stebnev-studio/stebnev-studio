@@ -24,8 +24,12 @@ jobs:
       - name: Build Nuxt App
         run: npm run build
 
+      # Проверка наличия файлов в папке .output
+      - name: List output files
+        run: ls -la .output
+
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3 # Обновлено на v3
+        uses: actions/upload-artifact@v3
         with:
           name: nuxt-dist
           path: .output # Убедитесь, что папка соответствует выходной директории Nuxt
@@ -36,7 +40,7 @@ jobs:
 
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v3 # Обновлено на v3
+        uses: actions/download-artifact@v3
         with:
           name: nuxt-dist
 
