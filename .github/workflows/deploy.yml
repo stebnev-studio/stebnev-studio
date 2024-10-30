@@ -55,20 +55,21 @@ jobs:
         env:
           HOST: ${{ secrets.VPS_HOST }}
           USER: ${{ secrets.VPS_USER }}
-          KEY: ${{ secrets.VPS_SSH_KEY }}
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
         run: |
-          echo "${KEY}" > /tmp/deploy_key
+          # Создаём временный файл с приватным ключом
+          printf "%b" "$SSH_KEY" > /tmp/deploy_key
           chmod 600 /tmp/deploy_key
 
           # Копируем файлы сборки на сервер
-          rsync -avz -e "ssh -i /tmp/deploy_key" ./nuxt-dist/ $USER@$HOST:/var/www/stebnev-studio.ru/html/
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no -i /tmp/deploy_key" ./nuxt-dist/ $USER@$HOST:/var/www/stebnev-studio.ru/html/
 
-          # Удаляем временный ключ
-          rm -f /tmp/deploy_key
-
-          # Выполняем команды на сервере для установки зависимостей и перезапуска PM2
-          ssh -i /tmp/deploy_key $USER@$HOST << 'EOF'
+          # Выполняем команды на сервере
+          ssh -o StrictHostKeyChecking=no -i /tmp/deploy_key $USER@$HOST << 'EOF'
             cd /var/www/stebnev-studio.ru/html
             npm ci --production
             pm2 reload ecosystem.config.cjs --env production
           EOF
+
+          # Удаляем временный ключ
+          rm -f /tmp/deploy_key
