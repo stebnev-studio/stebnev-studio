@@ -28,7 +28,8 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: nuxt-dist
-        path: .output # Должен быть правильный путь к собранной сборке
+        path: .output  # Убедитесь, что это правильный путь к собранной сборке
+
   deploy:
     runs-on: ubuntu-latest
     needs: build-deploy
@@ -53,10 +54,11 @@ jobs:
         rsync -avz -e "ssh -i /tmp/deploy_key" .output/ $USER@$HOST:/var/www/stebnev-studio.ru/html
 
         # Выполняем команду на сервере для установки зависимостей и перезапуска PM2
-        ssh -i /tmp/deploy_key $USER@$HOST << EOF
+        ssh -i /tmp/deploy_key $USER@$HOST << 'EOF'
           cd /var/www/stebnev-studio.ru/html
           npm ci
           pm2 restart nuxt-app || pm2 start npm --name nuxt-app -- start
 EOF
 
       continue-on-error: false
+
