@@ -3,7 +3,7 @@
     <div class="offer__front" :class="{ mix: route.fullPath == '/about' }">
       <div class="offer__wrapper wrapper">
         <div class="offer__container container" v-if="to">
-          <h1 class="offer__title t1" ref="titleS">{{ title }}123</h1>
+          <h1 class="offer__title t1" ref="titleS">{{ title }}12356</h1>
           <div class="offer__description">
             <span class="offer__text text-med">
               {{ description }}
