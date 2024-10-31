@@ -51,52 +51,24 @@ jobs:
           name: nuxt-dist
           path: ./nuxt-dist
 
-      - name: Install sshpass
-        run: |
-          sudo apt-get update
-          sudo apt-get install sshpass -y
-        shell: bash
-
-      - name: Generate SSH Key
-        run: |
-          ssh-keygen -t ed25519 -f /home/runner/.ssh/deploy_key -N "" -q
-          echo "Generated SSH Key:"
-          cat /home/runner/.ssh/deploy_key.pub
-        shell: bash
-
-      - name: Add SSH Key to Server
-        env:
-          HOST: ${{ secrets.VPS_HOST }}
-          USER: ${{ secrets.VPS_USER }}
-          PASSWORD: ${{ secrets.VPS_PASSWORD }}
-        run: |
-          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
-          sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no $USER@$HOST "mkdir -p ~/.ssh && chmod 700 ~/.ssh && echo '$(cat /home/runner/.ssh/deploy_key.pub)' >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
-        shell: bash
-
       - name: Deploy to VPS
         env:
           HOST: ${{ secrets.VPS_HOST }}
           USER: ${{ secrets.VPS_USER }}
+          KEY: ${{ secrets.VPS_SSH_KEY }}
         run: |
-          rsync -avz -e "ssh -i /home/runner/.ssh/deploy_key -o StrictHostKeyChecking=no" ./nuxt-dist/ $USER@$HOST:/var/www/stebnev-studio.ru/html/
-          ssh -i /home/runner/.ssh/deploy_key -o StrictHostKeyChecking=no $USER@$HOST << 'EOF'
+          echo "${KEY}" > /tmp/deploy_key
+          chmod 600 /tmp/deploy_key
+
+          # Копируем файлы сборки на сервер
+          rsync -avz -e "ssh -i /tmp/deploy_key" ./nuxt-dist/ $USER@$HOST:/var/www/stebnev-studio.ru/html/
+
+          # Удаляем временный ключ
+          rm -f /tmp/deploy_key
+
+          # Выполняем команды на сервере для установки зависимостей и перезапуска PM2
+          ssh -i /tmp/deploy_key $USER@$HOST << 'EOF'
             cd /var/www/stebnev-studio.ru/html
             npm ci --production
             pm2 reload ecosystem.config.cjs --env production
           EOF
-        shell: bash
-
-      - name: Remove SSH Key from Server
-        env:
-          HOST: ${{ secrets.VPS_HOST }}
-          USER: ${{ secrets.VPS_USER }}
-          PASSWORD: ${{ secrets.VPS_PASSWORD }}
-        run: |
-          sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no $USER@$HOST "grep -v '$(cat /home/runner/.ssh/deploy_key.pub)' ~/.ssh/authorized_keys > ~/.ssh/authorized_keys.tmp && mv ~/.ssh/authorized_keys.tmp ~/.ssh/authorized_keys"
-        shell: bash
-
-      - name: Clean up SSH Key
-        run: |
-          rm -f /home/runner/.ssh/deploy_key /home/runner/.ssh/deploy_key.pub
-        shell: bash
