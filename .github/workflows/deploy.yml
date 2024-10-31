@@ -121,7 +121,7 @@ jobs:
             # Перейти в директорию приложения
             cd /var/www/stebnev-studio.ru/html
 
-            # Установить зависимости (production)
+            # Установить зависимости (production) и перезапустить приложение
             echo "Установка зависимостей..."
             npm ci --production
 
