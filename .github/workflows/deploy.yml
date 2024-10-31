@@ -96,7 +96,10 @@ jobs:
             fi
 
             cd /var/www/stebnev-studio.ru/html
-            npm ci --production
+            git pull
+            npm install
+            npx nuxi cleanup
+            npm run build
 
             # Перезапуск приложения через PM2
             pm2 restart all || pm2 start ecosystem.config.cjs --env production
