@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main # Запускать на пуш в ветку main
+  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
   build:
