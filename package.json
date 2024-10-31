@@ -13,7 +13,6 @@
     "format": "prettier .  --write"
   },
   "dependencies": {
-    "-": "^0.0.1",
     "@hypernym/nuxt-gsap": "^2.4.2",
     "@ivanv/vue-collapse-transition": "^1.0.2",
     "@nuxtjs/google-fonts": "^3.1.3",

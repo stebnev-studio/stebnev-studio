@@ -38,12 +38,18 @@ jobs:
       - name: List directories after install
         run: ls -la
 
-      # Шаг 6: Сборка Nuxt приложения
-      - name: Build Nuxt App
-        run: npm run build
+      # Шаг 6: Проверка версии nuxi и доступных скриптов
+      - name: Check nuxi version
+        run: npx nuxi --version
 
-      # Шаг 7: Проверка результатов сборки
-      # Добавлены дополнительные команды для отладки
+      - name: List available scripts
+        run: npm run
+
+      # Шаг 7: Сборка Nuxt приложения
+      - name: Build Nuxt App
+        run: npx nuxi build
+
+      # Шаг 8: Проверка результатов сборки
       - name: Verify build output
         run: |
           echo "Содержимое корневой директории после сборки:"
@@ -58,7 +64,7 @@ jobs:
             exit 1 # Прерываем выполнение, если ни одна из директорий не найдена
           fi
 
-      # Шаг 8: Загрузка артефактов для деплоя
+      # Шаг 9: Загрузка артефактов для деплоя
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
