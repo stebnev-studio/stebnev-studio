@@ -3,7 +3,7 @@ name: Deploy Nuxt 3 App
 on:
   push:
     branches:
-      - main # Запускать на пуш в ветку main
+      - main # Trigger the workflow on push to the main branch
 
 jobs:
   build:
@@ -11,130 +11,149 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Step 2: Setup Node.js environment
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18.x"
+          node-version: "18.x" # Ensure compatibility with Nuxt 3
 
-      - name: Cache npm cache
+      # Step 3: Cache npm dependencies to speed up builds
+      - name: Cache npm dependencies
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: npm-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: npm-cache-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             npm-cache-${{ runner.os }}-
 
+      # Step 4: Install dependencies using npm ci for a clean install
       - name: Install dependencies
         run: npm ci
 
+      # Step 5: Build the Nuxt application
       - name: Build Nuxt App
         run: npm run build
 
-      - name: List output files
-        run: ls -la .output
+      # Step 6: Verify the build output
+      - name: Verify build output
+        run: |
+          echo "Listing root directory contents:"
+          ls -la
+          echo "Checking for .output directory:"
+          if [ -d ".output" ]; then
+            echo ".output directory exists."
+            ls -la .output
+          else
+            echo ".output directory NOT found. Checking for dist directory:"
+            ls -la dist || echo "Neither .output nor dist directories found."
+            exit 1 # Exit if neither directory exists
+          fi
 
+      # Step 7: Upload build artifacts for deployment
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: nuxt-dist
           path: |
-            .output/**
+            .output/**          # For server builds
+            dist/**             # For static builds
             package.json
             package-lock.json
             ecosystem.config.cjs
-          if-no-files-found: error
+          if-no-files-found: error # Fail the build if artifacts are missing
 
   deploy:
     name: Deploy to VPS
     runs-on: ubuntu-latest
-    needs: build
+    needs: build # Ensure the deploy job runs after a successful build
 
     steps:
+      # Step 1: Download the build artifacts
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
           name: nuxt-dist
           path: ./nuxt-dist
 
+      # Step 2: Verify the downloaded artifacts
       - name: Verify artifacts
         run: |
+          echo "Listing downloaded artifacts:"
           ls -la ./nuxt-dist
 
+      # Step 3: Deploy to the VPS using SSH and rsync
       - name: Deploy to VPS
         env:
-          HOST: ${{ secrets.VPS_HOST }}
-          USER: ${{ secrets.VPS_USER }}
-          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          HOST: ${{ secrets.VPS_HOST }} # VPS hostname or IP
+          USER: ${{ secrets.VPS_USER }} # VPS SSH user
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }} # VPS SSH private key
         run: |
-          set -e
+          set -e # Exit immediately if a command exits with a non-zero status
 
-          # Создаем директорию .ssh и устанавливаем права
+          # Configure SSH
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-
-          # Добавляем приватный ключ в файл, сохраняя форматирование
           echo "$SSH_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-
-          # Добавляем хост в known_hosts
           ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
 
-          # Копируем файлы сборки на сервер, удаляя старые файлы
+          # Synchronize build artifacts to the VPS
           rsync -avz --delete -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" ./nuxt-dist/ $USER@$HOST:/var/www/stebnev-studio.ru/html/
 
-          # Выполняем команды на сервере
+          # Execute deployment commands on the VPS
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $USER@$HOST << 'EOF'
             set -e
 
-            echo "Проверка установленной версии Node.js..."
+            echo "Verifying Node.js installation..."
             NODE_VERSION=$(node -v || echo "v0.0.0")
-            echo "Текущая версия Node.js: $NODE_VERSION"
+            echo "Current Node.js version: $NODE_VERSION"
 
             REQUIRED_NODE_VERSION="v18.0.0"
 
-            # Функция для сравнения версий
+            # Function to compare versions
             version_gt() { test "$(echo "$@" | tr " " "\n" | sort -V | head -n1)" != "$1"; }
 
             if version_gt "$REQUIRED_NODE_VERSION" "$NODE_VERSION"; then
-              echo "Установка Node.js $REQUIRED_NODE_VERSION..."
+              echo "Installing Node.js $REQUIRED_NODE_VERSION..."
               curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
               sudo apt-get install -y nodejs
             else
-              echo "Версия Node.js соответствует требованиям."
+              echo "Node.js version meets the requirement."
             fi
 
-            echo "Установленная версия Node.js: $(node -v)"
-            echo "Установленная версия npm: $(npm -v)"
+            echo "Installed Node.js version: $(node -v)"
+            echo "Installed npm version: $(npm -v)"
 
-            # Установка PM2 (если не установлен)
+            # Install PM2 globally if not already installed
             if ! command -v pm2 > /dev/null 2>&1; then
-              echo "Установка PM2..."
+              echo "Installing PM2..."
               sudo npm install -g pm2
             else
-              echo "PM2 уже установлен."
+              echo "PM2 is already installed."
             fi
 
-            # Перейти в директорию приложения
+            # Navigate to the application directory
             cd /var/www/stebnev-studio.ru/html
 
-            # Установить зависимости (production) и перезапустить приложение
-            echo "Установка зависимостей..."
+            # Install production dependencies
+            echo "Installing production dependencies..."
             npm ci --production
 
-            # Перезапустить приложение через PM2
-            echo "Перезапуск приложения через PM2..."
+            # Restart the application using PM2
+            echo "Restarting the application with PM2..."
             pm2 reload ecosystem.config.cjs --env production || pm2 start ecosystem.config.cjs --env production
 
-            # Сохранить процессы PM2
+            # Save the PM2 process list
             pm2 save
 
-            # Вывести статус PM2
+            # Display the PM2 process status
             pm2 status
           EOF
 
-          # Удаляем приватный ключ из runner
+          # Clean up SSH keys from the runner
           rm -f ~/.ssh/id_rsa
         shell: bash
