@@ -3,7 +3,7 @@ name: Deploy Nuxt 3 App
 on:
   push:
     branches:
-      - main # Запускать на пуш в ветку main
+      - main
 
 jobs:
   build:
@@ -11,17 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Шаг 1: Checkout кода
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Шаг 2: Настройка Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18.x" # Убедитесь, что версия соответствует требованиям Nuxt 3
+          node-version: "18.x"
 
-      # Шаг 3: Кэширование npm зависимостей
       - name: Cache npm dependencies
         uses: actions/cache@v3
         with:
@@ -30,26 +27,21 @@ jobs:
           restore-keys: |
             npm-cache-${{ runner.os }}-
 
-      # Шаг 4: Установка зависимостей
       - name: Install dependencies
         run: npm ci
 
-      # Шаг 5: Проверка содержимого директории после установки зависимостей
       - name: List directories after install
         run: ls -la
 
-      # Шаг 6: Проверка версии nuxi и доступных скриптов
       - name: Check nuxi version
         run: npx nuxi --version
 
       - name: List available scripts
         run: npm run
 
-      # Шаг 7: Сборка Nuxt приложения
       - name: Build Nuxt App
         run: npx nuxi build
 
-      # Шаг 8: Проверка результатов сборки
       - name: Verify build output
         run: |
           echo "Содержимое корневой директории после сборки:"
@@ -61,110 +53,63 @@ jobs:
           else
             echo ".output directory NOT found. Проверка наличия папки dist:"
             ls -la dist || echo "Ни .output, ни dist директории не найдены."
-            exit 1 # Прерываем выполнение, если ни одна из директорий не найдена
+            exit 1
           fi
 
-      # Шаг 9: Загрузка артефактов для деплоя
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: nuxt-dist
           path: |
-            ./.output/**/*
-            ./dist/**/*
+            ./.output/**  # Захват всех вложенных файлов в .output
+            ./dist/**     # Захват всех вложенных файлов в dist
             package.json
             package-lock.json
             ecosystem.config.cjs
-          if-no-files-found: error # Прерываем сборку, если артефакты не найдены
+          if-no-files-found: error
 
   deploy:
     name: Deploy to VPS
     runs-on: ubuntu-latest
-    needs: build # Деплой выполняется после успешной сборки
+    needs: build
 
     steps:
-      # Шаг 1: Загрузка артефактов
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
           name: nuxt-dist
           path: ./nuxt-dist
 
-      # Шаг 2: Проверка загруженных артефактов
       - name: Verify artifacts
         run: |
           echo "Содержимое папки с артефактами:"
           ls -la ./nuxt-dist
 
-      # Шаг 3: Деплой на VPS
-      - name: Deploy to VPS
+      - name: Setup SSH
         env:
-          HOST: ${{ secrets.VPS_HOST }} # Хост VPS
-          USER: ${{ secrets.VPS_USER }} # Пользователь VPS
-          SSH_KEY: ${{ secrets.VPS_SSH_KEY }} # Приватный SSH ключ
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          HOST: ${{ secrets.VPS_HOST }}
+          USER: ${{ secrets.VPS_USER }}
         run: |
-          set -e # Прерывать выполнение при ошибке
-
-          # Настройка SSH
           mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
           echo "$SSH_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
 
-          # Синхронизация артефактов на сервер
+      - name: Deploy to VPS
+        env:
+          HOST: ${{ secrets.VPS_HOST }}
+          USER: ${{ secrets.VPS_USER }}
+        run: |
           rsync -avz --delete -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" ./nuxt-dist/ $USER@$HOST:/var/www/stebnev-studio.ru/html/
 
-          # Выполнение команд деплоя на сервере
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $USER@$HOST << 'EOF'
             set -e
-
-            echo "Проверка установленной версии Node.js..."
-            NODE_VERSION=$(node -v || echo "v0.0.0")
-            echo "Текущая версия Node.js: $NODE_VERSION"
-
-            REQUIRED_NODE_VERSION="v18.0.0"
-
-            # Функция для сравнения версий
-            version_gt() { test "$(echo "$@" | tr " " "\n" | sort -V | head -n1)" != "$1"; }
-
-            if version_gt "$REQUIRED_NODE_VERSION" "$NODE_VERSION"; then
-              echo "Установка Node.js $REQUIRED_NODE_VERSION..."
-              curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-              sudo apt-get install -y nodejs
-            else
-              echo "Версия Node.js соответствует требованиям."
-            fi
-
-            echo "Установленная версия Node.js: $(node -v)"
-            echo "Установленная версия npm: $(npm -v)"
-
-            # Установка PM2 (если не установлен)
-            if ! command -v pm2 > /dev/null 2>&1; then
-              echo "Установка PM2..."
-              sudo npm install -g pm2
-            else
-              echo "PM2 уже установлен."
-            fi
-
-            # Перейти в директорию приложения
             cd /var/www/stebnev-studio.ru/html
-
-            # Установка зависимостей (production)
-            echo "Установка зависимостей..."
             npm ci --production
-
-            # Перезапуск приложения через PM2
-            echo "Перезапуск приложения через PM2..."
             pm2 reload ecosystem.config.cjs --env production || pm2 start ecosystem.config.cjs --env production
-
-            # Сохранение процессов PM2
             pm2 save
-
-            # Вывод статуса PM2
-            pm2 status
           EOF
 
-          # Удаление приватного ключа из runner
-          rm -f ~/.ssh/id_rsa
-        shell: bash
+      - name: Remove SSH key
+        run: rm -f ~/.ssh/id_rsa
