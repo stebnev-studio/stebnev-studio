@@ -101,13 +101,12 @@ jobs:
           HOST: ${{ secrets.VPS_HOST }}
           USER: ${{ secrets.VPS_USER }}
         run: |
-          rsync -avz --delete -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" ./nuxt-dist/ $USER@$HOST:/var/www/stebnev-studio.ru/html/
-
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $USER@$HOST << 'EOF'
             set -e
             cd /var/www/stebnev-studio.ru/html
-            npm ci --production
-            pm2 reload ecosystem.config.cjs --env production || pm2 start ecosystem.config.cjs --env production
+            git pull
+            npm run build
+            pm2 restart ecosystem.config.cjs --env production || pm2 start ecosystem.config.cjs --env production
             pm2 save
           EOF
 
