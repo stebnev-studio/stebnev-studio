@@ -21,7 +21,6 @@ jobs:
 
       - name: Cache npm cache
         uses: actions/cache@v3
-        id: npm-cache
         with:
           path: ~/.npm
           key: npm-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
@@ -66,6 +65,8 @@ jobs:
           USER: ${{ secrets.VPS_USER }}
           SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
         run: |
+          set -e
+
           # Создаем директорию .ssh и устанавливаем права
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
@@ -82,25 +83,54 @@ jobs:
 
           # Выполняем команды на сервере
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $USER@$HOST << 'EOF'
-            # Установка Node.js LTS (если необходимо)
+            set -e
+
+            echo "Проверка установленной версии Node.js..."
             NODE_VERSION=$(node -v || echo "v0.0.0")
+            echo "Текущая версия Node.js: $NODE_VERSION"
+
             REQUIRED_NODE_VERSION="v18.0.0"
-            if [ "$(printf '%s\n' "$REQUIRED_NODE_VERSION" "$NODE_VERSION" | sort -V | head -n1)" != "$REQUIRED_NODE_VERSION" ]; then
+
+            # Функция для сравнения версий
+            version_gt() { test "$(echo "$@" | tr " " "\n" | sort -V | head -n1)" != "$1"; }
+
+            if version_gt "$REQUIRED_NODE_VERSION" "$NODE_VERSION"; then
+              echo "Установка Node.js $REQUIRED_NODE_VERSION..."
               curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
               sudo apt-get install -y nodejs
+            else
+              echo "Версия Node.js соответствует требованиям."
             fi
+
+            echo "Установленная версия Node.js: $(node -v)"
+            echo "Установленная версия npm: $(npm -v)"
 
             # Установка PM2 (если не установлен)
             if ! command -v pm2 > /dev/null 2>&1; then
+              echo "Установка PM2..."
               sudo npm install -g pm2
+            else
+              echo "PM2 уже установлен."
             fi
 
+            # Перейти в директорию приложения
             cd /var/www/stebnev-studio.ru/html
+
+            # Установить зависимости
+            echo "Установка зависимостей..."
             npm ci --production
 
-            # Перезапуск приложения через PM2
-            pm2 restart ecosystem.config.cjs --env production || pm2 start ecosystem.config.cjs --env production
+            # Перезапустить приложение через PM2
+            echo "Перезапуск приложения через PM2..."
+            pm2 restart all || pm2 start ecosystem.config.cjs --env production
+
+            # Сохранить процессы PM2
+            pm2 save
+
+            # Вывести статус PM2
+            pm2 status
           EOF
 
           # Удаляем приватный ключ из runner
           rm -f ~/.ssh/id_rsa
+        shell: bash
