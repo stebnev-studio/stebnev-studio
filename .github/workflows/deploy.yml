@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main # Запускать на пуш в ветку main
-  workflow_dispatch:
-    branches:
-      - main
 
 jobs:
   build:
@@ -54,35 +51,52 @@ jobs:
           name: nuxt-dist
           path: ./nuxt-dist
 
+      - name: Install sshpass
+        run: |
+          sudo apt-get update
+          sudo apt-get install sshpass -y
+        shell: bash
+
+      - name: Generate SSH Key
+        run: |
+          ssh-keygen -t ed25519 -f /home/runner/.ssh/deploy_key -N "" -q
+          echo "Generated SSH Key:"
+          cat /home/runner/.ssh/deploy_key.pub
+        shell: bash
+
+      - name: Add SSH Key to Server
+        env:
+          HOST: ${{ secrets.VPS_HOST }}
+          USER: ${{ secrets.VPS_USER }}
+          PASSWORD: ${{ secrets.VPS_PASSWORD }}
+        run: |
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
+          sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no $USER@$HOST "mkdir -p ~/.ssh && chmod 700 ~/.ssh && echo '$(cat /home/runner/.ssh/deploy_key.pub)' >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+        shell: bash
+
       - name: Deploy to VPS
         env:
           HOST: ${{ secrets.VPS_HOST }}
           USER: ${{ secrets.VPS_USER }}
-          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
         run: |
-          # Создаём папку .ssh и задаём права
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-
-          # Добавляем ключ в файл, сохраняя форматирование
-          echo "$SSH_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-
-          # Добавляем хост в known_hosts, чтобы избежать подтверждения
-          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
-
-          # Тестируем SSH-подключение
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no $USER@$HOST "echo 'SSH connection successful'"
-
-          # Копируем файлы сборки на сервер
-          rsync -avz -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" ./nuxt-dist/ $USER@$HOST:/var/www/stebnev-studio.ru/html/
-
-          # Выполняем команды на сервере
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no $USER@$HOST << 'EOF'
+          rsync -avz -e "ssh -i /home/runner/.ssh/deploy_key -o StrictHostKeyChecking=no" ./nuxt-dist/ $USER@$HOST:/var/www/stebnev-studio.ru/html/
+          ssh -i /home/runner/.ssh/deploy_key -o StrictHostKeyChecking=no $USER@$HOST << 'EOF'
             cd /var/www/stebnev-studio.ru/html
             npm ci --production
             pm2 reload ecosystem.config.cjs --env production
           EOF
+        shell: bash
 
-          # Удаляем приватный ключ
-          rm -f ~/.ssh/deploy_key
+      - name: Remove SSH Key from Server
+        env:
+          HOST: ${{ secrets.VPS_HOST }}
+          USER: ${{ secrets.VPS_USER }}
+          PASSWORD: ${{ secrets.VPS_PASSWORD }}
+        run: |
+          sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no $USER@$HOST "grep -v '$(cat /home/runner/.ssh/deploy_key.pub)' ~/.ssh/authorized_keys > ~/.ssh/authorized_keys.tmp && mv ~/.ssh/authorized_keys.tmp ~/.ssh/authorized_keys"
+        shell: bash
+
+      - name: Clean up SSH Key
+        run: |
+          rm -f /home/runner/.ssh/deploy_key /home/runner/.ssh/deploy_key.pub
+        shell: bash
