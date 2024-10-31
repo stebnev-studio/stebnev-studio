@@ -59,6 +59,11 @@ jobs:
           name: nuxt-dist
           path: ./nuxt-dist
 
+      - name: Verify artifacts
+        run: |
+          ls -la ./nuxt-dist
+          ls -la ./nuxt-dist/.output
+
       - name: Deploy to VPS
         env:
           HOST: ${{ secrets.VPS_HOST }}
@@ -116,17 +121,13 @@ jobs:
             # Перейти в директорию приложения
             cd /var/www/stebnev-studio.ru/html
 
-            # Установить зависимости
+            # Установить зависимости (production)
             echo "Установка зависимостей..."
-            npm install
-
-            # Собрать приложение
-            echo "Сборка приложения..."
-            npm run build
+            npm ci --production
 
             # Перезапустить приложение через PM2
             echo "Перезапуск приложения через PM2..."
-            pm2 restart all || pm2 start ecosystem.config.cjs --env production
+            pm2 reload ecosystem.config.cjs --env production || pm2 start ecosystem.config.cjs --env production
 
             # Сохранить процессы PM2
             pm2 save
