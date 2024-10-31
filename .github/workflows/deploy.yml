@@ -61,11 +61,11 @@ jobs:
         with:
           name: nuxt-dist
           path: |
-            ./.output/**  # Захват всех вложенных файлов в .output
-            ./dist/**     # Захват всех вложенных файлов в dist
             package.json
             package-lock.json
             ecosystem.config.cjs
+            dist  
+            .output
           if-no-files-found: error
 
   deploy:
