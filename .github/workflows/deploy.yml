@@ -152,7 +152,9 @@ jobs:
 
             # Установка зависимостей (production)
             echo "Установка зависимостей..."
-            npm ci --production
+            npm ci
+
+            npm run build
 
             # Перезапуск приложения через PM2
             echo "Перезапуск приложения через PM2..."
