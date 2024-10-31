@@ -80,10 +80,25 @@ jobs:
           # Копируем файлы сборки на сервер
           rsync -avz -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" ./nuxt-dist/ $USER@$HOST:/var/www/stebnev-studio.ru/html/
 
-          # Выполняем команды на сервере для установки зависимостей и перезапуска PM2
+          # Выполняем команды на сервере
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $USER@$HOST << 'EOF'
+            # Установка Node.js LTS (если необходимо)
+            NODE_VERSION=$(node -v || echo "v0.0.0")
+            REQUIRED_NODE_VERSION="v16.0.0"
+            if [ "$(printf '%s\n' "$REQUIRED_NODE_VERSION" "$NODE_VERSION" | sort -V | head -n1)" != "$REQUIRED_NODE_VERSION" ]; then
+              curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+              sudo apt-get install -y nodejs
+            fi
+
+            # Установка PM2 (если не установлен)
+            if ! command -v pm2 > /dev/null 2>&1; then
+              sudo npm install -g pm2
+            fi
+
             cd /var/www/stebnev-studio.ru/html
             npm ci --production
+
+            # Перезапуск приложения через PM2
             pm2 reload ecosystem.config.cjs --env production || pm2 start ecosystem.config.cjs --env production
           EOF
 
