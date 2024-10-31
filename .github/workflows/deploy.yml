@@ -62,7 +62,6 @@ jobs:
       - name: Verify artifacts
         run: |
           ls -la ./nuxt-dist
-          ls -la ./nuxt-dist/.output
 
       - name: Deploy to VPS
         env:
