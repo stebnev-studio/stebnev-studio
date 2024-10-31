@@ -99,7 +99,7 @@ jobs:
             npm ci --production
 
             # Перезапуск приложения через PM2
-            pm2 reload ecosystem.config.cjs --env production || pm2 start ecosystem.config.cjs --env production
+            pm2 restart all || pm2 start ecosystem.config.cjs --env production
           EOF
 
           # Удаляем приватный ключ из runner
