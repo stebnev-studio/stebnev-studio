@@ -6,7 +6,7 @@
           <h1 class="offer__title t1" ref="titleS">{{ title }}</h1>
           <div class="offer__description">
             <span class="offer__text text-med">
-              {{ description }} {{ 123 }}
+              {{ description }}
             </span>
 
             <LazyNuxtLink :to="to" class="offer__link btn-text-big">
