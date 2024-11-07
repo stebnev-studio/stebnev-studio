@@ -1,4 +1,5 @@
 <template>
+  <Title>О нас | Stebnev-Studio</Title>
   <main class="main" :class="{ bgBlack: isBlack || isMobile }">
     <LazySectionsOffer
       v-if="data.acf.offer"

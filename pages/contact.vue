@@ -1,4 +1,5 @@
 <template>
+  <Title>Контакты | Stebnev-Studio</Title>
   <main class="main bgBlack">
     <LazySectionsContact
       class="section-contact"

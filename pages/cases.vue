@@ -1,4 +1,5 @@
 <template>
+  <Title>Портфолио | Stebnev-Studio</Title>
   <main class="main" :class="{ bgBlack: isBlack, bgWhite: isMobile }">
     <LazySectionsCasesOffer
       class="section-cases-offer"

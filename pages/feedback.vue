@@ -1,4 +1,5 @@
 <template>
+  <Title>Обратная связь | Stebnev-Studio</Title>
   <main class="main bgBlack">
     <LazySectionsFeedback :feedback="data.acf.feedback" />
   </main>

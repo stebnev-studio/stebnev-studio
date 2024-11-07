@@ -1,4 +1,5 @@
 <template>
+  <Title>Главная | Stebnev-Studio</Title>
   <main class="main" :class="{ bgBlack: isBlack }">
     <SectionsOffer
       class="section-offer"

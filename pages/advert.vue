@@ -1,4 +1,5 @@
 <template>
+  <Title>Реклама | Stebnev-Studio</Title>
   <main class="main" :class="{ bgBlack: isBlack || isMobile }">
     <LazySectionsOffer
       :to="data.acf.offer.button.link"
