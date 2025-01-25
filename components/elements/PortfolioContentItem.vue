@@ -1,6 +1,10 @@
 <template>
   <div class="portfolio-content-item row">
-    <LazyNuxtLink :to="info.link" class="portfolio-content-item__content" target="_blank">
+    <LazyNuxtLink
+      :to="info.link"
+      class="portfolio-content-item__content"
+      target="_blank"
+    >
       <div class="portfolio-content-item__picture">
         <LazyNuxtImg
           class="portfolio-content-item__img"
@@ -123,7 +127,7 @@ onMounted(async () => {
       }
 
       @include mobile {
-        grid-column: 4 span
+        grid-column: 4 span;
       }
     }
   }

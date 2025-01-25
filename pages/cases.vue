@@ -23,9 +23,7 @@ const { $ScrollTrigger } = useNuxtApp();
 const { page, fetchPage } = usePage("cases");
 await fetchPage();
 
-const data = page.value[0];
-
-const { $router } = useNuxtApp();
+const data = page.value;
 
 onMounted(async () => {
   if (process.client) {
@@ -94,12 +92,6 @@ onMounted(async () => {
         },
       });
     }
-
-    $ScrollTrigger.refresh();
-
-    $router.afterEach(() => {
-      $ScrollTrigger.refresh();
-    });
   }
 });
 

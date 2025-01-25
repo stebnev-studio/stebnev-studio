@@ -58,7 +58,7 @@ const riSwiper = ref();
 const { page, fetchPage } = usePage("advert");
 await fetchPage();
 
-const data = page.value[0];
+const data = page.value;
 
 provide("riSwiper", riSwiper);
 
@@ -127,12 +127,6 @@ onMounted(async () => {
           await riSwiper.value.slideNext();
         }
       },
-    });
-
-    $ScrollTrigger.refresh();
-
-    $router.afterEach(() => {
-      $ScrollTrigger.refresh();
     });
   }
 });

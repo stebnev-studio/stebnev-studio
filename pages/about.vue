@@ -63,7 +63,7 @@ const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
 const { page, fetchPage } = usePage("about");
 await fetchPage();
 
-const data = page.value[0];
+const data = page.value;
 
 onMounted(async () => {
   if (process.client) {
@@ -110,12 +110,6 @@ onMounted(async () => {
           state.setIsHeaderActive(false);
         }
       },
-    });
-
-    $ScrollTrigger.refresh();
-
-    $router.afterEach(() => {
-      $ScrollTrigger.refresh();
     });
   }
 });

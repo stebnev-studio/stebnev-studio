@@ -19,7 +19,6 @@ export default defineNuxtConfig({
     "/": {
       prerender: false,
       ssr: true,
-      delayHydration: 'mount'
     },
     "/about": { prerender: false, ssr: true },
     "/dev": { prerender: false, ssr: true },
@@ -60,10 +59,6 @@ export default defineNuxtConfig({
   },
   plugins: [
     "~/plugins/vee-validate",
-    {
-      src: "~/plugins/LenisLocomotiveScroll",
-      mode: "client",
-    },
     "~/plugins/changeBackgroundColor",
   ],
   modules: [
@@ -84,10 +79,8 @@ export default defineNuxtConfig({
     "nuxt-headlessui",
     "@nuxt/image",
     "@vueuse/nuxt",
-    "@hypernym/nuxt-gsap",
     "@vee-validate/nuxt",
     "@pinia/nuxt",
-    'nuxt-delay-hydration',
     "nuxt-build-cache",
   ],
   veeValidate: {
@@ -101,17 +94,5 @@ export default defineNuxtConfig({
       FieldArray: "VeeFieldArray",
       ErrorMessage: "VeeErrorMessage",
     },
-  },
-  delayHydration: {
-    // enables nuxt-delay-hydration in dev mode for testing
-    // NOTE: you should disable this once you've finished testing, it will break HMR
-    mode: 'mount',
-    // debug: process.env.NODE_ENV === 'development'
-  },
-  gsap: {
-    composables: true,
-    extraPlugins: {
-      scrollTrigger: true,
-    },
-  },
+  }
 });

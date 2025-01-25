@@ -1,34 +1,49 @@
 <template>
   <div id="app" class="app">
+    <!-- Header -->
     <Header
-      v-if="header"
+      v-if="header && header.acf?.header"
       class="app__header"
-      :header="header[0].acf.header"
-      :links="footer[0].acf.footer.repeater"
+      :header="header.acf.header"
+      :links="footer?.acf?.footer?.repeater"
     />
+
+    <!-- Слот для контента -->
     <slot />
+
+    <!-- Footer -->
     <LazyFooter
-      v-if="footer"
+      v-if="footer && footer.acf?.footer"
       class="app__footer"
-      :footer="footer[0].acf.footer"
+      :footer="footer.acf.footer"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, nextTick } from "vue";
+import { onMounted } from "vue";
 import { useStateGlobal } from "~/composables/stateGlobal";
+import { usePage } from "~/composables/usePage";
 
+// Глобальное состояние
 const state = useStateGlobal();
+
+// Подключение страниц для Header и Footer
 const { pageState: header, fetchPage: fetchHeader } = usePage("header");
 const { pageState: footer, fetchPage: fetchFooter } = usePage("footer");
-await fetchHeader();
-await fetchFooter();
 
+// Асинхронная загрузка данных
 onMounted(async () => {
-  await nextTick();
-  state.setIsHeaderActive(true);
-  state.setIsBlack(false);
+  try {
+    // Параллельная загрузка данных Header и Footer
+    await Promise.all([fetchHeader(), fetchFooter()]);
+
+    // Устанавливаем состояние после загрузки
+    state.setIsHeaderActive(true);
+    state.setIsBlack(false);
+  } catch (error) {
+    console.error("Ошибка загрузки Header/Footer:", error);
+  }
 });
 </script>
 

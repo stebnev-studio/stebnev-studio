@@ -21,10 +21,13 @@
 <script setup>
 import { useStateGlobal } from "~/composables/stateGlobal";
 
-defineProps({
-  header: Object,
-  links: Object
-})
+const { header } = defineProps({
+  header: {
+    type: Object,
+    required: true,
+    default: () => {},
+  },
+});
 
 onMounted(() => {
   state.setIsHeaderActive(true);

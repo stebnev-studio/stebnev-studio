@@ -52,7 +52,7 @@ const isMobile = useMediaQuery("(min-width: 340px) and (max-width: 767.5px)");
 const { page, fetchPage } = usePage("support");
 await fetchPage();
 
-const data = page.value[0];
+const data = page.value;
 
 const { $router } = useNuxtApp();
 
@@ -106,12 +106,6 @@ onMounted(async () => {
         },
       });
     }
-
-    $ScrollTrigger.refresh();
-
-    $router.afterEach(() => {
-      $ScrollTrigger.refresh();
-    });
   }
 });
 

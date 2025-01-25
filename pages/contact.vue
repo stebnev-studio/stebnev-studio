@@ -17,20 +17,13 @@ const { $ScrollTrigger } = useNuxtApp();
 const { page, fetchPage } = usePage("contacts");
 await fetchPage();
 
-const data = page.value[0];
+const data = page.value;
 // console.log(data);
-const { $router } = useNuxtApp();
 
 onMounted(async () => {
   if (process.client) {
     await nextTick();
     state.setIsHeaderActive(true);
-
-    $ScrollTrigger.refresh();
-
-    $router.afterEach(() => {
-      $ScrollTrigger.refresh();
-    });
   }
 });
 
