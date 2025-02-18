@@ -93,10 +93,11 @@ onMounted(async () => {
 
   &__img {
     height: 100%;
+    width: 100%;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-size: contain;
-    scale: 1.5;
+    background-size: cover;
+    scale: 1;
 
     @include laptop {
       min-height: 355px;
