@@ -108,7 +108,7 @@ onMounted(async () => {
     }
 
     @include mobile {
-      min-height: 270px;
+      // s
     }
   }
   .img_phone {
