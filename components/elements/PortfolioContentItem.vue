@@ -108,7 +108,8 @@ onMounted(async () => {
     }
 
     @include mobile {
-      // s
+      // min-height: 270px;
+      // object-fit: cover;
     }
   }
   .img_phone {

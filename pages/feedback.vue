@@ -12,14 +12,6 @@ const { page, fetchPage } = usePage("form");
 await fetchPage();
 
 const data = page.value;
-// console.log(data);
-
-const { $router } = useNuxtApp();
-
-onMounted(async () => {
-  if (process.client) {
-  }
-});
 
 onUnmounted(async () => {
   if (process.client) {

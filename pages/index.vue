@@ -1,6 +1,9 @@
 <template>
   <Title>Главная | Stebnev-Studio</Title>
-
+  <Meta
+    name="description"
+    content="Stebnev Studio — веб-студия полного цикла с 15-летним опытом. Предлагаем комплексные услуги по созданию, продвижению и сопровождению сайтов для вашего бизнеса."
+  />
   <!-- Если всё загружено -->
   <main v-if="isLoaded" class="main" :class="{ bgBlack: isBlack }">
     <SectionsOffer
@@ -167,8 +170,9 @@ const setupScrollTriggers = () => {
 };
 
 // Вешаем логику на onMounted
-onMounted(() => {
+onMounted(async () => {
   if (!process.client) return;
+  await nextTick();
 
   /**
    * Если документ уже полностью загружен (user может переходить
